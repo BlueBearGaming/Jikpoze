@@ -1,0 +1,6 @@
+name: Aetion
+author: Vincent Chalnot
+description: A sample web application
+dependencies:
+  browser: any
+  stagexl: any
