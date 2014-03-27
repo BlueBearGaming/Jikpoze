@@ -6,36 +6,50 @@ class Cell extends DisplayObjectContainer {
 	int size;
 	Shape shape;
 	List<Cell> adjacentCells = new List<Cell>();
+	int color;
+	bool selected = false;
+	bool mouseOver = false;
+	static List<int> colors = [
+			Color.Beige,
+			Color.DarkKhaki,
+			Color.BurlyWood,
+			Color.DarkGreen,
+			Color.DimGray,
+			Color.ForestGreen,
+		];
 
 	Cell(Board board, Point position, int size){
 		this.board = board;
 		this.position = position;
-		shape = new Shape();
+		color = colors.elementAt(new Math.Random().nextInt(colors.length));
 		updateCell(size);
 		attachEvents();
-		this.board.stage.addChild(this);
 	}
 
 	void attachEvents(){
 		void mouseOverEvent(MouseEvent e){
-			shape.graphics.fillColor(Color.Black);
-			for(Cell cell in getAdjacentCells()){
-				cell.shape.graphics.fillColor(Color.Gray);
-			}
+			mouseOver = true;
+			draw();
+			board.updateSelected();
 		}
 		onMouseOver.listen(mouseOverEvent);
 		void mouseOutEvent(MouseEvent e){
-			shape.graphics.fillColor(Color.White);
-			for(Cell cell in getAdjacentCells()){
-				cell.shape.graphics.fillColor(Color.White);
-			}
+			mouseOver = false;
+            draw();
+			board.updateSelected();
 		}
 		onMouseOut.listen(mouseOutEvent);
+		void mouseClickEvent(MouseEvent e){
+			board.select(this);
+		}
+		onMouseClick.listen(mouseClickEvent);
 	}
 
-	void updateCell(int size){
+	void updateCell([int size]){
 		var center = board.stage.contentRectangle.center;
-		this.size = size;
+		if(size != null) {
+			this.size = size;
+		}
 		Point viewPoint = this.gamePointToViewPoint(position);
 		x = center.x + viewPoint.x;
 		y = center.y + viewPoint.y;
@@ -43,10 +57,30 @@ class Cell extends DisplayObjectContainer {
 	}
 
 	void draw(){
+		clear();
 		buildGraphics(shape.graphics);
-		shape.graphics.strokeColor(Color.Black, 1);
-		shape.graphics.fillColor(Color.White);
+		if(board.selected == this){
+			shape.graphics.strokeColor(Color.Aqua, 10);
+		} else if(mouseOver){
+			shape.graphics.strokeColor(Color.Azure, 5);
+		} else {
+			shape.graphics.strokeColor(Color.Gray, 1);
+		}
+		shape.graphics.fillColor(color);
+
+	}
+
+	void clear() {
+		if(shape != null) {
+			shape.graphics.clear();
+			removeChild(shape);
+		}
+		if(board.stage.contains(this)) {
+			board.stage.removeChild(this);
+		}
+		shape = new Shape();
 		addChild(shape);
+		board.stage.addChild(this);
 	}
 
 	void buildGraphics(Graphics g) {
@@ -59,22 +93,6 @@ class Cell extends DisplayObjectContainer {
 
 	Point gamePointToViewPoint(Point gamePoint){
 		return new Point(gamePoint.x * size * 2, gamePoint.y * size * 2);
-	}
-
-	static int getMaxX(num width, int size){
-		return (width / size / 4).floor();
-	}
-
-	static int getMaxY(num height, int size){
-		return (height / size / 4).floor();
-	}
-
-	static int getPointHashCode(Point point){
-		return new JenkinsHasher().add(point.x).add(point.x.sign).add(point.y).add(point.y.sign).hash;
-	}
-
-	static bool pointEquals(Point k1, Point k2) {
-		return Cell.getPointHashCode(k1) == Cell.getPointHashCode(k2);
 	}
 
 	List<Point> getAdjacentPoints() {
@@ -100,5 +118,21 @@ class Cell extends DisplayObjectContainer {
 			}
 		}
 		return adjacentCells;
+	}
+
+	static int getMaxX(num width, int size){
+		return (width / size / 4).floor();
+	}
+
+	static int getMaxY(num height, int size){
+		return (height / size / 4).floor();
+	}
+
+	static int getPointHashCode(Point point){
+		return new JenkinsHasher().add(point.x).add(point.x.sign).add(point.y).add(point.y.sign).hash;
+	}
+
+	static bool pointEquals(Point k1, Point k2) {
+		return Cell.getPointHashCode(k1) == Cell.getPointHashCode(k2);
 	}
 }

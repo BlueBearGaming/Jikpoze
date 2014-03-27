@@ -17,6 +17,7 @@ class Board {
 	RenderLoop renderLoop;
 	Map<Point, Cell> cells = new LinkedHashMap(hashCode: Cell.getPointHashCode, equals: Cell.pointEquals);
 	int cellSize;
+	Cell selected;
 
 	Board(Html.CanvasElement canvas, int cellSize){
 		this.canvas = canvas;
@@ -32,24 +33,17 @@ class Board {
 
 	void attachEvents(){
 		onResizeEvent(Event e){
-			stage.removeChildren();
-    		cells.clear();
-    		stage.removeCache();
 			renderCells();
 		}
 		stage.onResize.listen(onResizeEvent);
 		onScaleEvent(MouseEvent e){
 			if(e.deltaY.isNegative){
-				cellSize += 10;
-				stage.removeChildren();
-				cells.clear();
-        		stage.removeCache();
-				renderCells();
+				if(cellSize < 100){
+					cellSize += 10;
+					renderCells();
+				}
 			} else if(cellSize > 20) {
 				cellSize -= 10;
-				stage.removeChildren();
-        		cells.clear();
-        		stage.removeCache();
 				renderCells();
 			}
 		}
@@ -57,22 +51,48 @@ class Board {
 	}
 
 	void renderCells(){
-		int maxX = Cell.getMaxX(stage.contentRectangle.width, cellSize);
-		int maxY = Cell.getMaxY(stage.contentRectangle.height, cellSize);
+		for(Cell cell in cells.values) {
+			cell.updateCell(cellSize);
+		}
+		int maxX = getMaxX();
+		int maxY = getMaxY();
 		Point point;
 		for(int x = -maxX; x <= maxX; x++) {
 			for(int y = -maxY; y <= maxY; y++) {
 				point = new Point(x, y);
 				if(!cells.containsKey(point)){
-					cells[point] = createCell(point);
-				} else {
-					cells[point].updateCell(cellSize);
+					createCell(point);
 				}
 			}
 		}
+		updateSelected();
 	}
 
 	Cell createCell(point) {
-		return new Cell(this, point, cellSize);
+		return cells[point] = new Cell(this, point, cellSize);
+	}
+
+	int getMaxX() {
+		return Cell.getMaxX(stage.contentRectangle.width, cellSize);
+	}
+
+	int getMaxY() {
+		return Cell.getMaxY(stage.contentRectangle.height, cellSize);
+	}
+
+	void select(Cell cell){
+		if(selected != null) {
+			Cell oldCell = selected;
+			selected = null;
+			oldCell.updateCell();
+		}
+		selected = cell;
+		selected.draw();
+	}
+
+	void updateSelected(){
+		if(selected != null) {
+			selected.draw();
+		}
 	}
 }
