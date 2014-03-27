@@ -10,13 +10,8 @@ class Cell extends DisplayObjectContainer {
 	Cell(Board board, Point position, int size){
 		this.board = board;
 		this.position = position;
-		var bounds = board.stage.contentRectangle;
-		this.size = size;
-		Point viewPoint = this.gamePointToViewPoint(position);
-		x = bounds.center.x + viewPoint.x;
-		y = bounds.center.y + viewPoint.y;
-		draw();
-		addChild(shape);
+		shape = new Shape();
+		updateCell(size);
 		attachEvents();
 		this.board.stage.addChild(this);
 	}
@@ -38,11 +33,20 @@ class Cell extends DisplayObjectContainer {
 		onMouseOut.listen(mouseOutEvent);
 	}
 
+	void updateCell(int size){
+		var center = board.stage.contentRectangle.center;
+		this.size = size;
+		Point viewPoint = this.gamePointToViewPoint(position);
+		x = center.x + viewPoint.x;
+		y = center.y + viewPoint.y;
+		draw();
+	}
+
 	void draw(){
-		shape = new Shape();
 		buildGraphics(shape.graphics);
-		shape.graphics.strokeColor(Color.Black, 0.5);
+		shape.graphics.strokeColor(Color.Black, 1);
 		shape.graphics.fillColor(Color.White);
+		addChild(shape);
 	}
 
 	void buildGraphics(Graphics g) {
@@ -92,7 +96,7 @@ class Cell extends DisplayObjectContainer {
 			if(board.cells.containsKey(point)){
 				adjacentCells.add(board.cells[point]);
 			} else {
-				print(point);
+				// Create and append
 			}
 		}
 		return adjacentCells;

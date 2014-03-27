@@ -20,7 +20,7 @@ class Board {
 
 	Board(Html.CanvasElement canvas, int cellSize){
 		this.canvas = canvas;
-		stage = new Stage(canvas);
+		stage = new Stage(canvas, webGL: false);
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 		stage.align = StageAlign.TOP_LEFT;
 		renderLoop = new RenderLoop();
@@ -32,9 +32,28 @@ class Board {
 
 	void attachEvents(){
 		onResizeEvent(Event e){
+			stage.removeChildren();
+    		cells.clear();
+    		stage.removeCache();
 			renderCells();
 		}
 		stage.onResize.listen(onResizeEvent);
+		onScaleEvent(MouseEvent e){
+			if(e.deltaY.isNegative){
+				cellSize += 10;
+				stage.removeChildren();
+				cells.clear();
+        		stage.removeCache();
+				renderCells();
+			} else if(cellSize > 20) {
+				cellSize -= 10;
+				stage.removeChildren();
+        		cells.clear();
+        		stage.removeCache();
+				renderCells();
+			}
+		}
+		stage.onMouseWheel.listen(onScaleEvent);
 	}
 
 	void renderCells(){
@@ -46,6 +65,8 @@ class Board {
 				point = new Point(x, y);
 				if(!cells.containsKey(point)){
 					cells[point] = createCell(point);
+				} else {
+					cells[point].updateCell(cellSize);
 				}
 			}
 		}
