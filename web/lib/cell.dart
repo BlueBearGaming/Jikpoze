@@ -46,13 +46,12 @@ class Cell extends DisplayObjectContainer {
 	}
 
 	void updateCell([int size]){
-		var center = board.stage.contentRectangle.center;
 		if(size != null) {
 			this.size = size;
 		}
-		Point viewPoint = this.gamePointToViewPoint(position);
-		x = center.x + viewPoint.x;
-		y = center.y + viewPoint.y;
+		Point viewPoint = board.gamePointToViewPoint(position);
+		x = viewPoint.x;
+		y = viewPoint.y;
 		draw();
 	}
 
@@ -75,12 +74,12 @@ class Cell extends DisplayObjectContainer {
 			shape.graphics.clear();
 			removeChild(shape);
 		}
-		if(board.stage.contains(this)) {
-			board.stage.removeChild(this);
+		if(board.contains(this)) {
+			board.removeChild(this);
 		}
 		shape = new Shape();
 		addChild(shape);
-		board.stage.addChild(this);
+		board.addChild(this);
 	}
 
 	void buildGraphics(Graphics g) {
@@ -89,10 +88,6 @@ class Cell extends DisplayObjectContainer {
 		g.lineTo(-size, -size);
 		g.lineTo(-size, size);
 		g.lineTo(size, size);
-	}
-
-	Point gamePointToViewPoint(Point gamePoint){
-		return new Point(gamePoint.x * size * 2, gamePoint.y * size * 2);
 	}
 
 	List<Point> getAdjacentPoints() {
@@ -118,14 +113,6 @@ class Cell extends DisplayObjectContainer {
 			}
 		}
 		return adjacentCells;
-	}
-
-	static int getMaxX(num width, int size){
-		return (width / size / 4).floor();
-	}
-
-	static int getMaxY(num height, int size){
-		return (height / size / 4).floor();
 	}
 
 	static int getPointHashCode(Point point){

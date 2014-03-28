@@ -10,22 +10,23 @@ part 'hexboard.dart';
 part 'cell.dart';
 part 'hexcell.dart';
 
-class Board {
+class Board extends DisplayObjectContainer {
 
 	Html.CanvasElement canvas;
-	Stage stage;
 	RenderLoop renderLoop;
 	Map<Point, Cell> cells = new LinkedHashMap(hashCode: Cell.getPointHashCode, equals: Cell.pointEquals);
 	int cellSize;
 	Cell selected;
+	Point startDrag;
 
 	Board(Html.CanvasElement canvas, int cellSize){
 		this.canvas = canvas;
-		stage = new Stage(canvas, webGL: false);
+		Stage stage = new Stage(canvas, webGL: false);
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 		stage.align = StageAlign.TOP_LEFT;
 		renderLoop = new RenderLoop();
 		renderLoop.addStage(stage);
+		stage.addChild(this);
 		this.cellSize = cellSize;
 		renderCells();
 		attachEvents();
@@ -48,18 +49,34 @@ class Board {
 			}
 		}
 		stage.onMouseWheel.listen(onScaleEvent);
+		onMouseDownEvent(MouseEvent e){
+			startDrag = new Point(e.stageX + x, e.stageY + y);
+		}
+		stage.onMouseDown.listen(onMouseDownEvent);
+		onMouseUpEvent(MouseEvent e){
+			startDrag = null;
+		}
+		stage.onMouseUp.listen(onMouseUpEvent);
+		onMouseMoveEvent(MouseEvent e){
+			if (startDrag != null) {
+				x = e.stageX - startDrag.x;
+				y = e.stageY - startDrag.y;
+			}
+			renderCells();
+		}
+		stage.onMouseMove.listen(onMouseMoveEvent);
 	}
 
 	void renderCells(){
 		for(Cell cell in cells.values) {
 			cell.updateCell(cellSize);
 		}
-		int maxX = getMaxX();
-		int maxY = getMaxY();
+		Point topLeft = viewPointToGamePoint(stage.contentRectangle.topLeft.add(new Point(x, y)));
+		Point bottomRight = viewPointToGamePoint(stage.contentRectangle.bottomRight.add(new Point(x, y)));
 		Point point;
-		for(int x = -maxX; x <= maxX; x++) {
-			for(int y = -maxY; y <= maxY; y++) {
-				point = new Point(x, y);
+		for(int cx = topLeft.x.floor(); cx <= bottomRight.x.floor(); cx++) {
+			for(int cy = topLeft.y.floor(); cy <= bottomRight.y.floor(); cy++) {
+				point = new Point(cx, cy);
 				if(!cells.containsKey(point)){
 					createCell(point);
 				}
@@ -70,14 +87,6 @@ class Board {
 
 	Cell createCell(point) {
 		return cells[point] = new Cell(this, point, cellSize);
-	}
-
-	int getMaxX() {
-		return Cell.getMaxX(stage.contentRectangle.width, cellSize);
-	}
-
-	int getMaxY() {
-		return Cell.getMaxY(stage.contentRectangle.height, cellSize);
 	}
 
 	void select(Cell cell){
@@ -94,5 +103,13 @@ class Board {
 		if(selected != null) {
 			selected.draw();
 		}
+	}
+
+	Point gamePointToViewPoint(Point gamePoint){
+		return new Point(gamePoint.x * cellSize * 2, gamePoint.y * cellSize * 2);
+	}
+
+	Point viewPointToGamePoint(Point viewPoint){
+		return new Point((viewPoint.x / cellSize / 2).floor(), (viewPoint.y / cellSize / 2).floor());
 	}
 }
