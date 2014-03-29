@@ -6,22 +6,15 @@ class Cell extends DisplayObjectContainer {
 	int size;
 	Shape shape;
 	List<Cell> adjacentCells = new List<Cell>();
-	int color;
 	bool selected = false;
 	bool mouseOver = false;
-	static List<int> colors = [
-			Color.Beige,
-			Color.DarkKhaki,
-			Color.BurlyWood,
-			Color.DarkGreen,
-			Color.DimGray,
-			Color.ForestGreen,
-		];
+	Bitmap bitmap;
 
 	Cell(Board board, Point position, int size){
 		this.board = board;
 		this.position = position;
-		color = colors.elementAt(new Math.Random().nextInt(colors.length));
+		bitmap = new Bitmap(board.resourceManager.getBitmapData('tile'));
+		addChild(bitmap);
 		updateCell(size);
 		draw();
 		attachEvents();
@@ -60,21 +53,23 @@ class Cell extends DisplayObjectContainer {
 		Point viewPoint = board.gamePointToViewPoint(position);
 		x = viewPoint.x;
 		y = viewPoint.y;
+		bitmap.x = -size;
+		bitmap.y = -size;
+		bitmap.width = size * 2;
+		bitmap.height = size * 2;
 	}
 
 	void draw(){
 		clear();
 		buildGraphics(shape.graphics);
 		if(board.selected == this){
-			shape.graphics.strokeColor(Color.Aqua, 10);
+			shape.graphics.strokeColor(Color.Aqua, 5);
 		} else if(mouseOver){
-			shape.graphics.strokeColor(Color.Azure, 5);
+			shape.graphics.strokeColor(Color.Azure, 3);
 		} else {
-			shape.graphics.strokeColor(Color.Gray, 1);
+			shape.graphics.strokeColor(Color.Gray, 0.2);
 		}
-		shape.graphics.fillColor(color);
-		//shape.applyCache(x - size, y - size, size * 2, size * 2, debugBorder: true);
-
+		shape.applyCache(-size - 5, -size - 5, size * 2 + 10, size * 2 + 10);
 	}
 
 	void clear() {

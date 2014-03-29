@@ -9,6 +9,7 @@ import 'jenkinshasher.dart';
 part 'hexboard.dart';
 part 'cell.dart';
 part 'hexcell.dart';
+part 'player.dart';
 
 /**
  * This is the main class of the game, it handles the creation
@@ -24,6 +25,7 @@ class Board extends DisplayObjectContainer {
 	MouseEvent dragMouseEvent;
 	Point dragging;
 	ResourceManager resourceManager = new ResourceManager();
+	Player player;
 
 	Board(Html.CanvasElement canvas, int cellSize){
 		this.canvas = canvas;
@@ -34,9 +36,13 @@ class Board extends DisplayObjectContainer {
 		renderLoop.addStage(stage);
 		stage.addChild(this);
 		this.cellSize = cellSize;
-		createCell(new Point(0, 0)).color = Color.Black;
-		renderCells();
-		attachEvents();
+		resourceManager.addBitmapData('tile', 'resources/grass-01.png');
+		resourceManager.addTextureAtlas('player', 'resources/player-01.json', TextureAtlasFormat.JSON);
+		resourceManager.load().then((res){
+			renderCells();
+			player = new Player(cells[new Point(10,10)]);
+			attachEvents();
+		});
 	}
 
 	void attachEvents(){
@@ -46,12 +52,15 @@ class Board extends DisplayObjectContainer {
 		stage.onResize.listen(onResizeEvent);
 		onScaleEvent(MouseEvent e){
 			if(e.deltaY.isNegative){
-				if(cellSize < 100){
+				if(cellSize < 40){
 					cellSize += 10;
 					renderCells();
 				}
-			} else if(cellSize > 20) {
+			} else if(cellSize > 16) {
 				cellSize -= 10;
+				if(cellSize < 16){
+					cellSize = 16;
+				}
 				renderCells();
 			}
 		}
@@ -107,12 +116,16 @@ class Board extends DisplayObjectContainer {
 			oldCell.draw();
 		}
 		selected = cell;
+		print(cell.position);
 		selected.draw();
 	}
 
 	void updateSelected(){
 		if(selected != null) {
 			selected.draw();
+		}
+		if(player != null){
+			player.draw();
 		}
 	}
 
