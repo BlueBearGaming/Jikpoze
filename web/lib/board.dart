@@ -10,6 +10,10 @@ part 'hexboard.dart';
 part 'cell.dart';
 part 'hexcell.dart';
 
+/**
+ * This is the main class of the game, it handles the creation
+ * of the stage and the creation of the cells.
+ */
 class Board extends DisplayObjectContainer {
 
 	Html.CanvasElement canvas;
@@ -17,7 +21,9 @@ class Board extends DisplayObjectContainer {
 	Map<Point, Cell> cells = new LinkedHashMap(hashCode: Cell.getPointHashCode, equals: Cell.pointEquals);
 	int cellSize;
 	Cell selected;
-	Point startDrag;
+	MouseEvent dragMouseEvent;
+	Point dragging;
+	ResourceManager resourceManager = new ResourceManager();
 
 	Board(Html.CanvasElement canvas, int cellSize){
 		this.canvas = canvas;
@@ -28,6 +34,7 @@ class Board extends DisplayObjectContainer {
 		renderLoop.addStage(stage);
 		stage.addChild(this);
 		this.cellSize = cellSize;
+		createCell(new Point(0, 0)).color = Color.Black;
 		renderCells();
 		attachEvents();
 	}
@@ -50,35 +57,39 @@ class Board extends DisplayObjectContainer {
 		}
 		stage.onMouseWheel.listen(onScaleEvent);
 		onMouseDownEvent(MouseEvent e){
-			startDrag = new Point(e.stageX + x, e.stageY + y);
+			dragMouseEvent = e;
+			dragging = new Point(e.stageX, e.stageY);
 		}
 		stage.onMouseDown.listen(onMouseDownEvent);
 		onMouseUpEvent(MouseEvent e){
-			startDrag = null;
+			dragging = null;
 		}
 		stage.onMouseUp.listen(onMouseUpEvent);
 		onMouseMoveEvent(MouseEvent e){
-			if (startDrag != null) {
-				x = e.stageX - startDrag.x;
-				y = e.stageY - startDrag.y;
+			if (dragging != null) {
+				x += e.stageX - dragging.x;
+				y += e.stageY - dragging.y;
+				dragging = new Point(e.stageX, e.stageY);
+				renderCells();
 			}
-			renderCells();
 		}
 		stage.onMouseMove.listen(onMouseMoveEvent);
 	}
 
 	void renderCells(){
-		for(Cell cell in cells.values) {
-			cell.updateCell(cellSize);
-		}
-		Point topLeft = viewPointToGamePoint(stage.contentRectangle.topLeft.add(new Point(x, y)));
-		Point bottomRight = viewPointToGamePoint(stage.contentRectangle.bottomRight.add(new Point(x, y)));
+		Point topLeft = viewPointToGamePoint(stage.contentRectangle.topLeft.subtract(new Point(x, y)));
+		Point bottomRight = viewPointToGamePoint(stage.contentRectangle.bottomRight.subtract(new Point(x, y)));
 		Point point;
-		for(int cx = topLeft.x.floor(); cx <= bottomRight.x.floor(); cx++) {
-			for(int cy = topLeft.y.floor(); cy <= bottomRight.y.floor(); cy++) {
+		for(int cx = topLeft.x.floor(); cx <= bottomRight.x.floor() + 1; cx++) {
+			for(int cy = topLeft.y.floor(); cy <= bottomRight.y.floor() + 1; cy++) {
 				point = new Point(cx, cy);
 				if(!cells.containsKey(point)){
 					createCell(point);
+				} else {
+					if(cells[point].size != cellSize) {
+						cells[point].updateCell(cellSize);
+						cells[point].draw();
+        			}
 				}
 			}
 		}
@@ -93,7 +104,7 @@ class Board extends DisplayObjectContainer {
 		if(selected != null) {
 			Cell oldCell = selected;
 			selected = null;
-			oldCell.updateCell();
+			oldCell.draw();
 		}
 		selected = cell;
 		selected.draw();

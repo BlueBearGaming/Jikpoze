@@ -23,6 +23,7 @@ class Cell extends DisplayObjectContainer {
 		this.position = position;
 		color = colors.elementAt(new Math.Random().nextInt(colors.length));
 		updateCell(size);
+		draw();
 		attachEvents();
 	}
 
@@ -40,7 +41,14 @@ class Cell extends DisplayObjectContainer {
 		}
 		onMouseOut.listen(mouseOutEvent);
 		void mouseClickEvent(MouseEvent e){
-			board.select(this);
+			MouseEvent o = board.dragMouseEvent;
+			if(o == null){
+				board.select(this);
+				return;
+			}
+			if(o.stageX == e.stageX && o.stageY == e.stageY){
+				board.select(this);
+			}
 		}
 		onMouseClick.listen(mouseClickEvent);
 	}
@@ -52,7 +60,6 @@ class Cell extends DisplayObjectContainer {
 		Point viewPoint = board.gamePointToViewPoint(position);
 		x = viewPoint.x;
 		y = viewPoint.y;
-		draw();
 	}
 
 	void draw(){
@@ -66,6 +73,7 @@ class Cell extends DisplayObjectContainer {
 			shape.graphics.strokeColor(Color.Gray, 1);
 		}
 		shape.graphics.fillColor(color);
+		//shape.applyCache(x - size, y - size, size * 2, size * 2, debugBorder: true);
 
 	}
 
@@ -77,6 +85,7 @@ class Cell extends DisplayObjectContainer {
 		if(board.contains(this)) {
 			board.removeChild(this);
 		}
+		removeCache();
 		shape = new Shape();
 		addChild(shape);
 		board.addChild(this);

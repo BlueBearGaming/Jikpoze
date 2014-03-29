@@ -14,23 +14,6 @@ class HexCell extends Cell {
 		}
 	}
 
-	Point gamePointToViewPoint(Point gamePoint){
-		num viewX = gamePoint.x * size * 2;
-		num viewY = gamePoint.y * size * Math.cos(Math.PI/6) * 2;
-		if(gamePoint.y.floor() % 2 == 0) {
-			viewX += size;
-		}
-		return new Point(viewX, viewY);
-	}
-
-	static int getMaxX(num width, int size){
-		return (width / size / 4).floor();
-	}
-
-	static int getMaxY(num height, int size){
-		return (height / size / Math.cos(Math.PI/6) / 4).floor();
-	}
-
 	List<Point> getAdjacentPoints() {
 		num x = position.x;
 		num y = position.y;

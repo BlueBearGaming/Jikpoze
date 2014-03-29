@@ -8,11 +8,16 @@ class HexBoard extends Board {
 		return cells[point] = new HexCell(this, point, cellSize);
 	}
 
-	int getMaxX() {
-		return HexCell.getMaxX(stage.contentRectangle.width, cellSize);
+	Point gamePointToViewPoint(Point gamePoint){
+		num viewX = gamePoint.x * cellSize * 2;
+		num viewY = gamePoint.y * cellSize * Math.cos(Math.PI/6) * 2;
+		if(gamePoint.y.floor() % 2 == 0) {
+			viewX += cellSize;
+		}
+		return new Point(viewX, viewY);
 	}
 
-	int getMaxY() {
-		return HexCell.getMaxY(stage.contentRectangle.height, cellSize);
+	Point viewPointToGamePoint(Point viewPoint){
+		return new Point((viewPoint.x / cellSize / 2).floor(), (viewPoint.y / cellSize / Math.cos(Math.PI/6) / 2).floor());
 	}
 }
