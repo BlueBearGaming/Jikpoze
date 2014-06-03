@@ -23,4 +23,8 @@ class IsoCell extends Cell {
 		bitmap.height = size * 2 * skewFactor;
 	}
 
+	void loadBitmap() {
+		bitmap = new IsoBitmap(board.resourceManager.getBitmapData('tile'));
+	}
+
 }

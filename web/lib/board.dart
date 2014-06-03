@@ -11,6 +11,7 @@ part 'isoboard.dart';
 part 'cell.dart';
 part 'hexcell.dart';
 part 'isocell.dart';
+part 'isobitmap.dart';
 part 'player.dart';
 
 /**
@@ -28,8 +29,11 @@ class Board extends DisplayObjectContainer {
 	Point dragging;
 	ResourceManager resourceManager = new ResourceManager();
 	Player player;
+	static int maxZoom = 128;
+	static int minZoom = 42;
+	static int zoomIncrement = 5;
 
-	Board(Html.CanvasElement canvas, int cellSize){
+	Board(Html.CanvasElement canvas, int cellSize) {
 		this.canvas = canvas;
 		Stage stage = new Stage(canvas, webGL: false);
 		stage.scaleMode = StageScaleMode.NO_SCALE;
@@ -47,21 +51,21 @@ class Board extends DisplayObjectContainer {
 		});
 	}
 
-	void attachEvents(){
+	void attachEvents() {
 		onResizeEvent(Event e){
 			renderCells();
 		}
 		stage.onResize.listen(onResizeEvent);
 		onScaleEvent(MouseEvent e){
 			if(e.deltaY.isNegative){
-				if(cellSize < 40){
-					cellSize += 10;
+				if(cellSize < maxZoom){
+					cellSize += zoomIncrement;
 					renderCells();
 				}
-			} else if(cellSize > 16) {
-				cellSize -= 10;
-				if(cellSize < 16){
-					cellSize = 16;
+			} else if(cellSize > minZoom) {
+				cellSize -= zoomIncrement;
+				if(cellSize < minZoom){
+					cellSize = minZoom;
 				}
 				renderCells();
 			}
@@ -87,9 +91,9 @@ class Board extends DisplayObjectContainer {
 		stage.onMouseMove.listen(onMouseMoveEvent);
 	}
 
-	void renderCells(){
-		Point topLeft = viewPointToGamePoint(stage.contentRectangle.topLeft.subtract(new Point(x, y)));
-		Point bottomRight = viewPointToGamePoint(stage.contentRectangle.bottomRight.subtract(new Point(x, y)));
+	void renderCells() {
+		Point topLeft = getTopLeftViewPoint();
+		Point bottomRight = getBottomRightViewPoint();
 		Point point;
 		for(int cx = topLeft.x.floor(); cx <= bottomRight.x.floor() + 1; cx++) {
 			for(int cy = topLeft.y.floor(); cy <= bottomRight.y.floor() + 1; cy++) {
@@ -111,7 +115,7 @@ class Board extends DisplayObjectContainer {
 		return cells[point] = new Cell(this, point, cellSize);
 	}
 
-	void select(Cell cell){
+	void select(Cell cell) {
 		if(selected != null) {
 			Cell oldCell = selected;
 			selected = null;
@@ -122,7 +126,7 @@ class Board extends DisplayObjectContainer {
 		selected.draw();
 	}
 
-	void updateSelected(){
+	void updateSelected() {
 		if(selected != null) {
 			selected.draw();
 		}
@@ -131,11 +135,20 @@ class Board extends DisplayObjectContainer {
 		}
 	}
 
-	Point gamePointToViewPoint(Point gamePoint){
+	Point gamePointToViewPoint(Point gamePoint) {
 		return new Point(gamePoint.x * cellSize * 2, gamePoint.y * cellSize * 2);
 	}
 
-	Point viewPointToGamePoint(Point viewPoint){
+	Point viewPointToGamePoint(Point viewPoint) {
 		return new Point((viewPoint.x / cellSize / 2).floor(), (viewPoint.y / cellSize / 2).floor());
 	}
+
+	Point getTopLeftViewPoint() {
+		return viewPointToGamePoint(stage.contentRectangle.topLeft.subtract(new Point(x, y)));
+	}
+
+	Point getBottomRightViewPoint() {
+		return viewPointToGamePoint(stage.contentRectangle.bottomRight.subtract(new Point(x, y)));
+	}
+
 }

@@ -10,44 +10,44 @@ class Cell extends DisplayObjectContainer {
 	bool mouseOver = false;
 	Bitmap bitmap;
 
-	Cell(Board board, Point position, int size){
+	Cell(Board board, Point position, int size) {
 		this.board = board;
 		this.position = position;
-		bitmap = new Bitmap(board.resourceManager.getBitmapData('tile'));
+		loadBitmap();
 		addChild(bitmap);
 		updateCell(size);
 		draw();
 		attachEvents();
 	}
 
-	void attachEvents(){
-		void mouseOverEvent(MouseEvent e){
+	void attachEvents() {
+		void mouseOverEvent(MouseEvent e) {
 			mouseOver = true;
 			draw();
 			board.updateSelected();
 		}
 		onMouseOver.listen(mouseOverEvent);
-		void mouseOutEvent(MouseEvent e){
+		void mouseOutEvent(MouseEvent e) {
 			mouseOver = false;
-            draw();
+			draw();
 			board.updateSelected();
 		}
 		onMouseOut.listen(mouseOutEvent);
-		void mouseClickEvent(MouseEvent e){
+		void mouseClickEvent(MouseEvent e) {
 			MouseEvent o = board.dragMouseEvent;
-			if(o == null){
+			if (o == null) {
 				board.select(this);
 				return;
 			}
-			if(o.stageX == e.stageX && o.stageY == e.stageY){
+			if (o.stageX == e.stageX && o.stageY == e.stageY) {
 				board.select(this);
 			}
 		}
 		onMouseClick.listen(mouseClickEvent);
 	}
 
-	void updateCell([int size]){
-		if(size != null) {
+	void updateCell([int size]) {
+		if (size != null) {
 			this.size = size;
 		}
 		Point viewPoint = board.gamePointToViewPoint(position);
@@ -59,12 +59,12 @@ class Cell extends DisplayObjectContainer {
 		bitmap.height = size * 2;
 	}
 
-	void draw(){
+	void draw() {
 		clear();
 		buildGraphics(shape.graphics);
-		if(board.selected == this){
+		if (board.selected == this) {
 			shape.graphics.strokeColor(Color.Aqua, 5);
-		} else if(mouseOver){
+		} else if (mouseOver) {
 			shape.graphics.strokeColor(Color.Azure, 3);
 		} else {
 			shape.graphics.strokeColor(Color.Gray, 0.5);
@@ -73,11 +73,11 @@ class Cell extends DisplayObjectContainer {
 	}
 
 	void clear() {
-		if(shape != null) {
+		if (shape != null) {
 			shape.graphics.clear();
 			removeChild(shape);
 		}
-		if(board.contains(this)) {
+		if (board.contains(this)) {
 			board.removeChild(this);
 		}
 		removeCache();
@@ -94,23 +94,22 @@ class Cell extends DisplayObjectContainer {
 		g.lineTo(size, size);
 	}
 
+	void loadBitmap() {
+		bitmap = new Bitmap(board.resourceManager.getBitmapData('tile'));
+	}
+
 	List<Point> getAdjacentPoints() {
 		num x = position.x;
 		num y = position.y;
-		return [
-			new Point(x + 1, y),
-			new Point(x, y + 1),
-			new Point(x - 1, y),
-			new Point(x, y - 1),
-         ];
+		return [new Point(x + 1, y), new Point(x, y + 1), new Point(x - 1, y), new Point(x, y - 1),];
 	}
 
-	List<Cell> getAdjacentCells(){
-		if(adjacentCells.isNotEmpty){
+	List<Cell> getAdjacentCells() {
+		if (adjacentCells.isNotEmpty) {
 			return adjacentCells;
 		}
-		for (Point point in getAdjacentPoints()){
-			if(board.cells.containsKey(point)){
+		for (Point point in getAdjacentPoints()) {
+			if (board.cells.containsKey(point)) {
 				adjacentCells.add(board.cells[point]);
 			} else {
 				// Create and append
@@ -119,7 +118,7 @@ class Cell extends DisplayObjectContainer {
 		return adjacentCells;
 	}
 
-	static int getPointHashCode(Point point){
+	static int getPointHashCode(Point point) {
 		return new JenkinsHasher().add(point.x).add(point.x.sign).add(point.y).add(point.y.sign).hash;
 	}
 
