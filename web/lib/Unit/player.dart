@@ -4,6 +4,7 @@ class Player extends DisplayObjectContainer {
 	Board board;
 	Cell currentCell;
 	bool selected = false;
+	bool mouseOver = false;
 	Bitmap bitmap;
 	static double sizeFactor = 0.6;
 
@@ -14,6 +15,33 @@ class Player extends DisplayObjectContainer {
 		bitmap = new Bitmap(textureAtlas.getBitmapData("down-0"));
 		addChild(bitmap);
 		draw();
+		attachEvents();
+	}
+
+	void attachEvents() {
+		void mouseOverEvent(MouseEvent e) {
+			mouseOver = true;
+			draw();
+			board.updateSelected();
+		}
+		onMouseOver.listen(mouseOverEvent);
+		void mouseOutEvent(MouseEvent e) {
+			mouseOver = false;
+			draw();
+			board.updateSelected();
+		}
+		onMouseOut.listen(mouseOutEvent);
+		void mouseClickEvent(MouseEvent e) {
+			MouseEvent o = board.dragMouseEvent;
+			if (o == null) {
+				board.select(this.currentCell);
+				return;
+			}
+			if (o.stageX == e.stageX && o.stageY == e.stageY) {
+				board.select(this.currentCell);
+			}
+		}
+		onMouseClick.listen(mouseClickEvent);
 	}
 
 	void draw() {

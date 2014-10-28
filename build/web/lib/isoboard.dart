@@ -18,6 +18,7 @@ class IsoBoard extends Board {
 	}
 
 	Point viewPointToGamePoint(Point viewPoint){
-		return new Point((viewPoint.x / cellSize / 2).floor(), (viewPoint.y / cellSize / Math.cos(Math.PI/4) / 2).floor());
+		return new Point((viewPoint.x / cellSize / 2).floor(), (viewPoint.y / cellSize / IsoCell.skewFactor).floor());
 	}
+
 }

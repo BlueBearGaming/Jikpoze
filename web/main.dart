@@ -1,5 +1,5 @@
 import 'dart:html';
-import 'lib/board.dart';
+import 'lib/game.dart';
 
 void main() {
 	CanvasElement canvas = querySelector('#canvas');

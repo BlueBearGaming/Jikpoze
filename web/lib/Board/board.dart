@@ -1,18 +1,4 @@
-library jikpoze;
-
-import 'dart:html' as Html;
-import 'dart:collection';
-import 'dart:math' as Math;
-import 'package:stagexl/stagexl.dart';
-import 'jenkinshasher.dart';
-
-part 'hexboard.dart';
-part 'isoboard.dart';
-part 'cell.dart';
-part 'hexcell.dart';
-part 'isocell.dart';
-part 'isobitmap.dart';
-part 'player.dart';
+part of jikpoze;
 
 /**
  * This is the main class of the game, it handles the creation
@@ -123,7 +109,7 @@ class Board extends DisplayObjectContainer {
 		}
 		selected = cell;
 		print(cell.position);
-		selected.draw();
+		updateSelected();
 	}
 
 	void updateSelected() {
