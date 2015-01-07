@@ -9,6 +9,7 @@ import 'jenkinshasher.dart';
 part 'Board/board.dart';
 part 'Board/hexboard.dart';
 part 'Board/isoboard.dart';
+part 'Layer/layer.dart';
 part 'Cell/cell.dart';
 part 'Cell/hexcell.dart';
 part 'Cell/isocell.dart';

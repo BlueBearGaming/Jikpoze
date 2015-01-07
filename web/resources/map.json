@@ -1,0 +1,50 @@
+{
+    "code":"ok",
+    "data":{
+        "name":"test_map",
+        "label":"Test Map",
+        "type":"mini-game",
+        "layers":{
+            "1":{
+                "name":"land_main",
+                "label":"Land (main)",
+                "description":null,
+                "mapItems":[
+
+                ]
+            }
+        },
+        "pencilSets":[
+            {
+                "name":"test",
+                "label":"Test",
+                "pencils":[
+                    {
+                        "name":"grass_01",
+                        "label":"Grass",
+                        "type":"land",
+                        "imageX":0,
+                        "imageY":0,
+                        "width":512,
+                        "height":256,
+                        "boundingBox":[
+                            [
+                                0,
+                                0
+                            ]
+                        ],
+                        "allowedLayers":[
+                            "land_main"
+                        ],
+                        "image":{
+                            "name":"isometric_grass_big.png",
+                            "fileName":"3ecc177460f9a7e89b623635702c9c4f549d5a8c5e1ed.png",
+                            "filePath":"/home/www/bluebear/resources/images",
+                            "extension":"png"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}

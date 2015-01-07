@@ -8,7 +8,7 @@ class Board extends DisplayObjectContainer {
 
 	Html.CanvasElement canvas;
 	RenderLoop renderLoop;
-	Map<Point, Cell> cells = new LinkedHashMap(hashCode: Cell.getPointHashCode, equals: Cell.pointEquals);
+	LinkedHashMap<String, Layer> layers = new LinkedHashMap<String, Layer>();
 	int cellSize;
 	Cell selected;
 	MouseEvent dragMouseEvent;
@@ -32,7 +32,7 @@ class Board extends DisplayObjectContainer {
 		resourceManager.addTextureAtlas('player', 'resources/player-01.json', TextureAtlasFormat.JSON);
 		resourceManager.load().then((res){
 			renderCells();
-			player = new Player(cells[new Point(10,10)]);
+			player = new Player(layers['units'].cells[new Point(10,10)]);
 			attachEvents();
 		});
 	}
@@ -83,14 +83,16 @@ class Board extends DisplayObjectContainer {
 		Point point;
 		for(int cx = topLeft.x.floor(); cx <= bottomRight.x.floor() + 1; cx++) {
 			for(int cy = topLeft.y.floor(); cy <= bottomRight.y.floor() + 1; cy++) {
-				point = new Point(cx, cy);
-				if(!cells.containsKey(point)){
-					createCell(point);
-				} else {
-					if(cells[point].size != cellSize) {
-						cells[point].updateCell(cellSize);
-						cells[point].draw();
-        			}
+				for(Layer layer in layers) {
+					point = new Point(cx, cy);
+    				if(!layer.cells.containsKey(point)){
+    					createCell(point);
+    				} else {
+    					if(layer.cells[point].size != cellSize) {
+    						layer.cells[point].updateCell(cellSize);
+    						layer.cells[point].draw();
+            			}
+    				}
 				}
 			}
 		}
