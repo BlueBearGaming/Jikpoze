@@ -28,13 +28,6 @@ class Board extends DisplayObjectContainer {
 		renderLoop.addStage(stage);
 		stage.addChild(this);
 		this.cellSize = cellSize;
-		resourceManager.addBitmapData('tile', 'resources/isometric_grass_big.png');
-		resourceManager.addTextureAtlas('player', 'resources/player-01.json', TextureAtlasFormat.JSON);
-		resourceManager.load().then((res){
-			renderCells();
-			player = new Player(layers['units'].cells[new Point(10,10)]);
-			attachEvents();
-		});
 	}
 
 	void attachEvents() {
@@ -139,4 +132,15 @@ class Board extends DisplayObjectContainer {
 		return viewPointToGamePoint(stage.contentRectangle.bottomRight.subtract(new Point(x, y)));
 	}
 
+	void loadMap(String responseText) {
+		var data = JSON.decode(responseText);
+		print(data);
+//		resourceManager.addBitmapData('tile', 'resources/isometric_grass_big.png');
+//		resourceManager.addTextureAtlas('player', 'resources/player-01.json', TextureAtlasFormat.JSON);
+//		resourceManager.load().then((res){
+//			renderCells();
+//			player = new Player(layers['units'].cells[new Point(10,10)]);
+//			attachEvents();
+//		});
+	}
 }
