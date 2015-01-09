@@ -8,7 +8,7 @@
             "map": {
               "name":"test_map",
               "label":"Test Map",
-              "type":"mini-game",
+              "type":"isometric",
               "layers":[
                   {
                       "name":"land_main",

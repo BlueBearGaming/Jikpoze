@@ -3,10 +3,7 @@ import 'lib/game.dart';
 
 void main() {
 	CanvasElement canvas = querySelector('#canvas');
-	Board board = new IsoBoard(canvas, 64);
 
-	var request = HttpRequest.getString("/resources/map.json").then(board.loadMap);
-
-	board.renderLoop.start();
+	Board board = new Board(canvas, "/resources/map.json");
+	board.init();
 }
-

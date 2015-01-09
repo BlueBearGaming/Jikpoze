@@ -8,26 +8,26 @@ class Board extends DisplayObjectContainer {
 
 	Html.CanvasElement canvas;
 	RenderLoop renderLoop;
-	LinkedHashMap<String, Layer> layers = new LinkedHashMap<String, Layer>();
-	int cellSize;
+	Map map;
 	Cell selected;
+	int cellSize;
 	MouseEvent dragMouseEvent;
 	Point dragging;
 	ResourceManager resourceManager = new ResourceManager();
-	Player player;
+	String endPoint;
 	static int maxZoom = 128;
 	static int minZoom = 42;
 	static int zoomIncrement = 5;
 
-	Board(Html.CanvasElement canvas, int cellSize) {
+	Board(Html.CanvasElement canvas, String endPoint) {
 		this.canvas = canvas;
+		this.endPoint = endPoint;
 		Stage stage = new Stage(canvas, webGL: false);
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 		stage.align = StageAlign.TOP_LEFT;
 		renderLoop = new RenderLoop();
 		renderLoop.addStage(stage);
 		stage.addChild(this);
-		this.cellSize = cellSize;
 	}
 
 	void attachEvents() {
@@ -71,70 +71,17 @@ class Board extends DisplayObjectContainer {
 	}
 
 	void renderCells() {
-		Point topLeft = getTopLeftViewPoint();
-		Point bottomRight = getBottomRightViewPoint();
-		Point point;
-		for(int cx = topLeft.x.floor(); cx <= bottomRight.x.floor() + 1; cx++) {
-			for(int cy = topLeft.y.floor(); cy <= bottomRight.y.floor() + 1; cy++) {
-				for(Layer layer in layers) {
-					point = new Point(cx, cy);
-    				if(!layer.cells.containsKey(point)){
-    					createCell(point);
-    				} else {
-    					if(layer.cells[point].size != cellSize) {
-    						layer.cells[point].updateCell(cellSize);
-    						layer.cells[point].draw();
-            			}
-    				}
-				}
-			}
-		}
-		updateSelected();
+		map.renderCells();
 	}
 
-	Cell createCell(point) {
-		return cells[point] = new Cell(this, point, cellSize);
-	}
-
-	void select(Cell cell) {
-		if(selected != null) {
-			Cell oldCell = selected;
-			selected = null;
-			oldCell.draw();
-		}
-		selected = cell;
-		print(cell.position);
-		updateSelected();
-	}
-
-	void updateSelected() {
-		if(selected != null) {
-			selected.draw();
-		}
-		if(player != null){
-			player.draw();
-		}
-	}
-
-	Point gamePointToViewPoint(Point gamePoint) {
-		return new Point(gamePoint.x * cellSize * 2, gamePoint.y * cellSize * 2);
-	}
-
-	Point viewPointToGamePoint(Point viewPoint) {
-		return new Point((viewPoint.x / cellSize / 2).floor(), (viewPoint.y / cellSize / 2).floor());
-	}
-
-	Point getTopLeftViewPoint() {
-		return viewPointToGamePoint(stage.contentRectangle.topLeft.subtract(new Point(x, y)));
-	}
-
-	Point getBottomRightViewPoint() {
-		return viewPointToGamePoint(stage.contentRectangle.bottomRight.subtract(new Point(x, y)));
+	void init() {
+		var request = Html.HttpRequest.getString(endPoint).then(loadMap);
 	}
 
 	void loadMap(String responseText) {
 		var data = JSON.decode(responseText);
 		print(data);
+		cellSize = 64;
 //		resourceManager.addBitmapData('tile', 'resources/isometric_grass_big.png');
 //		resourceManager.addTextureAtlas('player', 'resources/player-01.json', TextureAtlasFormat.JSON);
 //		resourceManager.load().then((res){
