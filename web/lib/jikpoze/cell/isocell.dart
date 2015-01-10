@@ -4,7 +4,7 @@ class IsoCell extends Cell {
 
 	static double skewFactor = 0.6;
 
-	IsoCell(Layer layer, Point position) : super(layer, position);
+	IsoCell(Layer layer, Point position, BlueBear.Pencil pencil) : super(layer, position, pencil);
 
 	void buildGraphics(Graphics g) {
 		int size = layer.map.board.cellSize;
@@ -23,7 +23,7 @@ class IsoCell extends Cell {
 	}
 
 	void loadBitmap() {
-		bitmap = new IsoBitmap(layer.map.board.resourceManager.getBitmapData('tile'));
+		bitmap = new IsoBitmap(getBitmapData());
 	}
 
 }

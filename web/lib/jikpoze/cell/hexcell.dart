@@ -2,7 +2,7 @@ part of jikpoze;
 
 class HexCell extends Cell {
 
-	HexCell(Layer layer, Point position) : super(layer, position);
+	HexCell(Layer layer, Point position, BlueBear.Pencil pencil) : super(layer, position, pencil);
 
 	void buildGraphics(Graphics g) {
 		int numberOfSides = 6; // hexagon

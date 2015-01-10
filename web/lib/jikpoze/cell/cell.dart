@@ -3,15 +3,15 @@ part of jikpoze;
 class Cell extends DisplayObjectContainer {
 	Layer layer;
 	Point position;
+	BlueBear.Pencil pencil;
 	Shape shape;
 	List<Cell> adjacentCells = new List<Cell>();
 	bool selected = false;
 	bool mouseOver = false;
 	Bitmap bitmap;
 
-	Cell(Layer layer, Point position) {
-		this.layer = layer;
-		this.position = position;
+	Cell(this.layer, this.position, this.pencil) {
+		layer.addChild(this);
 		loadBitmap();
 		addChild(bitmap);
 		updateCell();
@@ -60,7 +60,11 @@ class Cell extends DisplayObjectContainer {
 	}
 
 	void loadBitmap() {
-		bitmap = new Bitmap(layer.map.board.resourceManager.getBitmapData('tile'));
+		bitmap = new Bitmap(getBitmapData());
+	}
+
+	BitmapData getBitmapData() {
+		return layer.map.board.resourceManager.getBitmapData('image.' + pencil.name);
 	}
 
 	List<Point> getAdjacentPoints() {

@@ -1,5 +1,5 @@
 import 'dart:html';
-import 'lib/game.dart';
+import 'lib/jikpoze/jikpoze.dart';
 
 void main() {
 	CanvasElement canvas = querySelector('#canvas');
