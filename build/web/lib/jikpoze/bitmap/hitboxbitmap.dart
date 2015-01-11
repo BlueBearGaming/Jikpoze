@@ -1,7 +1,7 @@
 part of jikpoze;
 
-class IsoBitmap extends Bitmap {
-	IsoBitmap(BitmapData bitmapData) : super(bitmapData);
+class HitboxBitmap extends Bitmap {
+	HitboxBitmap(BitmapData bitmapData) : super(bitmapData);
 
 	DisplayObject hitTestInput(num localX, num localY) {
 		if (bitmapData == null) {

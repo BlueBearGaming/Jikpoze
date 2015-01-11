@@ -1,0 +1,92 @@
+{
+    "code":"ok",
+    "timestamp": 1420827204000,
+    "type": "LoadContextResponse",
+    "data":{
+        "context": {
+            "id": 12,
+            "map": {
+              "name":"test_map",
+              "label":"Test Map",
+              "type":"hexagonal",
+              "layers":[
+                  {
+                      "name":"land_main",
+                      "label":"Land (main)",
+                      "description":null,
+                      "index":0
+                  },
+                  {
+                      "name":"selection",
+                      "label":"Selection",
+                      "description":"Used to display selected layers graphically",
+                      "index":1
+                  },
+                  {
+                      "name":"units_main",
+                      "label":"Units (main)",
+                      "description":null,
+                      "index":2
+                  }
+              ],
+              "pencilSets":[
+                  {
+                      "name":"test",
+                      "label":"Test",
+                      "pencils":[
+                          {
+                              "name":"grass_01",
+                              "label":"Grass",
+                              "type":"land",
+                              "imageX":0,
+                              "imageY":0,
+                              "width":1,
+                              "height":1.15,
+                              "boundingBox":[
+                                  [0, 0]
+                              ],
+                              "allowedLayers":[
+                                  "land_main"
+                              ],
+                              "image":{
+                                  "name":"grass-01",
+                                  "fileName":"hexagon.png"
+                              }
+                          }
+                      ]
+                  }
+              ]
+          },
+          "mapItems":[
+              {
+                  "id": 1,
+                  "layerName": "land_main",
+                  "pencilName": "grass_01",
+                  "x": 0,
+                  "y": 0
+              },
+              {
+                  "id": 2,
+                  "layerName": "land_main",
+                  "pencilName": "grass_01",
+                  "x": 1,
+                  "y": 0
+              },
+              {
+                  "id": 3,
+                  "layerName": "land_main",
+                  "pencilName": "grass_01",
+                  "x": 1,
+                  "y": 1
+              },
+              {
+                  "id": 4,
+                  "layerName": "land_main",
+                  "pencilName": "grass_01",
+                  "x": 0,
+                  "y": 1
+              }
+          ]
+      }
+    }
+}
