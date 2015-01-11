@@ -8,7 +8,7 @@
             "map": {
               "name":"test_map",
               "label":"Test Map",
-              "type":"square",
+              "type":"isometric",
               "layers":[
                   {
                       "name":"land_main",
@@ -39,7 +39,7 @@
                               "label":"Grass",
                               "type":"land",
                               "imageX":0,
-                              "imageY":0,
+                              "imageY":0.4,
                               "width":2,
                               "height":2,
                               "boundingBox":[
@@ -50,7 +50,7 @@
                               ],
                               "image":{
                                   "name":"grass-01",
-                                  "fileName":"grass-01.png"
+                                  "fileName":"isometric_grass.png"
                               }
                           }
                       ]

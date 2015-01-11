@@ -8,13 +8,25 @@ import 'jenkinshasher.dart';
 import '../bluebear/bluebear.dart' as BlueBear;
 
 part 'board/board.dart';
-part 'map/map.dart';
+
+// Map
+part 'map/squaremap.dart';
 part 'map/hexmap.dart';
 part 'map/isomap.dart';
+
+// Layers
 part 'layer/layer.dart';
-part 'layer/editionlayer.dart';
+part 'layer/gridlayer.dart';
+
+// Cells
 part 'cell/cell.dart';
 part 'cell/hexcell.dart';
-part 'cell/isocell.dart';
+
+// Pencils
 part 'pencil/pencil.dart';
-part 'pencil/isobitmap.dart';
+part 'pencil/gridpencil.dart';
+part 'pencil/isogridpencil.dart';
+part 'pencil/hexgridpencil.dart';
+
+// Bitmaps
+part 'bitmap/hitboxbitmap.dart';

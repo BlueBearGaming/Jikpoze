@@ -4,17 +4,35 @@ part of jikpoze;
  * This is the main class of the game, it handles the creation
  * of the stage and the creation of the cells.
  */
-class Map extends DisplayObjectContainer {
+class SquareMap extends DisplayObjectContainer {
 
 	Board board;
+	Pencil gridPencil;
 	Col.LinkedHashMap<String, Layer> layers = new Col.LinkedHashMap<String, Layer>();
 
-	Map(this.board) {
+	SquareMap(Board board) {
+		if (null == board) {
+			throw 'board cannot be null';
+		}
 		board.addChild(this);
+		this.board = board;
 	}
 
-	Cell createCell(Layer layer, Point point, BlueBear.Pencil pencil) =>
+	Cell createCell(Layer layer, Point point, Pencil pencil) =>
 			layer.cells[point] = new Cell(layer, point, pencil);
+
+	void renderCells() {
+		for(Layer layer in layers.values) {
+			layer.renderCells();
+		}
+	}
+
+	Pencil getGridPencil() {
+		if (null == gridPencil) {
+			gridPencil = new GridPencil(board);
+		}
+		return gridPencil;
+	}
 
 	Point gamePointToViewPoint(Point gamePoint) {
 		return new Point(
@@ -28,17 +46,5 @@ class Map extends DisplayObjectContainer {
 				(viewPoint.x / board.cellSize / 2).floor(),
 				(viewPoint.y / board.cellSize / 2).floor()
 			);
-	}
-
-	Point getTopLeftViewPoint() =>
-			viewPointToGamePoint(stage.contentRectangle.topLeft.subtract(new Point(x, y)));
-
-	Point getBottomRightViewPoint() =>
-			viewPointToGamePoint(stage.contentRectangle.bottomRight.subtract(new Point(x, y)));
-
-	void renderCells() {
-		for(Layer layer in layers.values) {
-			layer.renderCells();
-		}
 	}
 }

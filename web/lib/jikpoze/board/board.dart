@@ -8,7 +8,7 @@ class Board extends DisplayObjectContainer {
 
 	Html.CanvasElement canvas;
 	RenderLoop renderLoop;
-	Map map;
+	SquareMap map;
 	BlueBear.Context context;
 	Col.LinkedHashMap<String, Pencil> pencils = new Col.LinkedHashMap<String, Pencil>();
 	Cell selected;
@@ -23,6 +23,12 @@ class Board extends DisplayObjectContainer {
 	bool editionMode = true;
 
 	Board(this.canvas, this.endPoint) {
+		if (null == canvas) {
+			throw "Canvas cannot be null";
+		}
+		if (null == endPoint) {
+			throw "EndPoint cannot be null";
+		}
 		Stage stage = new Stage(canvas, webGL: false);
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 		stage.align = StageAlign.TOP_LEFT;
@@ -96,7 +102,7 @@ class Board extends DisplayObjectContainer {
 				map = new IsoMap(this);
 				break;
 			default:
-				map= new Map(this);
+				map = new SquareMap(this);
 		}
 		map.name = 'map.' + contextMap.name;
 		cellSize = 64; // @todo load from contextMap
@@ -109,17 +115,14 @@ class Board extends DisplayObjectContainer {
 		}
 
 		if (editionMode) {
-			Layer layer = new EditionLayer(map, map.layers.length - 1);
+			Layer layer = new GridLayer(map, map.layers.length - 1);
 			layer.name = 'layer.edition';
 			map.layers['edition'] = layer;
 		}
 
 		for (BlueBear.PencilSet pencilSet in contextMap.pencilSets) {
 			for (BlueBear.Pencil pencil in pencilSet.pencils) {
-				pencils[pencil.name] = new Pencil.fromBlueBearPencil(pencil);
-				if (null != pencil.image) {
-					resourceManager.addBitmapData('image.' + pencil.name, 'resources/' + pencil.image.fileName);
-				}
+				pencils[pencil.name] = new Pencil.fromBlueBearPencil(this, pencil);
 			}
 		}
 
@@ -140,5 +143,10 @@ class Board extends DisplayObjectContainer {
 		});
 	}
 
+	Point getTopLeftViewPoint() =>
+			map.viewPointToGamePoint(stage.contentRectangle.topLeft.subtract(new Point(x, y)));
+
+	Point getBottomRightViewPoint() =>
+			map.viewPointToGamePoint(stage.contentRectangle.bottomRight.subtract(new Point(x, y)));
 
 }

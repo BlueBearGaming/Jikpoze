@@ -6,10 +6,10 @@ class Pencil {
 	String label;
 	String description;
 	String type;
-	int imageX;
-	int imageY;
-	int width;
-	int height;
+	num imageX;
+	num imageY;
+	num width;
+	num height;
 	List<Point> boundingBox = new List<Point>();
 	List<String> allowedLayers = new List<String>();
 	Image image;

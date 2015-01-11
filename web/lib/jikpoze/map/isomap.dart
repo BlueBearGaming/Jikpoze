@@ -2,12 +2,29 @@ part of jikpoze;
 
 class IsoMap extends HexMap {
 
-	num gameToViewYFactor = IsoCell.skewFactor;
-	num viewToGameYFactor = IsoCell.skewFactor;
+	static double skewFactor = 0.6;
+	num gameToViewYFactor = skewFactor;
+	num viewToGameYFactor = skewFactor;
 
 	IsoMap(Board board) : super(board);
 
-	Cell createCell(Layer layer, Point point, BlueBear.Pencil pencil) =>
-			layer.cells[point] = new IsoCell(layer, point, pencil);
+	Point gamePointToViewPoint(Point gamePoint){
+		num viewX = gamePoint.x * board.cellSize * 2;
+		num viewY = gamePoint.y * board.cellSize * skewFactor;
+		if(gamePoint.y.floor() % 2 == 0) {
+			viewX += board.cellSize;
+		}
+		return new Point(viewX, viewY);
+	}
 
+	Point viewPointToGamePoint(Point viewPoint){
+		return new Point((viewPoint.x / board.cellSize / 2).floor(), (viewPoint.y / board.cellSize / skewFactor).floor());
+	}
+
+	Pencil getGridPencil() {
+		if (null == gridPencil) {
+			gridPencil = new IsoGridPencil(board);
+		}
+		return gridPencil;
+	}
 }

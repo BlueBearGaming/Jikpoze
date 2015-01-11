@@ -8,7 +8,7 @@
             "map": {
               "name":"test_map",
               "label":"Test Map",
-              "type":"square",
+              "type":"hexagonal",
               "layers":[
                   {
                       "name":"land_main",
@@ -41,7 +41,7 @@
                               "imageX":0,
                               "imageY":0,
                               "width":2,
-                              "height":2,
+                              "height":2.3,
                               "boundingBox":[
                                   [0, 0]
                               ],
@@ -50,7 +50,7 @@
                               ],
                               "image":{
                                   "name":"grass-01",
-                                  "fileName":"grass-01.png"
+                                  "fileName":"hexagon.png"
                               }
                           }
                       ]
