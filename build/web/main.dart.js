@@ -14927,9 +14927,9 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
 ["", "main.dart", , F, {
   "^": "",
   main: [function() {
-    S.Board$(document.querySelector("#canvas_square"), "/resources/map.json").init$0();
-    S.Board$(document.querySelector("#canvas_iso"), "/resources/isomap.json").init$0();
-    S.Board$(document.querySelector("#canvas_hex"), "/resources/hexmap.json").init$0();
+    S.Board$(document.querySelector("#canvas_square"), "resources/map.json").init$0();
+    S.Board$(document.querySelector("#canvas_iso"), "resources/isomap.json").init$0();
+    S.Board$(document.querySelector("#canvas_hex"), "resources/hexmap.json").init$0();
   }, "call$0", "main$closure", 0, 0, 18]
 },
 1],
