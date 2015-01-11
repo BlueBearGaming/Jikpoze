@@ -39,9 +39,9 @@
                               "label":"Grass",
                               "type":"land",
                               "imageX":0,
-                              "imageY":0.4,
-                              "width":2,
-                              "height":2,
+                              "imageY":0.2,
+                              "width":1,
+                              "height":1,
                               "boundingBox":[
                                   [0, 0]
                               ],

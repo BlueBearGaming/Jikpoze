@@ -40,8 +40,8 @@
                               "type":"land",
                               "imageX":0,
                               "imageY":0,
-                              "width":2,
-                              "height":2.3,
+                              "width":1,
+                              "height":1.15,
                               "boundingBox":[
                                   [0, 0]
                               ],

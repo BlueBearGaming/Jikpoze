@@ -9,6 +9,7 @@ class SquareMap extends DisplayObjectContainer {
 	Board board;
 	Pencil gridPencil;
 	Col.LinkedHashMap<String, Layer> layers = new Col.LinkedHashMap<String, Layer>();
+	num skewFactor = 1;
 
 	SquareMap(Board board) {
 		if (null == board) {
@@ -36,15 +37,15 @@ class SquareMap extends DisplayObjectContainer {
 
 	Point gamePointToViewPoint(Point gamePoint) {
 		return new Point(
-				gamePoint.x * board.cellSize * 2,
-				gamePoint.y * board.cellSize * 2
+				gamePoint.x * board.cellSize,
+				gamePoint.y * board.cellSize
 			);
 	}
 
 	Point viewPointToGamePoint(Point viewPoint) {
 		return new Point(
-				(viewPoint.x / board.cellSize / 2).floor(),
-				(viewPoint.y / board.cellSize / 2).floor()
+				(viewPoint.x / board.cellSize).floor(),
+				(viewPoint.y / board.cellSize).floor()
 			);
 	}
 }

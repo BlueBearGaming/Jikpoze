@@ -17,9 +17,9 @@ class Board extends DisplayObjectContainer {
 	Point dragging;
 	ResourceManager resourceManager = new ResourceManager();
 	String endPoint;
-	static int maxZoom = 128;
-	static int minZoom = 42;
-	static int zoomIncrement = 5;
+	static int maxZoom = 256;
+	static int minZoom = 80;
+	static int zoomIncrement = 10;
 	bool editionMode = true;
 
 	Board(this.canvas, this.endPoint) {
@@ -105,7 +105,7 @@ class Board extends DisplayObjectContainer {
 				map = new SquareMap(this);
 		}
 		map.name = 'map.' + contextMap.name;
-		cellSize = 64; // @todo load from contextMap
+		cellSize = 128; // @todo load from contextMap
 
 		// Create layers
 		for (BlueBear.Layer contextLayer in contextMap.layers) {
