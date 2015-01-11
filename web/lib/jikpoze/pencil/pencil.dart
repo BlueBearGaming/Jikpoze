@@ -20,7 +20,7 @@ class Pencil {
 		}
 	}
 
-	DisplayObject getDisplayObject() {
+	DisplayObject getDisplayObject(Point point) {
 		Bitmap bitmap = new HitboxBitmap(getBitmapData());
 		updateBitmap(bitmap);
 		return bitmap;

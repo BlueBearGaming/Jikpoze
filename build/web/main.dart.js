@@ -612,6 +612,9 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     floor$0: function(receiver) {
       return this.toInt$0(Math.floor(receiver));
     },
+    round$0: function(receiver) {
+      return this.toInt$0(this.roundToDouble$0(receiver));
+    },
     roundToDouble$0: function(receiver) {
       if (receiver < 0)
         return -Math.round(-receiver);
@@ -816,6 +819,10 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       if (otherLength > t1)
         return false;
       return other === this.substring$1(receiver, t1 - otherLength);
+    },
+    replaceAll$2: function(receiver, from, to) {
+      H.checkString(to);
+      return H.stringReplaceAllUnchecked(receiver, from, to);
     },
     split$1: function(receiver, pattern) {
       return receiver.split(pattern);
@@ -2790,6 +2797,20 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     reflectionInfo.fixed$length = Array;
     return H.Closure_fromTearOff(receiver, functions, reflectionInfo, !!isStatic, jsArguments, $name);
   },
+  propertyTypeCastError: function(value, property) {
+    var t1 = J.getInterceptor$asx(property);
+    throw H.wrapException(H.CastErrorImplementation$(H.Primitives_objectTypeName(value), t1.substring$2(property, 3, t1.get$length(property))));
+  },
+  interceptedTypeCast: function(value, property) {
+    var t1;
+    if (value != null)
+      t1 = typeof value === "object" && J.getInterceptor(value)[property];
+    else
+      t1 = true;
+    if (t1)
+      return value;
+    H.propertyTypeCastError(value, property);
+  },
   throwCyclicInit: function(staticName) {
     throw H.wrapException(P.CyclicInitializationError$("Cyclic initialization for static " + H.S(staticName)));
   },
@@ -3624,6 +3645,16 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
   },
   JSName: {
     "^": "Object;name>"
+  },
+  CastErrorImplementation: {
+    "^": "Error;message",
+    toString$0: function(_) {
+      return this.message;
+    },
+    $isError: true,
+    static: {CastErrorImplementation$: function(actualType, expectedType) {
+        return new H.CastErrorImplementation("CastError: Casting value of type " + H.S(actualType) + " to incompatible type " + H.S(expectedType));
+      }}
   },
   RuntimeError: {
     "^": "Error;message",
@@ -11863,7 +11894,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     "%": "HTMLCanvasElement"
   },
   CanvasRenderingContext2D: {
-    "^": "Interceptor;lineCap},lineJoin},lineWidth},strokeStyle}",
+    "^": "Interceptor;fillStyle},lineCap},lineJoin},lineWidth},strokeStyle}",
     isPointInStroke$3: function(receiver, path_OR_x, x_OR_y, y) {
       return receiver.isPointInStroke(path_OR_x, x_OR_y, y);
     },
@@ -11881,6 +11912,12 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     },
     moveTo$2: function(receiver, x, y) {
       return receiver.moveTo(x, y);
+    },
+    fill$1: function(receiver, winding) {
+      receiver.fill(winding);
+    },
+    fill$0: function($receiver) {
+      return this.fill$1($receiver, "nonzero");
     },
     "%": "CanvasRenderingContext2D"
   },
@@ -12041,6 +12078,9 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     },
     toString$0: function(receiver) {
       return receiver.localName;
+    },
+    get$offsetTop: function(receiver) {
+      return C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(receiver.offsetTop));
     },
     get$onError: function(receiver) {
       return C.EventStreamProvider_error.forElement$1(receiver);
@@ -12286,10 +12326,18 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     "%": "NavigatorUserMediaError"
   },
   Node: {
-    "^": "EventTarget;parent:parentElement=",
+    "^": "EventTarget;parent:parentElement=,text:textContent%",
+    remove$0: function(receiver) {
+      var t1 = receiver.parentNode;
+      if (t1 != null)
+        t1.removeChild(receiver);
+    },
     toString$0: function(receiver) {
       var t1 = receiver.nodeValue;
       return t1 == null ? J.Interceptor.prototype.toString$0.call(this, receiver) : t1;
+    },
+    append$1: function(receiver, newChild) {
+      return receiver.appendChild(newChild);
     },
     contains$1: function(receiver, other) {
       return receiver.contains(other);
@@ -12441,6 +12489,10 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     "^": "UIEvent;data=",
     "%": "TextEvent"
   },
+  TextMetrics: {
+    "^": "Interceptor;width=",
+    "%": "TextMetrics"
+  },
   Touch: {
     "^": "Interceptor;identifier=",
     get$target: function(receiver) {
@@ -12585,6 +12637,12 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
   },
   _Attr: {
     "^": "Node;name=,value=",
+    get$text: function(receiver) {
+      return receiver.textContent;
+    },
+    set$text: function(receiver, value) {
+      receiver.textContent = value;
+    },
     "%": "Attr"
   },
   _ClientRect: {
@@ -12703,6 +12761,9 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     else
       return "DOMMouseScroll";
   }, "call$1", "Element__determineMouseWheelEventType$closure", 2, 0, 31, 3, []],
+  _ElementFactoryProvider_createElement_tag: function(tag, typeExtension) {
+    return document.createElement(tag);
+  },
   HttpRequest_getString: function(url, onProgress, withCredentials) {
     return W.HttpRequest_request(url, null, null, onProgress, null, null, null, withCredentials).then$1(new W.HttpRequest_getString_closure());
   },
@@ -12764,6 +12825,12 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     set$cursor: function(receiver, value) {
       this.setProperty$3(receiver, "cursor", value, "");
     },
+    set$display: function(receiver, value) {
+      this.setProperty$3(receiver, "display", value, "");
+    },
+    set$font: function(receiver, value) {
+      this.setProperty$3(receiver, "font", value, "");
+    },
     get$height: function(receiver) {
       return this.getPropertyValue$1(receiver, "height");
     },
@@ -12778,6 +12845,9 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     },
     set$outline: function(receiver, value) {
       this.setProperty$3(receiver, "outline", value, "");
+    },
+    set$verticalAlign: function(receiver, value) {
+      this.setProperty$3(receiver, "vertical-align", value, "");
     },
     get$width: function(receiver) {
       return this.getPropertyValue$1(receiver, "width");
@@ -13480,27 +13550,42 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
   min: function(a, b) {
     if (typeof a !== "number")
       throw H.wrapException(P.ArgumentError$(a));
-    if (C.JSNumber_methods.$gt(a, b))
+    if (typeof b !== "number")
+      throw H.wrapException(P.ArgumentError$(b));
+    if (a > b)
       return b;
-    if (C.JSNumber_methods.$lt(a, b))
+    if (a < b)
       return a;
-    if (typeof a === "number")
-      if (a === 0)
-        return C.JSNumber_methods.$mul(C.JSNumber_methods.$add(a, b) * a, b);
-    if (a === 0)
-      b.get$isNegative(b);
-    b.get$isNaN(b);
+    if (typeof b === "number") {
+      if (typeof a === "number")
+        if (a === 0)
+          return (a + b) * a * b;
+      if (a === 0 && C.JSDouble_methods.get$isNegative(b) || C.JSDouble_methods.get$isNaN(b))
+        return b;
+      return a;
+    }
     return a;
   },
   max: function(a, b) {
-    if (C.JSNumber_methods.$gt(a, b))
+    var t1;
+    if (a > b)
       return a;
-    if (C.JSNumber_methods.$lt(a, b))
+    if (a < b)
       return b;
-    if (typeof a === "number")
-      if (a === 0)
-        return C.JSNumber_methods.$add(a, b);
-    b.get$isNaN(b);
+    if (typeof b === "number") {
+      if (typeof a === "number")
+        if (a === 0)
+          return a + b;
+      if (isNaN(b))
+        return b;
+      return a;
+    }
+    if (b === 0)
+      t1 = a === 0 ? 1 / a < 0 : a < 0;
+    else
+      t1 = false;
+    if (t1)
+      return b;
     return a;
   },
   Point0: {
@@ -13613,13 +13698,13 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     },
     get$hashCode: function(_) {
       var t1, t2, t3, t4, t5, t6;
-      t1 = this.get$left(this);
-      t2 = this.get$top(this);
+      t1 = C.JSNumber_methods.get$hashCode(this.get$left(this));
+      t2 = J.get$hashCode$(this.get$top(this));
       t3 = this.get$left(this);
       t4 = this.get$width(this);
       t5 = this.get$top(this);
       t6 = this.get$height(this);
-      return P._JenkinsSmiHash_finish(P._JenkinsSmiHash_combine(P._JenkinsSmiHash_combine(P._JenkinsSmiHash_combine(P._JenkinsSmiHash_combine(0, t1 & 0x1FFFFFFF), t2 & 0x1FFFFFFF), t3 + t4 & 0x1FFFFFFF), t5 + t6 & 0x1FFFFFFF));
+      return P._JenkinsSmiHash_finish(P._JenkinsSmiHash_combine(P._JenkinsSmiHash_combine(P._JenkinsSmiHash_combine(P._JenkinsSmiHash_combine(0, t1), t2), t3 + t4 & 0x1FFFFFFF), t5 + t6 & 0x1FFFFFFF));
     },
     boundingBox$1: [function(_, other) {
       var right, bottom, left, $top;
@@ -14359,7 +14444,13 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       }
       if (this.editionMode) {
         t1 = this.map;
-        layer = S.GridLayer$(t1, t1.layers._collection$_length - 1);
+        t2 = t1.layers._collection$_length - 1;
+        t3 = P.LinkedHashMap_LinkedHashMap(S.Cell_pointEquals$closure(), S.Cell_getPointHashCode$closure(), null, null, null);
+        t4 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
+        t5 = $.DisplayObject__nextID;
+        $.DisplayObject__nextID = t5 + 1;
+        layer = new S.GridLayer(null, t1, t2, t3, t4, true, true, false, true, "auto", true, 0, t5, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
+        layer.Layer$2(t1, t2);
         layer._display$_name = "layer.edition";
         this.map.layers.$indexSet(0, "edition", layer);
       }
@@ -14374,6 +14465,20 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         }
       this.resourceManager.load$0(0).then$1(new S.Board_loadMap_closure(this));
     }, "call$1", "get$loadMap", 2, 0, 97, 103, []],
+    getTopLeftViewPoint$0: function() {
+      var t1, t2;
+      t1 = this.map;
+      t2 = this.get$stage()._contentRectangle;
+      t2 = H.setRuntimeTypeInfo(new U.Rectangle0(t2.left, t2.top, t2.width, t2.height), [H.getTypeArgumentByIndex(t2, 0)]);
+      return t1.viewPointToGamePoint$1(H.setRuntimeTypeInfo(new U.Point(t2.left, t2.top), [H.getTypeArgumentByIndex(t2, 0)]).subtract$1(H.setRuntimeTypeInfo(new U.Point(this._x, this._y), [null])));
+    },
+    getBottomRightViewPoint$0: function() {
+      var t1, t2;
+      t1 = this.map;
+      t2 = this.get$stage()._contentRectangle;
+      t2 = H.setRuntimeTypeInfo(new U.Rectangle0(t2.left, t2.top, t2.width, t2.height), [H.getTypeArgumentByIndex(t2, 0)]);
+      return t1.viewPointToGamePoint$1(H.setRuntimeTypeInfo(new U.Point(t2.left + t2.width, t2.top + t2.height), [H.getTypeArgumentByIndex(t2, 0)]).subtract$1(H.setRuntimeTypeInfo(new U.Point(this._x, this._y), [null])));
+    },
     Board$2: function(canvas, endPoint) {
       var t1, stage, t2, t3;
       t1 = this.canvas;
@@ -14515,17 +14620,21 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
   Cell: {
     "^": "DisplayObjectContainer;layer,position,pencil,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     draw$0: function() {
-      var t1, t2, viewPoint;
+      var t1, t2, t3, viewPoint;
       this.removeChildren$0();
       t1 = this.layer;
       t2 = J.getInterceptor$asx(t1);
       if (t2.contains$1(t1, this) === true)
         t1.removeChild$1(this);
       t1.addChild$1(this);
-      viewPoint = t2.get$map(t1).gamePointToViewPoint$1(this.position);
+      t3 = this.position;
+      viewPoint = t2.get$map(t1).gamePointToViewPoint$1(t3);
       this.set$x(0, viewPoint.x);
       this.set$y(0, viewPoint.y);
-      this.addChildAt$2(this.pencil.getDisplayObject$0(), this._children.length);
+      this.addChildAt$2(this.pencil.getDisplayObject$1(t3), this._children.length);
+    },
+    attachEvents$0: function() {
+      this.on$1(0, "click").listen$1(new S.Cell_attachEvents_closure(this));
     },
     Cell$3: function(layer, position, pencil) {
       var t1 = this.layer;
@@ -14534,6 +14643,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       if (null == this.pencil)
         throw H.wrapException("pencil cannot be null");
       t1.addChild$1(this);
+      this.attachEvents$0();
       this.draw$0();
     },
     static: {Cell$: function(layer, position, pencil) {
@@ -14555,24 +14665,33 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         return S.Cell_getPointHashCode(k1) === S.Cell_getPointHashCode(k2);
       }, "call$2", "Cell_pointEquals$closure", 4, 0, 40, 41, [], 42, []]}
   },
+  Cell_attachEvents_closure: {
+    "^": "Closure:105;this_0",
+    call$1: [function(e) {
+      var t1, t2, t3, targetLayer;
+      t1 = this.this_0;
+      t2 = t1.layer;
+      t3 = J.getInterceptor$ax(t2);
+      if (t3.get$map(t2).get$board().dragging != null)
+        return;
+      targetLayer = J.$index$asx(t3.get$map(t2).get$layers(), "land_main");
+      t1 = t1.position;
+      if (J.get$cells$x(targetLayer).containsKey$1(t1))
+        return;
+      t3.get$map(t2).createCell$3(targetLayer, t1, t3.get$map(t2).get$board().pencils.$index(0, "grass_01"));
+      targetLayer.renderCells$0();
+    }, "call$1", null, 2, 0, null, 3, [], "call"]
+  },
   HexCell: {
     "^": "Cell;layer,position,pencil,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams"
   },
   GridLayer: {
     "^": "Layer;pencil,map,index,cells,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     renderCells$0: function() {
-      var t1, t2, t3, topLeft, bottomRight, cx, point, cy;
+      var topLeft, bottomRight, cx, point, cy, t1;
       this.removeChildren$0();
-      t1 = this.map.board;
-      t2 = t1.map;
-      t3 = t1.get$stage()._contentRectangle;
-      t3 = H.setRuntimeTypeInfo(new U.Rectangle0(t3.left, t3.top, t3.width, t3.height), [H.getTypeArgumentByIndex(t3, 0)]);
-      topLeft = t2.viewPointToGamePoint$1(H.setRuntimeTypeInfo(new U.Point(t3.left, t3.top), [H.getTypeArgumentByIndex(t3, 0)]).subtract$1(H.setRuntimeTypeInfo(new U.Point(t1._x, t1._y), [null])));
-      t1 = this.map.board;
-      t3 = t1.map;
-      t2 = t1.get$stage()._contentRectangle;
-      t2 = H.setRuntimeTypeInfo(new U.Rectangle0(t2.left, t2.top, t2.width, t2.height), [H.getTypeArgumentByIndex(t2, 0)]);
-      bottomRight = t3.viewPointToGamePoint$1(H.setRuntimeTypeInfo(new U.Point(t2.left + t2.width, t2.top + t2.height), [H.getTypeArgumentByIndex(t2, 0)]).subtract$1(H.setRuntimeTypeInfo(new U.Point(t1._x, t1._y), [null])));
+      topLeft = this.map.board.getTopLeftViewPoint$0();
+      bottomRight = this.map.board.getBottomRightViewPoint$0();
       for (cx = J.floor$0$n(topLeft.x), point = null; cx <= J.floor$0$n(bottomRight.x) + 1; ++cx)
         for (cy = J.floor$0$n(topLeft.y); cy <= J.floor$0$n(bottomRight.y) + 1; ++cy) {
           point = new U.Point(cx, cy);
@@ -14580,30 +14699,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
           t1 = this.map;
           t1.createCell$3(this, point, t1.getGridPencil$0());
         }
-    },
-    GridLayer$2: function(map, index) {
-      this.on$1(0, "click").listen$1(new S.GridLayer_mouseClickEvent(this));
-    },
-    static: {GridLayer$: function(map, index) {
-        var t1, t2, t3;
-        t1 = P.LinkedHashMap_LinkedHashMap(S.Cell_pointEquals$closure(), S.Cell_getPointHashCode$closure(), null, null, null);
-        t2 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
-        t3 = $.DisplayObject__nextID;
-        $.DisplayObject__nextID = t3 + 1;
-        t3 = new S.GridLayer(null, map, index, t1, t2, true, true, false, true, "auto", true, 0, t3, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
-        t3.Layer$2(map, index);
-        t3.GridLayer$2(map, index);
-        return t3;
-      }}
-  },
-  GridLayer_mouseClickEvent: {
-    "^": "Closure:107;this_0",
-    call$1: [function(e) {
-      if (this.this_0.map.board.dragging == null) {
-        P.print(e);
-        return;
-      }
-    }, "call$1", null, 2, 0, null, 3, [], "call"]
+    }
   },
   Layer: {
     "^": "DisplayObjectContainer;map*,index*,cells>,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
@@ -14611,8 +14707,16 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       return this.map.call$1(arg0);
     },
     renderCells$0: function() {
-      for (var t1 = this.cells, t1 = t1.get$values(t1), t1 = H.setRuntimeTypeInfo(new H.MappedIterator(null, J.get$iterator$ax(t1._iterable), t1._f), [H.getTypeArgumentByIndex(t1, 0), H.getTypeArgumentByIndex(t1, 1)]); t1.moveNext$0();)
-        t1.__internal$_current.draw$0();
+      var topLeft, bottomRight, cy, t1, point, cx;
+      topLeft = this.map.board.getTopLeftViewPoint$0();
+      bottomRight = this.map.board.getBottomRightViewPoint$0();
+      for (cy = J.floor$0$n(topLeft.y), t1 = this.cells, point = null; cy <= J.floor$0$n(bottomRight.y) + 1; ++cy)
+        for (cx = J.floor$0$n(topLeft.x); cx <= J.floor$0$n(bottomRight.x) + 1; ++cx) {
+          point = new U.Point(cx, cy);
+          point.$builtinTypeInfo = [null];
+          if (t1.containsKey$1(point))
+            t1.$index(0, point).draw$0();
+        }
     },
     Layer$2: function(map, index) {
       var t1, t2;
@@ -14701,9 +14805,11 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     }
   },
   SquareMap: {
-    "^": "DisplayObjectContainer;board,gridPencil,layers@,skewFactor,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    "^": "DisplayObjectContainer;board<,gridPencil,layers@,skewFactor,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     createCell$3: function(layer, point, pencil) {
       var t1, t2;
+      if (null == layer)
+        throw H.wrapException("layer cannot be null");
       t1 = J.get$cells$x(layer);
       t2 = S.Cell$(layer, point, pencil);
       t1.$indexSet(0, point, t2);
@@ -14747,25 +14853,51 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         return t3;
       }}
   },
+  CoordinatedGridPencil: {
+    "^": "DisplayObjectContainer;_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    CoordinatedGridPencil$2: function(shape, point) {
+      var t1, t2, t3, t4, coordinates;
+      t1 = this._children;
+      this.addChildAt$2(shape, t1.length);
+      t2 = H.S(point.x) + "," + H.S(point.y);
+      t3 = H.setRuntimeTypeInfo([], [Y.TextLineMetrics]);
+      t4 = $.DisplayObject__nextID;
+      $.DisplayObject__nextID = t4 + 1;
+      coordinates = new Y.TextField("", null, "none", "dynamic", 0, 0, 0, 0, 0, 0, 0, false, false, false, false, false, "\u2022", 16777215, 0, 0, 100, 100, 0, 0, t3, 3, true, null, false, true, "auto", true, 0, t4, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
+      coordinates.TextField$2(t2, new Y.TextFormat("Monospace", 10, 4292072403, 0, 4278190080, null, false, false, false, "left", 0, 0, 0, 0, 0, 0));
+      coordinates.set$x(0, -10);
+      coordinates.set$y(0, -5);
+      this.addChildAt$2(coordinates, t1.length);
+    }
+  },
   GridPencil: {
     "^": "Pencil;board,pencil",
-    getDisplayObject$0: function() {
-      var t1, t2, t3, t4, t5, t6;
+    getDisplayObject$1: function(point) {
+      var t1, t2, t3, shape, t4;
       t1 = H.setRuntimeTypeInfo([], [A._GraphicsCommand]);
       t2 = new A.Graphics(t1, H.setRuntimeTypeInfo(new U.Rectangle0(0, 0, 0, 0), [P.num]), true);
       t3 = $.DisplayObject__nextID;
       $.DisplayObject__nextID = t3 + 1;
-      t4 = T.Matrix$fromIdentity();
+      shape = new A.Shape(t2, t3, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
       this.buildGraphics$1(t2);
-      t5 = V.color2rgba(4286611584);
-      t6 = new A._GraphicsCommandStrokeColor(null, null, null, null);
-      t6._lineWidth = 0.2;
-      t6._lineJoin = "round";
-      t6._lineCap = "round";
-      t6._color = t5;
-      t1.push(t6);
+      t3 = V.color2rgba(4286611584);
+      t4 = new A._GraphicsCommandStrokeColor(null, null, null, null);
+      t4._lineWidth = 0.2;
+      t4._lineJoin = "round";
+      t4._lineCap = "round";
+      t4._color = t3;
+      t1.push(t4);
       t2._boundsRefresh = true;
-      return new A.Shape(t2, t3, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, t4, true, null, null, null, null);
+      t4 = new A._GraphicsCommandFillColor(null);
+      t4._color = V.color2rgba(16777215);
+      t1.push(t4);
+      t2._boundsRefresh = true;
+      t1 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
+      t2 = $.DisplayObject__nextID;
+      $.DisplayObject__nextID = t2 + 1;
+      t2 = new S.CoordinatedGridPencil(t1, true, true, false, true, "auto", true, 0, t2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
+      t2.CoordinatedGridPencil$2(shape, point);
+      return t2;
     },
     buildGraphics$1: function(g) {
       var t1, size, t2, t3;
@@ -14872,8 +15004,8 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     }
   },
   Pencil: {
-    "^": "Object;board,pencil",
-    getDisplayObject$0: function() {
+    "^": "Object;board<,pencil",
+    getDisplayObject$1: function(point) {
       var t1, t2, value, t3, bitmap, size, normalWidth, normalHeight;
       t1 = this.pencil;
       t2 = J.getInterceptor$x(t1);
@@ -14890,13 +15022,13 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       if (typeof t3 !== "number")
         return H.iae(t3);
       bitmap.set$scaleX(1);
-      normalWidth = bitmap.get$boundsTransformed().width;
+      normalWidth = bitmap.get$width(bitmap);
       bitmap.set$scaleX(normalWidth !== 0 ? size * t3 / normalWidth : 1);
       t2 = t2.get$height(t1);
       if (typeof t2 !== "number")
         return H.iae(t2);
       bitmap.set$scaleY(1);
-      normalHeight = bitmap.get$boundsTransformed().height;
+      normalHeight = bitmap.get$height(bitmap);
       bitmap.set$scaleY(normalHeight !== 0 ? size * t2 / normalHeight : 1);
       t2 = t1.get$imageX();
       if (typeof t2 !== "number")
@@ -15062,7 +15194,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       var t1 = new A.BitmapData(0, 0, null, null);
       t1.BitmapData$fromRenderTextureQuad$3(renderTexture.get$quad(), null, null);
       return t1;
-    }, "call$1", null, 2, 0, null, 108, [], "call"]
+    }, "call$1", null, 2, 0, null, 107, [], "call"]
   },
   BitmapDataLoadOptions: {
     "^": "Object;png,jpg,webp,autoHiDpi,corsEnabled"
@@ -15207,7 +15339,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     set$width: function(_, value) {
       var normalWidth;
       this.set$scaleX(1);
-      normalWidth = this.get$boundsTransformed().width;
+      normalWidth = this.get$width(this);
       this.set$scaleX(normalWidth !== 0 ? value / normalWidth : 1);
     },
     get$height: function(_) {
@@ -15216,7 +15348,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     set$height: function(_, value) {
       var normalHeight;
       this.set$scaleY(1);
-      normalHeight = this.get$boundsTransformed().height;
+      normalHeight = this.get$height(this);
       this.set$scaleY(normalHeight !== 0 ? value / normalHeight : 1);
     },
     get$transformationMatrix: function() {
@@ -15507,7 +15639,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       if (this.get$bounds().contains$2(0, localX, localY)) {
         if ($.get$isCocoonJS() === true)
           return true;
-        context = $.get$_dummyCanvasContext();
+        context = $.get$_dummyCanvasContext0();
         context.setTransform(1, 0, 0, 1, 0, 0);
         context.beginPath();
         for (t1 = this._commands, i = 0; i < t1.length; ++i)
@@ -15545,6 +15677,23 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
   },
   _GraphicsBounds: {
     "^": "Object;pathLeft,pathRight,pathTop,pathBottom,boundsLeft,boundsRight,boundsTop,boundsBottom,cursorX,cursorY",
+    get$hasPath: function() {
+      var t1 = this.pathLeft;
+      if (!(t1 == Infinity || t1 == -Infinity)) {
+        t1 = this.pathRight;
+        if (!(t1 == Infinity || t1 == -Infinity)) {
+          t1 = this.pathTop;
+          if (!(t1 == Infinity || t1 == -Infinity)) {
+            t1 = this.pathBottom;
+            t1 = !(t1 == Infinity || t1 == -Infinity);
+          } else
+            t1 = false;
+        } else
+          t1 = false;
+      } else
+        t1 = false;
+      return t1;
+    },
     updatePath$2: function(x, y) {
       if (!isNaN(this.cursorX) && !isNaN(this.cursorY)) {
         if (this.pathLeft > x)
@@ -15633,25 +15782,11 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
 
     },
     updateBounds$1: function(bounds) {
-      var t1, t2, t3, lw, left, right, $top, bottom;
+      var t1, lw, left, right, $top, bottom;
       t1 = this._lineWidth;
-      t2 = bounds.pathLeft;
-      if (!(t2 == Infinity || t2 == -Infinity)) {
-        t3 = bounds.pathRight;
-        if (!(t3 == Infinity || t3 == -Infinity)) {
-          t3 = bounds.pathTop;
-          if (!(t3 == Infinity || t3 == -Infinity)) {
-            t3 = bounds.pathBottom;
-            t3 = !(t3 == Infinity || t3 == -Infinity);
-          } else
-            t3 = false;
-        } else
-          t3 = false;
-      } else
-        t3 = false;
-      if (t3) {
+      if (bounds.get$hasPath()) {
         lw = t1 / 2;
-        left = t2 - lw;
+        left = bounds.pathLeft - lw;
         right = bounds.pathRight + lw;
         $top = bounds.pathTop - lw;
         bottom = bounds.pathBottom + lw;
@@ -15677,8 +15812,46 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       t1.stroke$0(context);
     }
   },
+  _GraphicsCommandFill: {
+    "^": "_GraphicsCommand;",
+    hitTestInput$3: function(context, localX, localY) {
+      return context.isPointInPath(localX, localY);
+    },
+    updateBounds$1: function(bounds) {
+      var t1, t2;
+      if (bounds.get$hasPath()) {
+        t1 = bounds.boundsLeft;
+        t2 = bounds.pathLeft;
+        if (t1 > t2)
+          bounds.boundsLeft = t2;
+        t1 = bounds.boundsRight;
+        t2 = bounds.pathRight;
+        if (t1 < t2)
+          bounds.boundsRight = t2;
+        t1 = bounds.boundsTop;
+        t2 = bounds.pathTop;
+        if (t1 > t2)
+          bounds.boundsTop = t2;
+        t1 = bounds.boundsBottom;
+        t2 = bounds.pathBottom;
+        if (t1 < t2)
+          bounds.boundsBottom = t2;
+      }
+    }
+  },
+  _GraphicsCommandFillColor: {
+    "^": "_GraphicsCommandFill;_color",
+    render$1: function(context) {
+      var t1 = J.getInterceptor$x(context);
+      t1.set$fillStyle(context, this._color);
+      t1.fill$0(context);
+    }
+  },
+  GraphicsGradient: {
+    "^": "Object;"
+  },
   InteractiveObject: {
-    "^": "DisplayObject;tabIndex*",
+    "^": "DisplayObject;mouseCursor<,tabIndex*",
     $isInteractiveObject: true
   },
   RenderLoop: {
@@ -15789,8 +15962,8 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       } else {
         clientRectangle = this._canvas.getBoundingClientRect();
         t1 = J.getInterceptor$x(clientRectangle);
-        clientLeft = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._canvas.clientLeft)) + C.JSNumber_methods.toInt$0(J.roundToDouble$0$n(t1.get$left(clientRectangle)));
-        clientTop = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._canvas.clientTop)) + C.JSNumber_methods.toInt$0(J.roundToDouble$0$n(t1.get$top(clientRectangle)));
+        clientLeft = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._canvas.clientLeft)) + J.round$0$n(t1.get$left(clientRectangle));
+        clientTop = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._canvas.clientTop)) + J.round$0$n(t1.get$top(clientRectangle));
         clientWidth = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._canvas.clientWidth));
         clientHeight = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._canvas.clientHeight));
       }
@@ -15884,7 +16057,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       mouseTarget = this._mouseTarget;
       mouseCursor = $.Mouse__cursorName;
       if (mouseTarget != null && mouseCursor === "auto") {
-        mc = mouseTarget.mouseCursor;
+        mc = mouseTarget.get$mouseCursor();
         if (mc !== "auto")
           mouseCursor = mc;
       }
@@ -16034,7 +16207,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
           target.dispatchEvent$1(0, new R.MouseEvent(localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, 0, 0, mouseButton.buttonDown, 0, t1.get$altKey($event), t1.get$ctrlKey($event), t1.get$shiftKey($event), mouseEventType, true, C.EventPhase_1, null, null, false, false));
         }
       }
-    }, "call$1", "get$_onMouseEvent", 2, 0, 109, 110, []],
+    }, "call$1", "get$_onMouseEvent", 2, 0, 108, 109, []],
     _onMouseWheelEvent$1: [function($event) {
       var t1, stagePoint, localPoint, target, mouseEvent;
       t1 = J.getInterceptor$x($event);
@@ -16046,7 +16219,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       target.dispatchEvent$1(0, mouseEvent);
       if (mouseEvent._stopsPropagation)
         t1.preventDefault$0($event);
-    }, "call$1", "get$_onMouseWheelEvent", 2, 0, 111, 110, []],
+    }, "call$1", "get$_onMouseWheelEvent", 2, 0, 110, 109, []],
     _onMultitouchInputModeChanged$1: [function(inputMode) {
       var t1, t2, t3, t4, t5, t6;
       C.JSArray_methods.forEach$1(this._touchEventSubscriptions, new A.Stage__onMultitouchInputModeChanged_closure());
@@ -16071,7 +16244,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         t6._tryResume$0();
         this._touchEventSubscriptions = [t1, t2, t3, t4, t5, t6];
       }
-    }, "call$1", "get$_onMultitouchInputModeChanged", 2, 0, 112, 113, []],
+    }, "call$1", "get$_onMultitouchInputModeChanged", 2, 0, 111, 112, []],
     _onTouchEvent$1: [function($event) {
       var jsEvent, t1, t2, jsChangedTouches, eventType, jsChangedTouch, identifier, client, altKey, ctrlKey, shiftKey, changedTouch;
       if ($.get$isCocoonJS() === true) {
@@ -16103,7 +16276,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
           this._onTouchEventProcessor$6(eventType, t2.get$identifier(changedTouch), t2.get$client(changedTouch), altKey, ctrlKey, shiftKey);
         }
       }
-    }, "call$1", "get$_onTouchEvent", 2, 0, 114, 110, []],
+    }, "call$1", "get$_onTouchEvent", 2, 0, 113, 109, []],
     _onTouchEventProcessor$6: function(eventType, identifier, client, altKey, ctrlKey, shiftKey) {
       var stagePoint, localPoint, target, t1, touch, t2, oldTarget, oldTargetList, newTargetList, p, commonCount, t3, t4, t5, ot, i, target0, touchEventType, isTap;
       stagePoint = this._clientTransformation.transformPoint$1(client);
@@ -16192,7 +16365,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       if (t1.get$keyCode($event) === 8)
         t1.preventDefault$0($event);
       return;
-    }, "call$1", "get$_onKeyEvent", 2, 0, 115, 110, []],
+    }, "call$1", "get$_onKeyEvent", 2, 0, 114, 109, []],
     Stage$7$alpha$color$frameRate$height$webGL$width: function(canvas, alpha, color, frameRate, height, webGL, width) {
       var t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, exception;
       if (!J.getInterceptor(canvas).$isCanvasElement)
@@ -16286,7 +16459,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     "^": "Closure:12;this_0",
     call$1: [function(cursorName) {
       return this.this_0._updateMouseCursor$0();
-    }, "call$1", null, 2, 0, null, 116, [], "call"]
+    }, "call$1", null, 2, 0, null, 115, [], "call"]
   },
   Stage__onMultitouchInputModeChanged_closure: {
     "^": "Closure:12;",
@@ -16437,6 +16610,31 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         context.drawImage(source, sourceX, sourceY, t1 - sourceX, t2 - sourceY, destinationX, 0 - t3 - t4, destinationWidth, t4);
       }
     },
+    renderTriangle$8: function(renderState, x1, y1, x2, y2, x3, y3, color) {
+      var context, t1, matrix, alpha, blendMode;
+      context = this._renderingContext;
+      t1 = renderState._currentContextState;
+      matrix = t1.matrix;
+      alpha = t1.alpha;
+      blendMode = t1.blendMode;
+      if (this._activeAlpha !== alpha) {
+        this._activeAlpha = alpha;
+        context.globalAlpha = alpha;
+      }
+      if (this._activeBlendMode !== blendMode) {
+        this._activeBlendMode = blendMode;
+        context.globalCompositeOperation = blendMode.compositeOperation;
+      }
+      t1 = matrix._data;
+      context.setTransform(t1[0], t1[1], t1[2], t1[3], t1[4], t1[5]);
+      context.beginPath();
+      context.moveTo(x1, y1);
+      context.lineTo(x2, y2);
+      context.lineTo(x3, y3);
+      context.closePath();
+      context.fillStyle = V.color2rgba(color);
+      context.fill("nonzero");
+    },
     beginRenderMask$2: function(renderState, mask) {
       var t1 = renderState._currentContextState.matrix._data;
       this._renderingContext.setTransform(t1[0], t1[1], t1[2], t1[3], t1[4], t1[5]);
@@ -16465,7 +16663,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       return "WebGL";
     },
     reset$0: function(_) {
-      var t1, t2, t3;
+      var t1, t2, t3, t4;
       t1 = this._canvasElement;
       this._viewportWidth = t1.width;
       this._viewportHeight = t1.height;
@@ -16482,24 +16680,23 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       if (typeof t3 !== "number")
         return H.iae(t3);
       t3 = -2 / t3;
-      t1 = t1._matrix_3d$_data;
-      t1[0] = t1[0] * t2;
-      t1[1] = t1[1] * t2;
-      t1[2] = t1[2] * t2;
-      t1[3] = t1[3] * t2;
-      t1[4] = t1[4] * t3;
-      t1[5] = t1[5] * t3;
-      t1[6] = t1[6] * t3;
-      t1[7] = t1[7] * t3;
-      t1[8] = t1[8];
-      t1[9] = t1[9];
-      t1[10] = t1[10];
-      t1[11] = t1[11];
-      t1[3] = t1[3] + -1;
-      t1[7] = t1[7] + 1;
-      t1[11] = t1[11] + 0;
-      t3 = this._activeRenderProgram;
-      t3._renderingContext.uniformMatrix4fv(t3._uProjectionMatrixLocation, false, t1);
+      t4 = t1._matrix_3d$_data;
+      t4[0] = t4[0] * t2;
+      t4[1] = t4[1] * t2;
+      t4[2] = t4[2] * t2;
+      t4[3] = t4[3] * t2;
+      t4[4] = t4[4] * t3;
+      t4[5] = t4[5] * t3;
+      t4[6] = t4[6] * t3;
+      t4[7] = t4[7] * t3;
+      t4[8] = t4[8];
+      t4[9] = t4[9];
+      t4[10] = t4[10];
+      t4[11] = t4[11];
+      t4[3] = t4[3] + -1;
+      t4[7] = t4[7] + 1;
+      t4[11] = t4[11] + 0;
+      this._activeRenderProgram.set$projectionMatrix(t1);
     },
     clear$1: function(_, color) {
       var t1, t2, t3;
@@ -16517,14 +16714,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     renderQuad$2: function(renderState, renderTextureQuad) {
       var t1, t2, t3, t4;
       t1 = this.renderProgramQuad;
-      t2 = this._activeRenderProgram;
-      if (t1 !== t2) {
-        t2.flush$0(0);
-        this._activeRenderProgram = t1;
-        t1.activate$1(this);
-        t2 = this._activeRenderProgram;
-        t2._renderingContext.uniformMatrix4fv(t2._uProjectionMatrixLocation, false, this._projectionMatrix._matrix_3d$_data);
-      }
+      this.activateRenderProgram$1(t1);
       this.activateBlendMode$1(renderState._currentContextState.blendMode);
       t2 = renderTextureQuad._renderTexture;
       t3 = this._activeRenderTexture;
@@ -16562,6 +16752,12 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       }
       t1.renderQuad$2(renderState, renderTextureQuad);
     },
+    renderTriangle$8: function(renderState, x1, y1, x2, y2, x3, y3, color) {
+      var t1 = this.renderProgramTriangle;
+      this.activateRenderProgram$1(t1);
+      this.activateBlendMode$1(renderState._currentContextState.blendMode);
+      t1.renderTriangle$8(renderState, x1, y1, x2, y2, x3, y3, color);
+    },
     beginRenderMask$2: function(renderState, mask) {
       this._renderMask$3(renderState, mask, 1);
     },
@@ -16588,6 +16784,15 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       this._renderingContext.colorMask(true, true, true, true);
       this._updateStencilDepth$1(t1);
     },
+    activateRenderProgram$1: function(renderProgram) {
+      var t1 = this._activeRenderProgram;
+      if (renderProgram !== t1) {
+        t1.flush$0(0);
+        this._activeRenderProgram = renderProgram;
+        renderProgram.activate$1(this);
+        this._activeRenderProgram.set$projectionMatrix(this._projectionMatrix);
+      }
+    },
     activateBlendMode$1: function(blendMode) {
       if (blendMode !== this._activeBlendMode) {
         this._activeRenderProgram.flush$0(0);
@@ -16603,7 +16808,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       if (t1._state >= 4)
         H.throwExpression(t1._addEventError$0());
       t1._sendData$1(new L.RenderContextEvent());
-    }, "call$1", "get$_onContextLost", 2, 0, 117, 118, []],
+    }, "call$1", "get$_onContextLost", 2, 0, 116, 117, []],
     _onContextRestored$1: [function(contextEvent) {
       var t1;
       this._contextValid = true;
@@ -16614,7 +16819,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       if (t1._state >= 4)
         H.throwExpression(t1._addEventError$0());
       t1._sendData$1(new L.RenderContextEvent());
-    }, "call$1", "get$_onContextRestored", 2, 0, 117, 118, []],
+    }, "call$1", "get$_onContextRestored", 2, 0, 116, 117, []],
     _updateStencilDepth$1: function(stencilDepth) {
       var t1 = this._activeRenderFrameBuffer;
       if (t1 != null) {
@@ -16677,7 +16882,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       if (this._running && J.$ge$n(deltaTime, 0))
         if (typeof deltaTime === "number")
           this.advanceTime$1(deltaTime);
-    }, "call$1", "get$_onGlobalFrame", 2, 0, 43, 119, []]
+    }, "call$1", "get$_onGlobalFrame", 2, 0, 43, 118, []]
   },
   RenderProgram: {
     "^": "Object;",
@@ -16757,6 +16962,9 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     },
     get$fragmentShaderSource: function() {
       return "    precision mediump float;\r\n    uniform sampler2D uSampler;\r\n    varying vec2 vTextCoord;\r\n    varying float vAlpha;\r\n\r\n    void main() {\r\n      gl_FragColor = texture2D(uSampler, vTextCoord) * vAlpha;\r\n    }\r\n    ";
+    },
+    set$projectionMatrix: function(matrix) {
+      this._renderingContext.uniformMatrix4fv(this._uProjectionMatrixLocation, false, matrix._matrix_3d$_data);
     },
     activate$1: function(renderContext) {
       var t1;
@@ -16876,6 +17084,83 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     get$fragmentShaderSource: function() {
       return "    precision mediump float;\r\n    varying vec4 vColor;\r\n\r\n    void main() {\r\n      gl_FragColor = vColor; \r\n    }\r\n    ";
     },
+    set$projectionMatrix: function(matrix) {
+      this._renderingContext.uniformMatrix4fv(this._uProjectionMatrixLocation, false, matrix._matrix_3d$_data);
+    },
+    activate$1: function(renderContext) {
+      var t1;
+      if (this._contextIdentifier !== renderContext._contextIdentifier) {
+        L.RenderProgram.prototype.activate$1.call(this, renderContext);
+        this._vertexBuffer = this._renderingContext.createBuffer();
+        t1 = this._attributeLocations;
+        this._aVertexPositionLocation = t1.$index(0, "aVertexPosition");
+        this._aVertexColorLocation = t1.$index(0, "aVertexColor");
+        this._uProjectionMatrixLocation = this._uniformLocations.$index(0, "uProjectionMatrix");
+        this._renderingContext.enableVertexAttribArray(this._aVertexPositionLocation);
+        this._renderingContext.enableVertexAttribArray(this._aVertexColorLocation);
+        this._renderingContext.bindBuffer(34962, this._vertexBuffer);
+        this._renderingContext.bufferData(34962, this._vertexList, 35048);
+      }
+      this._renderingContext.useProgram(this._program);
+      this._renderingContext.bindBuffer(34962, this._vertexBuffer);
+      this._renderingContext.vertexAttribPointer(this._aVertexPositionLocation, 2, 5126, false, 24, 0);
+      this._renderingContext.vertexAttribPointer(this._aVertexColorLocation, 4, 5126, false, 24, 8);
+    },
+    flush$0: function(_) {
+      var t1, t2, vertexUpdate;
+      t1 = this._triangleCount;
+      if (t1 === 0)
+        return;
+      t2 = this._vertexList.buffer;
+      t2.toString;
+      vertexUpdate = H.NativeFloat32List_NativeFloat32List$view(t2, 0, t1 * 3 * 6);
+      this._renderingContext.bufferSubData(34962, 0, vertexUpdate);
+      this._renderingContext.drawArrays(4, 0, this._triangleCount * 3);
+      this._triangleCount = 0;
+    },
+    renderTriangle$8: function(renderState, x1, y1, x2, y2, x3, y3, color) {
+      var t1, matrix, colorA, colorR, colorG, colorB, a, b, c, d, tx, ty, index, t2;
+      t1 = renderState._currentContextState;
+      matrix = t1.matrix;
+      colorA = (color >>> 24 & 255) / 255 * t1.alpha;
+      colorR = (color >>> 16 & 255) / 255;
+      colorG = (color >>> 8 & 255) / 255;
+      colorB = (color & 255) / 255;
+      t1 = matrix._data;
+      a = t1[0];
+      b = t1[1];
+      c = t1[2];
+      d = t1[3];
+      tx = t1[4];
+      ty = t1[5];
+      t1 = this._triangleCount;
+      index = t1 * 18;
+      t2 = this._vertexList;
+      if (index > t2.length - 18)
+        return;
+      t2[index] = x1 * a + y1 * c + tx;
+      t2[index + 1] = x1 * b + y1 * d + ty;
+      t2[index + 2] = colorR;
+      t2[index + 3] = colorG;
+      t2[index + 4] = colorB;
+      t2[index + 5] = colorA;
+      t2[index + 6] = x2 * a + y2 * c + tx;
+      t2[index + 7] = x2 * b + y2 * d + ty;
+      t2[index + 8] = colorR;
+      t2[index + 9] = colorG;
+      t2[index + 10] = colorB;
+      t2[index + 11] = colorA;
+      t2[index + 12] = x3 * a + y3 * c + tx;
+      t2[index + 13] = x3 * b + y3 * d + ty;
+      t2[index + 14] = colorR;
+      t2[index + 15] = colorG;
+      t2[index + 16] = colorB;
+      t2[index + 17] = colorA;
+      t1 += 3;
+      this._triangleCount = t1;
+      if (t1 === 256)
+        this.flush$0(0);
+    },
     static: {"^": "RenderProgramTriangle__maxTriangleCount"}
   },
   _ContextState: {
@@ -16985,6 +17270,51 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     get$height: function(_) {
       return this._engine$_height;
     },
+    resize$2: function(_, width, height) {
+      if (width !== this._engine$_width || height !== this._engine$_height) {
+        this._engine$_width = V.ensureInt(width);
+        this._engine$_height = V.ensureInt(height);
+        this._storeWidth = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._engine$_width * this._storePixelRatio));
+        this._storeHeight = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._engine$_height * this._storePixelRatio));
+        J.set$width$x(this._engine$_canvas, this._storeWidth);
+        J.set$height$x(this._engine$_canvas, this._storeHeight);
+        this._quad = L.RenderTextureQuad$(this, 0, 0, 0, 0, 0, this._engine$_width, this._engine$_height);
+      }
+    },
+    update$0: function() {
+      if (this._texture != null) {
+        this._renderingContext.activeTexture(33994);
+        this._renderingContext.bindTexture(3553, this._texture);
+        if (this._textureSourceWorkaround) {
+          J.get$context2D$x(this._engine$_canvas).drawImage(this._engine$_source, 0, 0);
+          this._renderingContext.texImage2D(3553, 0, 6408, 6408, 5121, this._engine$_canvas);
+        } else
+          this._renderingContext.texImage2D(3553, 0, 6408, 6408, 5121, this._engine$_source);
+        this._renderingContext.bindTexture(3553, null);
+      }
+    },
+    RenderTexture$5: function(width, height, transparent, fillColor, storePixelRatio) {
+      var t1, context;
+      if (width === 0 && height === 0)
+        throw H.wrapException(P.ArgumentError$(null));
+      this._engine$_width = V.ensureInt(width);
+      this._engine$_height = V.ensureInt(height);
+      this._transparent = V.ensureBool(transparent);
+      t1 = V.ensureNum(storePixelRatio);
+      this._storePixelRatio = t1;
+      this._storeWidth = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._engine$_width * t1));
+      t1 = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._engine$_height * this._storePixelRatio));
+      this._storeHeight = t1;
+      t1 = W.CanvasElement_CanvasElement(t1, this._storeWidth);
+      this._engine$_source = t1;
+      this._engine$_canvas = t1;
+      this._quad = L.RenderTextureQuad$(this, 0, 0, 0, 0, 0, this._engine$_width, this._engine$_height);
+      if (fillColor !== 0 || !transparent) {
+        context = J.get$context2D$x(this._engine$_canvas);
+        context.fillStyle = transparent ? V.color2rgba(fillColor) : V.color2rgb(fillColor);
+        context.fillRect(0, 0, this._storeWidth, this._storeHeight);
+      }
+    },
     RenderTexture$fromImageElement$2: function(imageElement, imagePixelRatio) {
       var t1, t2;
       this._storePixelRatio = V.ensureNum(imagePixelRatio);
@@ -17002,7 +17332,11 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       this._texture = null;
       J.get$context2D$x(this._engine$_canvas).drawImage(imageElement, 0, 0, t1.get$width(imageElement), t1.get$height(imageElement), 0, 0, this._storeWidth, this._storeHeight);
     },
-    static: {RenderTexture_load: function(url, autoHiDpi, webpAvailable, corsEnabled) {
+    static: {RenderTexture$: function(width, height, transparent, fillColor, storePixelRatio) {
+        var t1 = new L.RenderTexture(0, 0, true, 1, 0, 0, null, null, null, null, C.RenderTextureFiltering_9729, -1, false, null, null, -1);
+        t1.RenderTexture$5(width, height, transparent, fillColor, storePixelRatio);
+        return t1;
+      }, RenderTexture_load: function(url, autoHiDpi, webpAvailable, corsEnabled) {
         var hiDpi, hiDpiUrl, t1, t2;
         hiDpi = autoHiDpi && C.JSString_methods.contains$1(url, "@1x.");
         if (hiDpi) {
@@ -17025,7 +17359,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       t2 = new L.RenderTexture(0, 0, true, 1, 0, 0, null, null, null, null, C.RenderTextureFiltering_9729, -1, false, null, null, -1);
       t2.RenderTexture$fromImageElement$2(image, t1);
       return t2;
-    }, "call$1", null, 2, 0, null, 120, [], "call"]
+    }, "call$1", null, 2, 0, null, 119, [], "call"]
   },
   RenderTextureFiltering: {
     "^": "Object;value>",
@@ -17413,12 +17747,18 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       this._events$_pauseCount = t1 - 1;
     }
   },
+  KeyboardEvent0: {
+    "^": "Event;"
+  },
   MouseEvent: {
-    "^": "Event;localX,localY,stageX<,stageY<,deltaX>,deltaY>,buttonDown,clickCount,altKey>,ctrlKey>,shiftKey>,_type,_bubbles,_eventPhase,_events$_target,_currentTarget,_stopsPropagation,_stopsImmediatePropagation",
+    "^": "Event;localX<,localY<,stageX<,stageY<,deltaX>,deltaY>,buttonDown,clickCount,altKey>,ctrlKey>,shiftKey>,_type,_bubbles,_eventPhase,_events$_target,_currentTarget,_stopsPropagation,_stopsImmediatePropagation",
     static: {"^": "MouseEvent_CLICK,MouseEvent_DOUBLE_CLICK,MouseEvent_MOUSE_DOWN,MouseEvent_MOUSE_UP,MouseEvent_MOUSE_MOVE,MouseEvent_MOUSE_OUT,MouseEvent_MOUSE_OVER,MouseEvent_MOUSE_WHEEL,MouseEvent_MIDDLE_CLICK,MouseEvent_MIDDLE_MOUSE_DOWN,MouseEvent_MIDDLE_MOUSE_UP,MouseEvent_RIGHT_CLICK,MouseEvent_RIGHT_MOUSE_DOWN,MouseEvent_RIGHT_MOUSE_UP,MouseEvent_CONTEXT_MENU,MouseEvent_ROLL_OUT,MouseEvent_ROLL_OVER"}
   },
+  TextEvent0: {
+    "^": "Event;"
+  },
   TouchEvent: {
-    "^": "Event;touchPointID<,isPrimaryTouchPoint,localX,localY,stageX<,stageY<,altKey>,ctrlKey>,shiftKey>,_type,_bubbles,_eventPhase,_events$_target,_currentTarget,_stopsPropagation,_stopsImmediatePropagation",
+    "^": "Event;touchPointID<,isPrimaryTouchPoint,localX<,localY<,stageX<,stageY<,altKey>,ctrlKey>,shiftKey>,_type,_bubbles,_eventPhase,_events$_target,_currentTarget,_stopsPropagation,_stopsImmediatePropagation",
     static: {"^": "TouchEvent_TOUCH_BEGIN,TouchEvent_TOUCH_END,TouchEvent_TOUCH_CANCEL,TouchEvent_TOUCH_MOVE,TouchEvent_TOUCH_OVER,TouchEvent_TOUCH_OUT,TouchEvent_TOUCH_ROLL_OUT,TouchEvent_TOUCH_ROLL_OVER,TouchEvent_TOUCH_TAP"}
   }
 }],
@@ -17448,10 +17788,10 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     },
     transformRectangle$2: function(rectangle, returnRectangle) {
       var rl, rr, rt, rb, t1, t2, t3, t4, t5, x1, t6, t7, t8, t9, y1, x2, y2, x3, y3, x4, y4, left, $top, right, bottom;
-      rl = rectangle.left;
-      rr = rl + rectangle.width;
-      rt = rectangle.top;
-      rb = rt + rectangle.height;
+      rl = C.JSNumber_methods.toDouble$0(rectangle.left);
+      rr = rectangle.left + rectangle.width;
+      rt = C.JSNumber_methods.toDouble$0(rectangle.top);
+      rb = rectangle.top + rectangle.height;
       t1 = this._data;
       t2 = t1[0];
       t3 = rl * t2;
@@ -17747,17 +18087,17 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         J.set$src$x(t3, J.substring$2$s(t1, 0, match._match.index) + "webp");
       else
         J.set$src$x(t3, t1);
-    }, "call$1", "get$_onWebpSupported", 2, 0, 121, 122, []],
+    }, "call$1", "get$_onWebpSupported", 2, 0, 120, 121, []],
     _onImageLoad$1: [function($event) {
       this._onLoadSubscription.cancel$0();
       this._onErrorSubscription.cancel$0();
       this._image_loader$_completer.complete$1(0, this.image);
-    }, "call$1", "get$_onImageLoad", 2, 0, 123, 110, []],
+    }, "call$1", "get$_onImageLoad", 2, 0, 122, 109, []],
     _onImageError$1: [function($event) {
       this._onLoadSubscription.cancel$0();
       this._onErrorSubscription.cancel$0();
       this._image_loader$_completer.completeError$1(new P.StateError("Failed to load image."));
-    }, "call$1", "get$_onImageError", 2, 0, 123, 110, []],
+    }, "call$1", "get$_onImageError", 2, 0, 122, 109, []],
     ImageLoader$3: function(url, webpAvailable, corsEnabled) {
       var t1, t2, t3;
       t1 = this.image;
@@ -17789,6 +18129,9 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
   },
   color2rgba: function(color) {
     return "rgba(" + (color >>> 16 & 255) + "," + (color >>> 8 & 255) + "," + (color & 255) + "," + (color >>> 24 & 255) / 255 + ")";
+  },
+  ensureBool: function(value) {
+    return value;
   },
   ensureInt: function(value) {
     if (typeof value === "number" && Math.floor(value) === value)
@@ -17881,7 +18224,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     "^": "Closure:12;",
     call$1: [function(r) {
       return J.get$complete$x(r);
-    }, "call$1", null, 2, 0, null, 124, [], "call"]
+    }, "call$1", null, 2, 0, null, 123, [], "call"]
   },
   ResourceManager_load_closure0: {
     "^": "Closure:12;this_0",
@@ -17944,7 +18287,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     "^": "Closure:12;this_0",
     call$1: [function(resource) {
       this.this_0._resources$_value = resource;
-    }, "call$1", null, 2, 0, null, 125, [], "call"]
+    }, "call$1", null, 2, 0, null, 124, [], "call"]
   },
   ResourceManagerResource_closure0: {
     "^": "Closure:12;this_1",
@@ -17958,6 +18301,630 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       var t1 = this.this_2;
       t1._completer.complete$1(0, t1);
     }, "call$0", null, 0, 0, null, "call"]
+  }
+}],
+["stagexl.text", "package:stagexl/src/text.dart", , Y, {
+  "^": "",
+  _getFontStyleMetrics: function(textFormat) {
+    var fontStyle = textFormat.get$_cssFontStyle();
+    return $.get$_fontStyleMetrics().putIfAbsent$2(fontStyle, new Y._getFontStyleMetrics_closure(textFormat));
+  },
+  _getFontStyleMetrics_closure: {
+    "^": "Closure:46;textFormat_0",
+    call$0: function() {
+      var t1 = new Y._FontStyleMetrics(0, 0, 0);
+      t1._FontStyleMetrics$1(this.textFormat_0);
+      return t1;
+    }
+  },
+  _FontStyleMetrics: {
+    "^": "Object;ascent<,descent<,height*",
+    _fromEstimation$1: function(textFormat) {
+      var t1 = textFormat.size;
+      this.height = t1;
+      this.ascent = C.JSInt_methods._tdivFast$1(t1 * 7, 8);
+      this.descent = C.JSInt_methods._tdivFast$1(t1 * 2, 8);
+    },
+    _fromHtml$1: function(textFormat) {
+      var text, block, div, fontStyle, t1, exception;
+      fontStyle = textFormat.get$_cssFontStyle();
+      text = W._ElementFactoryProvider_createElement_tag("span", null);
+      block = W._ElementFactoryProvider_createElement_tag("div", null);
+      div = W._ElementFactoryProvider_createElement_tag("div", null);
+      J.set$font$x(J.get$style$x(text), fontStyle);
+      J.set$text$x(text, "Hg");
+      J.set$display$x(J.get$style$x(block), "inline-block");
+      J.set$width$x(J.get$style$x(block), "1px");
+      J.set$height$x(J.get$style$x(block), "0px");
+      J.append$1$x(div, block);
+      J.append$1$x(div, text);
+      document.body.appendChild(div);
+      try {
+        J.set$verticalAlign$x(J.get$style$x(block), "baseline");
+        this.ascent = J.get$offsetTop$x(block) - J.get$offsetTop$x(text);
+        J.set$verticalAlign$x(J.get$style$x(block), "bottom");
+        t1 = J.get$offsetTop$x(block) - J.get$offsetTop$x(text);
+        this.height = t1;
+        this.descent = t1 - this.ascent;
+      } catch (exception) {
+        H.unwrapException(exception);
+        this._fromEstimation$1(textFormat);
+      }
+ finally {
+        J.remove$0$ax(div);
+      }
+    },
+    _FontStyleMetrics$1: function(textFormat) {
+      if ($.get$isCocoonJS() === true)
+        this._fromEstimation$1(textFormat);
+      else
+        this._fromHtml$1(textFormat);
+    },
+    $is_FontStyleMetrics: true
+  },
+  TextField: {
+    "^": "InteractiveObject;_text<,_defaultTextFormat,_autoSize,_text$_type,_caretIndex,_caretLine,_caretTime,_caretX,_caretY,_caretWidth,_caretHeight,_wordWrap,_multiline,_displayAsPassword,_background,_border,_passwordChar,_backgroundColor,_borderColor,_maxChars,_text$_width,_text$_height,_textWidth,_textHeight,_textLineMetrics,_refreshPending,_cacheAsBitmap,_text$_renderTexture,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    get$text: function(_) {
+      return this._text;
+    },
+    get$type: function(_) {
+      return this._text$_type;
+    },
+    get$mouseCursor: function() {
+      return this._text$_type === "input" ? "text" : this.mouseCursor;
+    },
+    set$width: function(_, value) {
+      this._text$_width = value.toDouble$0(0);
+      this._refreshPending |= 3;
+    },
+    set$height: function(_, value) {
+      this._text$_height = value.toDouble$0(0);
+      this._refreshPending |= 3;
+    },
+    set$text: function(_, value) {
+      var t1;
+      H.checkString("\n");
+      t1 = J.replaceAll$2$s(H.stringReplaceAllUnchecked(value, "\r\n", "\n"), "\r", "\n");
+      this._text = t1;
+      this._caretIndex = J.get$length$asx(t1);
+      this._refreshPending |= 3;
+    },
+    set$type: function(_, value) {
+      this._text$_type = value;
+      this._refreshPending |= 3;
+    },
+    get$x: function(_) {
+      this._refreshTextLineMetrics$0();
+      return A.DisplayObject.prototype.get$x.call(this, this);
+    },
+    get$width: function(_) {
+      this._refreshTextLineMetrics$0();
+      return this._text$_width;
+    },
+    get$height: function(_) {
+      this._refreshTextLineMetrics$0();
+      return this._text$_height;
+    },
+    get$transformationMatrix: function() {
+      this._refreshTextLineMetrics$0();
+      return A.DisplayObject.prototype.get$transformationMatrix.call(this);
+    },
+    get$bounds: function() {
+      this._refreshTextLineMetrics$0();
+      var t1 = this._text$_width;
+      this._refreshTextLineMetrics$0();
+      return H.setRuntimeTypeInfo(new U.Rectangle0(0, 0, t1, this._text$_height), [P.num]);
+    },
+    hitTestInput$2: function(localX, localY) {
+      var t1;
+      if (!(localX < 0)) {
+        this._refreshTextLineMetrics$0();
+        t1 = localX >= this._text$_width;
+      } else
+        t1 = true;
+      if (t1)
+        return;
+      if (!(localY < 0)) {
+        this._refreshTextLineMetrics$0();
+        t1 = localY >= this._text$_height;
+      } else
+        t1 = true;
+      if (t1)
+        return;
+      return this;
+    },
+    render$1: function(renderState) {
+      var renderContext, t1, t2, x1, y1, x3, y3, color;
+      this._refreshTextLineMetrics$0();
+      renderContext = renderState._engine$_renderContext;
+      if (this._cacheAsBitmap || !J.getInterceptor(renderContext).$isRenderContextCanvas) {
+        this._refreshCache$0();
+        renderContext.renderQuad$2(renderState, this._text$_renderTexture._quad);
+      } else {
+        H.interceptedTypeCast(renderContext, "$isRenderContextCanvas");
+        renderContext.setTransform$1(0, renderState._currentContextState.matrix);
+        t1 = renderState._currentContextState.alpha;
+        renderContext._activeAlpha = t1;
+        t2 = renderContext._renderingContext;
+        t2.globalAlpha = t1;
+        this._renderText$1(t2);
+      }
+      this._caretTime = this._caretTime + renderState.deltaTime;
+      if (this._text$_type === "input") {
+        if (this.get$stage() != null)
+          t1 = false;
+        else
+          t1 = false;
+        if (t1) {
+          x1 = this._caretX;
+          y1 = this._caretY;
+          x3 = x1 + this._caretWidth;
+          y3 = y1 + this._caretHeight;
+          color = this._defaultTextFormat.color;
+          renderContext.renderTriangle$8(renderState, x1, y1, x3, y1, x3, y3, color);
+          renderContext.renderTriangle$8(renderState, x1, y1, x3, y3, x1, y3, color);
+        }
+      }
+    },
+    _refreshTextLineMetrics$0: function() {
+      var t1, textFormat, textFormatSize, textFormatStrokeWidth, textFormatLeftMargin, textFormatRightMargin, textFormatTopMargin, textFormatBottomMargin, textFormatIndent, textFormatLeading, textFormatAlign, fontStyle, fontStyleMetrics, fontStyleMetricsAscent, fontStyleMetricsDescent, availableWidth, canvasContext, paragraphLines, paragraphs, t2, t3, startIndex, checkLine, validLine, lineWidth, lineIndent, p, paragraph, words, w, word, t4, checkLine0, line, textLineMetrics, indent, offsetX, offsetY, width, t5, autoWidth, autoHeight, textIndex, text, shiftX, shiftY;
+      t1 = this._refreshPending;
+      if ((t1 & 1) === 0)
+        return;
+      else
+        this._refreshPending = t1 & 254;
+      t1 = this._textLineMetrics;
+      C.JSArray_methods.set$length(t1, 0);
+      textFormat = this._defaultTextFormat;
+      textFormatSize = V.ensureNum(textFormat.size);
+      textFormatStrokeWidth = V.ensureNum(textFormat.strokeWidth);
+      textFormatLeftMargin = V.ensureNum(textFormat.leftMargin);
+      textFormatRightMargin = V.ensureNum(textFormat.rightMargin);
+      textFormatTopMargin = V.ensureNum(textFormat.topMargin);
+      textFormatBottomMargin = V.ensureNum(textFormat.bottomMargin);
+      textFormatIndent = V.ensureNum(textFormat.indent);
+      textFormatLeading = V.ensureNum(textFormat.leading);
+      textFormatAlign = V.ensureString(textFormat.align);
+      fontStyle = textFormat.get$_cssFontStyle();
+      fontStyleMetrics = Y._getFontStyleMetrics(textFormat);
+      fontStyleMetricsAscent = V.ensureNum(fontStyleMetrics.get$ascent());
+      fontStyleMetricsDescent = V.ensureNum(fontStyleMetrics.get$descent());
+      availableWidth = this._text$_width - textFormatLeftMargin - textFormatRightMargin;
+      canvasContext = $.get$_dummyCanvasContext();
+      paragraphLines = H.setRuntimeTypeInfo([], [P.$int]);
+      paragraphs = J.split$1$s(this._text, "\n");
+      canvasContext.font = fontStyle + " ";
+      canvasContext.textAlign = "start";
+      canvasContext.textBaseline = "alphabetic";
+      canvasContext.setTransform(1, 0, 0, 1, 0, 0);
+      for (t2 = this._wordWrap, t3 = !t2, startIndex = 0, checkLine = "", validLine = "", lineWidth = 0, lineIndent = 0, p = 0; p < paragraphs.length; ++p) {
+        paragraph = paragraphs[p];
+        if (typeof paragraph !== "string")
+          continue;
+        paragraphLines.push(t1.length);
+        if (t3) {
+          paragraph = this._passwordEncoder$1(paragraph);
+          t1.push(new Y.TextLineMetrics(paragraph, startIndex, 0, 0, 0, 0, 0, 0, 0, 0));
+          startIndex += paragraph.length + 1;
+        } else {
+          words = paragraph.split(" ");
+          for (lineIndent = textFormatIndent, checkLine = null, w = 0; w < words.length; ++w) {
+            word = words[w];
+            if (typeof word !== "string")
+              continue;
+            t4 = checkLine == null;
+            checkLine0 = this._passwordEncoder$1(t4 ? word : checkLine + " " + word);
+            lineWidth = canvasContext.measureText(checkLine0).width;
+            lineWidth.toString;
+            if (typeof lineWidth !== "number")
+              return H.iae(lineWidth);
+            if (lineIndent + lineWidth >= availableWidth) {
+              if (t4) {
+                t1.push(new Y.TextLineMetrics(checkLine0, startIndex, 0, 0, 0, 0, 0, 0, 0, 0));
+                startIndex += checkLine0.length + 1;
+                checkLine0 = null;
+              } else {
+                t1.push(new Y.TextLineMetrics(checkLine, startIndex, 0, 0, 0, 0, 0, 0, 0, 0));
+                startIndex += checkLine.length + 1;
+                checkLine0 = this._passwordEncoder$1(word);
+              }
+              lineIndent = 0;
+            }
+            validLine = checkLine;
+            checkLine = checkLine0;
+          }
+          if (checkLine != null) {
+            t1.push(new Y.TextLineMetrics(checkLine, startIndex, 0, 0, 0, 0, 0, 0, 0, 0));
+            startIndex += checkLine.length + 1;
+          }
+        }
+      }
+      this._textWidth = 0;
+      this._textHeight = 0;
+      for (t3 = textFormatTopMargin + textFormatSize, t4 = textFormatLeading + textFormatSize + fontStyleMetricsDescent, line = 0; line < t1.length; ++line) {
+        textLineMetrics = t1[line];
+        if (!J.getInterceptor(textLineMetrics).$isTextLineMetrics)
+          continue;
+        indent = C.JSArray_methods.contains$1(paragraphLines, line) ? textFormatIndent : 0;
+        offsetX = textFormatLeftMargin + indent;
+        offsetY = t3 + line * t4;
+        width = canvasContext.measureText(textLineMetrics._text).width;
+        width.toString;
+        textLineMetrics._text$_x = offsetX;
+        textLineMetrics._text$_y = offsetY;
+        textLineMetrics._text$_width = width;
+        textLineMetrics._text$_height = textFormatSize;
+        textLineMetrics._ascent = fontStyleMetricsAscent;
+        textLineMetrics._descent = fontStyleMetricsDescent;
+        textLineMetrics._leading = textFormatLeading;
+        textLineMetrics._indent = indent;
+        t5 = this._textWidth;
+        if (typeof width !== "number")
+          return H.iae(width);
+        this._textWidth = P.max(t5, offsetX + width + textFormatRightMargin);
+        this._textHeight = offsetY + fontStyleMetricsDescent + textFormatBottomMargin;
+      }
+      t3 = textFormatStrokeWidth * 2;
+      t4 = this._textWidth + t3;
+      this._textWidth = t4;
+      this._textHeight += t3;
+      autoWidth = t2 ? this._text$_width : C.JSNumber_methods.toInt$0(Math.ceil(t4));
+      autoHeight = C.JSNumber_methods.toInt$0(Math.ceil(this._textHeight));
+      t2 = this._text$_width;
+      if (t2 !== autoWidth || this._text$_height !== autoHeight)
+        switch (this._autoSize) {
+          case "left":
+            this._text$_width = autoWidth;
+            this._text$_height = autoHeight;
+            t2 = autoWidth;
+            break;
+          case "right":
+            A.DisplayObject.prototype.set$x.call(this, this, A.DisplayObject.prototype.get$x.call(this, this) - (autoWidth - t2));
+            this._text$_width = autoWidth;
+            this._text$_height = autoHeight;
+            t2 = autoWidth;
+            break;
+          case "center":
+            A.DisplayObject.prototype.set$x.call(this, this, A.DisplayObject.prototype.get$x.call(this, this) - (autoWidth - t2) / 2);
+            this._text$_width = autoWidth;
+            this._text$_height = autoHeight;
+            t2 = autoWidth;
+            break;
+        }
+      availableWidth = t2 - textFormatLeftMargin - textFormatRightMargin;
+      for (line = 0; t2 = t1.length, line < t2; ++line) {
+        textLineMetrics = t1[line];
+        if (!J.getInterceptor(textLineMetrics).$isTextLineMetrics)
+          continue;
+        switch (textFormatAlign) {
+          case "center":
+          case "justify":
+            textLineMetrics._text$_x = textLineMetrics._text$_x + (availableWidth - textLineMetrics._text$_width) / 2;
+            break;
+          case "right":
+          case "end":
+            textLineMetrics._text$_x = textLineMetrics._text$_x + (availableWidth - textLineMetrics._text$_width);
+            break;
+          default:
+            textLineMetrics._text$_x += textFormatStrokeWidth;
+        }
+        textLineMetrics._text$_y += textFormatStrokeWidth;
+      }
+      if (this._text$_type === "input") {
+        for (line = t2 - 1; line >= 0; --line) {
+          if (line >= t1.length)
+            return H.ioore(t1, line);
+          textLineMetrics = t1[line];
+          if (!J.getInterceptor(textLineMetrics).$isTextLineMetrics)
+            continue;
+          t2 = this._caretIndex;
+          t3 = textLineMetrics._textIndex;
+          if (J.$ge$n(t2, t3)) {
+            textIndex = J.$sub$n(this._caretIndex, t3);
+            text = C.JSString_methods.substring$2(textLineMetrics._text, 0, textIndex);
+            this._caretLine = line;
+            t2 = textLineMetrics._text$_x;
+            t3 = canvasContext.measureText(text).width;
+            t3.toString;
+            if (typeof t3 !== "number")
+              return H.iae(t3);
+            this._caretX = t2 + t3;
+            this._caretY = textLineMetrics._text$_y - fontStyleMetricsAscent * 0.9;
+            this._caretWidth = 2;
+            this._caretHeight = textFormatSize;
+            break;
+          }
+        }
+        for (t2 = this._caretX, t3 = this._text$_width, t4 = t3 * 0.2, shiftX = 0; shiftX + t2 > t3;)
+          shiftX -= t4;
+        for (; shiftX + t2 < 0;)
+          shiftX += t4;
+        for (t3 = this._caretY, t4 = this._caretHeight, t5 = this._text$_height, shiftY = 0; shiftY + t3 + t4 > t5;)
+          shiftY -= textFormatSize;
+        for (; shiftY + t3 < 0;)
+          shiftY += textFormatSize;
+        this._caretX = t2 + shiftX;
+        this._caretY += shiftY;
+        for (line = 0; line < t1.length; ++line) {
+          textLineMetrics = t1[line];
+          if (!J.getInterceptor(textLineMetrics).$isTextLineMetrics)
+            continue;
+          textLineMetrics._text$_x += shiftX;
+          textLineMetrics._text$_y += shiftY;
+        }
+      }
+    },
+    _refreshCache$0: function() {
+      var t1, pixelRatio, width, height, matrix, context;
+      t1 = this._refreshPending;
+      if ((t1 & 2) === 0)
+        return;
+      else
+        this._refreshPending = t1 & 253;
+      pixelRatio = $.get$Stage_autoHiDpi() === true ? $.get$devicePixelRatio() : 1;
+      width = C.JSNumber_methods.toInt$0(Math.ceil(P.max(1, this._text$_width)));
+      height = C.JSNumber_methods.toInt$0(Math.ceil(P.max(1, this._text$_height)));
+      t1 = this._text$_renderTexture;
+      if (t1 == null)
+        this._text$_renderTexture = L.RenderTexture$(width, height, true, 16777215, pixelRatio);
+      else
+        t1.resize$2(0, width, height);
+      matrix = this._text$_renderTexture._quad.get$drawMatrix();
+      context = J.get$context2D$x(this._text$_renderTexture._engine$_canvas);
+      t1 = matrix._data;
+      context.setTransform(t1[0], t1[1], t1[2], t1[3], t1[4], t1[5]);
+      context.clearRect(0, 0, this._text$_width, this._text$_height);
+      this._renderText$1(context);
+      this._text$_renderTexture.update$0();
+    },
+    _renderText$1: function(context) {
+      var textFormat, t1, lineWidth, i, lm, t2, t3, t4, t5, t6, underlineY;
+      textFormat = this._defaultTextFormat;
+      t1 = textFormat.bold ? textFormat.size / 10 : textFormat.size / 20;
+      lineWidth = C.JSNumber_methods.toInt$0(Math.ceil(t1));
+      context.save();
+      context.beginPath();
+      context.rect(0, 0, this._text$_width, this._text$_height);
+      context.clip();
+      context.font = textFormat.get$_cssFontStyle() + " ";
+      context.textAlign = "start";
+      context.textBaseline = "alphabetic";
+      context.lineCap = "round";
+      context.lineJoin = "round";
+      if (this._background) {
+        context.fillStyle = V.color2rgb(this._backgroundColor);
+        context.fillRect(0, 0, this._text$_width, this._text$_height);
+      }
+      t1 = textFormat.strokeWidth;
+      if (t1 > 0) {
+        context.lineWidth = t1 * 2;
+        context.strokeStyle = V.color2rgb(textFormat.strokeColor);
+        for (t1 = this._textLineMetrics, i = 0; i < t1.length; ++i) {
+          lm = t1[i];
+          t2 = J.getInterceptor$x(lm);
+          context.strokeText(lm.get$_text(), t2.get$x(lm), t2.get$y(lm));
+        }
+      }
+      context.lineWidth = lineWidth;
+      t1 = textFormat.color;
+      context.strokeStyle = V.color2rgb(t1);
+      context.fillStyle = V.color2rgb(t1);
+      for (t1 = this._textLineMetrics, t2 = textFormat.underline, i = 0; i < t1.length; ++i) {
+        lm = t1[i];
+        t3 = lm.get$_text();
+        t4 = J.getInterceptor$x(lm);
+        t5 = t4.get$x(lm);
+        t6 = t4.get$y(lm);
+        context.fillText(t3, t5, t6);
+        if (t2) {
+          underlineY = J.round$0$n(J.$add$ns(t4.get$y(lm), lineWidth));
+          if (C.JSInt_methods.$mod(lineWidth, 2) !== 0)
+            underlineY += 0.5;
+          context.beginPath();
+          context.moveTo(t4.get$x(lm), underlineY);
+          context.lineTo(J.$add$ns(t4.get$x(lm), t4.get$width(lm)), underlineY);
+          context.stroke();
+        }
+      }
+      if (this._border) {
+        context.strokeStyle = V.color2rgb(this._borderColor);
+        context.lineWidth = 1;
+        context.strokeRect(0, 0, this._text$_width, this._text$_height);
+      }
+      context.restore();
+    },
+    _passwordEncoder$1: function(text) {
+      var t1, t2, newText, i;
+      if (!this._displayAsPassword)
+        return text;
+      for (t1 = text.length, t2 = this._passwordChar, newText = "", i = 0; i < t1; ++i)
+        newText += t2;
+      return newText;
+    },
+    _onKeyDown$1: [function(keyboardEvent) {
+      var text, t1, textLength, textLineMetrics, caretIndex, caretLine, t2, caretIndexNew, tlm, tlmFrom, tlmTo, lineIndex;
+      if (this._text$_type === "input") {
+        this._refreshTextLineMetrics$0();
+        text = this._text;
+        t1 = J.getInterceptor$asx(text);
+        textLength = t1.get$length(text);
+        textLineMetrics = this._textLineMetrics;
+        caretIndex = this._caretIndex;
+        caretLine = this._caretLine;
+        switch (J.get$keyCode$x(keyboardEvent)) {
+          case 8:
+            t2 = J.getInterceptor$n(caretIndex);
+            if (t2.$gt(caretIndex, 0)) {
+              this._text = t1.substring$2(text, 0, t2.$sub(caretIndex, 1)) + t1.substring$1(text, caretIndex);
+              caretIndexNew = t2.$sub(caretIndex, 1);
+            } else
+              caretIndexNew = -1;
+            break;
+          case 35:
+            if (caretLine < 0 || caretLine >= textLineMetrics.length)
+              return H.ioore(textLineMetrics, caretLine);
+            tlm = textLineMetrics[caretLine];
+            t1 = tlm.get$_textIndex();
+            t2 = J.get$length$asx(tlm.get$_text());
+            if (typeof t2 !== "number")
+              return H.iae(t2);
+            caretIndexNew = t1 + t2;
+            break;
+          case 36:
+            if (caretLine < 0 || caretLine >= textLineMetrics.length)
+              return H.ioore(textLineMetrics, caretLine);
+            caretIndexNew = textLineMetrics[caretLine].get$_textIndex();
+            break;
+          case 37:
+            t1 = J.getInterceptor$n(caretIndex);
+            caretIndexNew = t1.$gt(caretIndex, 0) ? t1.$sub(caretIndex, 1) : -1;
+            break;
+          case 38:
+            if (caretLine > 0 && caretLine < textLineMetrics.length) {
+              t1 = textLineMetrics.length;
+              if (caretLine < 0 || caretLine >= t1)
+                return H.ioore(textLineMetrics, caretLine);
+              tlmFrom = textLineMetrics[caretLine];
+              t2 = caretLine - 1;
+              if (t2 < 0 || t2 >= t1)
+                return H.ioore(textLineMetrics, t2);
+              tlmTo = textLineMetrics[t2];
+              lineIndex = P.min(J.$sub$n(caretIndex, tlmFrom.get$_textIndex()), J.get$length$asx(tlmTo.get$_text()));
+              caretIndexNew = tlmTo.get$_textIndex() + lineIndex;
+            } else
+              caretIndexNew = 0;
+            break;
+          case 39:
+            t1 = J.getInterceptor$n(caretIndex);
+            caretIndexNew = t1.$lt(caretIndex, textLength) ? t1.$add(caretIndex, 1) : -1;
+            break;
+          case 40:
+            if (caretLine >= 0 && caretLine < textLineMetrics.length - 1) {
+              t1 = textLineMetrics.length;
+              if (caretLine < 0 || caretLine >= t1)
+                return H.ioore(textLineMetrics, caretLine);
+              tlmFrom = textLineMetrics[caretLine];
+              t2 = caretLine + 1;
+              if (t2 >= t1)
+                return H.ioore(textLineMetrics, t2);
+              tlmTo = textLineMetrics[t2];
+              lineIndex = P.min(J.$sub$n(caretIndex, tlmFrom.get$_textIndex()), J.get$length$asx(tlmTo.get$_text()));
+              caretIndexNew = tlmTo.get$_textIndex() + lineIndex;
+            } else
+              caretIndexNew = textLength;
+            break;
+          case 46:
+            t2 = J.getInterceptor$n(caretIndex);
+            if (t2.$lt(caretIndex, textLength)) {
+              this._text = t1.substring$2(text, 0, caretIndex) + t1.substring$1(text, t2.$add(caretIndex, 1));
+              caretIndexNew = caretIndex;
+            } else
+              caretIndexNew = -1;
+            break;
+          default:
+            caretIndexNew = -1;
+        }
+        if (!J.$eq(caretIndexNew, -1)) {
+          this._caretIndex = caretIndexNew;
+          this._caretTime = 0;
+          this._refreshPending |= 3;
+        }
+      }
+    }, "call$1", "get$_onKeyDown", 2, 0, 125, 126, []],
+    _onTextInput$1: [function(textEvent) {
+      var textLength, caretIndex, newText, t1, t2;
+      if (this._text$_type === "input") {
+        textLength = J.get$length$asx(this._text);
+        caretIndex = this._caretIndex;
+        newText = J.get$text$x(textEvent);
+        if (J.$eq(newText, "\r"))
+          newText = "\n";
+        if (J.$eq(newText, "\n") && !this._multiline)
+          newText = "";
+        t1 = J.getInterceptor(newText);
+        if (t1.$eq(newText, ""))
+          return;
+        t2 = this._maxChars;
+        if (t2 !== 0 && J.$ge$n(textLength, t2))
+          return;
+        this._text = C.JSString_methods.$add(J.substring$2$s(this._text, 0, caretIndex), newText) + J.substring$1$s(this._text, caretIndex);
+        this._caretIndex = J.$add$ns(this._caretIndex, t1.get$length(newText));
+        this._caretTime = 0;
+        this._refreshPending |= 3;
+      }
+    }, "call$1", "get$_onTextInput", 2, 0, 127, 128, []],
+    _onMouseDown$1: [function(mouseEvent) {
+      var mouseX, mouseY, canvasContext, t1, line, textLineMetrics, text, lineX, t2, t3, t4, bestDistance, bestIndex, c, width, distance;
+      mouseX = J.toDouble$0$n(mouseEvent.get$localX());
+      mouseY = J.toDouble$0$n(mouseEvent.get$localY());
+      canvasContext = $.get$_dummyCanvasContext();
+      canvasContext.setTransform(1, 0, 0, 1, 0, 0);
+      for (t1 = this._textLineMetrics, line = 0; line < t1.length; ++line) {
+        textLineMetrics = t1[line];
+        if (!J.getInterceptor(textLineMetrics).$isTextLineMetrics)
+          continue;
+        text = textLineMetrics._text;
+        lineX = textLineMetrics._text$_x;
+        t2 = textLineMetrics._text$_y;
+        t3 = textLineMetrics._ascent;
+        t4 = textLineMetrics._descent;
+        if (t2 - t3 <= mouseY && t2 + t4 >= mouseY) {
+          for (t2 = text.length, bestDistance = 1 / 0, bestIndex = 0, c = 0; c <= t2; ++c) {
+            width = canvasContext.measureText(C.JSString_methods.substring$2(text, 0, c)).width;
+            width.toString;
+            if (typeof width !== "number")
+              return H.iae(width);
+            distance = Math.abs(lineX + width - mouseX);
+            if (distance < bestDistance) {
+              bestIndex = c;
+              bestDistance = distance;
+            }
+          }
+          this._caretIndex = textLineMetrics._textIndex + bestIndex;
+          this._caretTime = 0;
+          this._refreshPending |= 3;
+        }
+      }
+    }, "call$1", "get$_onMouseDown", 2, 0, 105, 129, []],
+    TextField$2: function(text, textFormat) {
+      this.set$text(0, text);
+      this._defaultTextFormat = new Y.TextFormat(textFormat.font, textFormat.size, textFormat.color, textFormat.strokeWidth, textFormat.strokeColor, textFormat.fillGradient, textFormat.bold, textFormat.italic, textFormat.underline, textFormat.align, textFormat.topMargin, textFormat.bottomMargin, textFormat.leftMargin, textFormat.rightMargin, textFormat.indent, textFormat.leading);
+      this._refreshPending |= 3;
+      this.on$1(0, "keyDown").listen$1(this.get$_onKeyDown());
+      this.on$1(0, "textInput").listen$1(this.get$_onTextInput());
+      this.on$1(0, "mouseDown").listen$1(this.get$_onMouseDown());
+    }
+  },
+  TextFormat: {
+    "^": "Object;font,size,color,strokeWidth,strokeColor,fillGradient,bold,italic,underline,align,topMargin,bottomMargin,leftMargin,rightMargin,indent,leading",
+    get$_cssFontStyle: function() {
+      var fontStyle = "" + this.size + "px " + this.font;
+      if (this.bold)
+        fontStyle = "bold " + fontStyle;
+      return this.italic ? "italic " + fontStyle : fontStyle;
+    }
+  },
+  TextLineMetrics: {
+    "^": "Object;_text<,_textIndex<,_text$_x,_text$_y,_text$_width,_text$_height,_ascent,_descent,_leading,_indent",
+    get$x: function(_) {
+      return this._text$_x;
+    },
+    get$y: function(_) {
+      return this._text$_y;
+    },
+    get$width: function(_) {
+      return this._text$_width;
+    },
+    get$height: function(_) {
+      return this._text$_height;
+    },
+    get$ascent: function() {
+      return this._ascent;
+    },
+    get$descent: function() {
+      return this._descent;
+    },
+    $isTextLineMetrics: true
   }
 }],
 ["stagexl.ui.mouse", "package:stagexl/src/ui/mouse.dart", , Q, {
@@ -18066,9 +19033,6 @@ $$ = null;
   _ = W.Event0;
   _.$isEvent0 = TRUE;
   _.$isObject = TRUE;
-  _ = R.EventStream;
-  _.$isStream = TRUE;
-  _.$isObject = TRUE;
   _ = P.LibraryMirror;
   _.$isLibraryMirror = TRUE;
   _.$isMirror = TRUE;
@@ -18107,7 +19071,12 @@ $$ = null;
   _.$isMirror = TRUE;
   _.$isMirror = TRUE;
   _.$isObject = TRUE;
+  _ = R.EventStream;
+  _.$isStream = TRUE;
+  _.$isObject = TRUE;
   A._GraphicsCommand.$isObject = TRUE;
+  Y.TextLineMetrics.$isObject = TRUE;
+  Y._FontStyleMetrics.$isObject = TRUE;
   _ = W.TableCellElement;
   _.$isHtmlElement = TRUE;
   _.$isElement = TRUE;
@@ -18139,11 +19108,11 @@ $$ = null;
   _.$is_EventSink = TRUE;
   _.$isStreamSubscription = TRUE;
   _.$isObject = TRUE;
-  _ = R.MouseEvent;
-  _.$isMouseEvent = TRUE;
+  _ = R.Event;
   _.$isEvent = TRUE;
   _.$isObject = TRUE;
-  _ = R.Event;
+  _ = R.MouseEvent;
+  _.$isMouseEvent = TRUE;
   _.$isEvent = TRUE;
   _.$isObject = TRUE;
   _ = W.EventTarget;
@@ -18194,6 +19163,21 @@ $$ = null;
   _ = P.Stream;
   _.$isStream = TRUE;
   _.$isObject = TRUE;
+  _ = U.Rectangle0;
+  _.$isRectangle0 = TRUE;
+  _.$isRectangle = TRUE;
+  _.$isObject = TRUE;
+  _ = R.KeyboardEvent0;
+  _.$isKeyboardEvent0 = TRUE;
+  _.$isEvent = TRUE;
+  _.$isObject = TRUE;
+  _ = R.TextEvent0;
+  _.$isTextEvent0 = TRUE;
+  _.$isEvent = TRUE;
+  _.$isObject = TRUE;
+  _ = A.GraphicsGradient;
+  _.$isGraphicsGradient = TRUE;
+  _.$isObject = TRUE;
   _ = F.JenkinsHasher;
   _.$isJenkinsHasher = TRUE;
   _.$isObject = TRUE;
@@ -18204,10 +19188,6 @@ $$ = null;
   _.$isObject = TRUE;
   _ = P.Function;
   _.$isFunction = TRUE;
-  _.$isObject = TRUE;
-  _ = U.Rectangle0;
-  _.$isRectangle0 = TRUE;
-  _.$isRectangle = TRUE;
   _.$isObject = TRUE;
   _ = P.Rectangle;
   _.$isRectangle = TRUE;
@@ -18378,6 +19358,9 @@ J.addEventListener$3$x = function(receiver, a0, a1, a2) {
 J.allMatches$1$s = function(receiver, a0) {
   return J.getInterceptor$s(receiver).allMatches$1(receiver, a0);
 };
+J.append$1$x = function(receiver, a0) {
+  return J.getInterceptor$x(receiver).append$1(receiver, a0);
+};
 J.codeUnitAt$1$s = function(receiver, a0) {
   return J.getInterceptor$s(receiver).codeUnitAt$1(receiver, a0);
 };
@@ -18441,6 +19424,9 @@ J.get$isNotEmpty$asx = function(receiver) {
 J.get$iterator$ax = function(receiver) {
   return J.getInterceptor$ax(receiver).get$iterator(receiver);
 };
+J.get$keyCode$x = function(receiver) {
+  return J.getInterceptor$x(receiver).get$keyCode(receiver);
+};
 J.get$last$ax = function(receiver) {
   return J.getInterceptor$ax(receiver).get$last(receiver);
 };
@@ -18455,6 +19441,9 @@ J.get$mask$x = function(receiver) {
 };
 J.get$name$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$name(receiver);
+};
+J.get$offsetTop$x = function(receiver) {
+  return J.getInterceptor$x(receiver).get$offsetTop(receiver);
 };
 J.get$outline$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$outline(receiver);
@@ -18479,6 +19468,9 @@ J.get$style$x = function(receiver) {
 };
 J.get$tabIndex$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$tabIndex(receiver);
+};
+J.get$text$x = function(receiver) {
+  return J.getInterceptor$x(receiver).get$text(receiver);
 };
 J.get$url$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$url(receiver);
@@ -18510,20 +19502,32 @@ J.noSuchMethod$1 = function(receiver, a0) {
 J.preventDefault$0$x = function(receiver) {
   return J.getInterceptor$x(receiver).preventDefault$0(receiver);
 };
+J.remove$0$ax = function(receiver) {
+  return J.getInterceptor$ax(receiver).remove$0(receiver);
+};
 J.remove$1$ax = function(receiver, a0) {
   return J.getInterceptor$ax(receiver).remove$1(receiver, a0);
 };
 J.removeEventListener$3$x = function(receiver, a0, a1, a2) {
   return J.getInterceptor$x(receiver).removeEventListener$3(receiver, a0, a1, a2);
 };
-J.roundToDouble$0$n = function(receiver) {
-  return J.getInterceptor$n(receiver).roundToDouble$0(receiver);
+J.replaceAll$2$s = function(receiver, a0, a1) {
+  return J.getInterceptor$s(receiver).replaceAll$2(receiver, a0, a1);
+};
+J.round$0$n = function(receiver) {
+  return J.getInterceptor$n(receiver).round$0(receiver);
 };
 J.send$1$x = function(receiver, a0) {
   return J.getInterceptor$x(receiver).send$1(receiver, a0);
 };
 J.set$cursor$x = function(receiver, value) {
   return J.getInterceptor$x(receiver).set$cursor(receiver, value);
+};
+J.set$display$x = function(receiver, value) {
+  return J.getInterceptor$x(receiver).set$display(receiver, value);
+};
+J.set$font$x = function(receiver, value) {
+  return J.getInterceptor$x(receiver).set$font(receiver, value);
 };
 J.set$height$x = function(receiver, value) {
   return J.getInterceptor$x(receiver).set$height(receiver, value);
@@ -18549,6 +19553,12 @@ J.set$src$x = function(receiver, value) {
 J.set$tabIndex$x = function(receiver, value) {
   return J.getInterceptor$x(receiver).set$tabIndex(receiver, value);
 };
+J.set$text$x = function(receiver, value) {
+  return J.getInterceptor$x(receiver).set$text(receiver, value);
+};
+J.set$verticalAlign$x = function(receiver, value) {
+  return J.getInterceptor$x(receiver).set$verticalAlign(receiver, value);
+};
 J.set$width$x = function(receiver, value) {
   return J.getInterceptor$x(receiver).set$width(receiver, value);
 };
@@ -18557,6 +19567,9 @@ J.split$1$s = function(receiver, a0) {
 };
 J.startsWith$1$s = function(receiver, a0) {
   return J.getInterceptor$s(receiver).startsWith$1(receiver, a0);
+};
+J.substring$1$s = function(receiver, a0) {
+  return J.getInterceptor$s(receiver).substring$1(receiver, a0);
 };
 J.substring$2$s = function(receiver, a0, a1) {
   return J.getInterceptor$s(receiver).substring$2(receiver, a0, a1);
@@ -18582,6 +19595,7 @@ Isolate.makeConstantList = function(list) {
 C.CanvasElement_methods = W.CanvasElement.prototype;
 C.HttpRequest_methods = W.HttpRequest.prototype;
 C.JSArray_methods = J.JSArray.prototype;
+C.JSDouble_methods = J.JSDouble.prototype;
 C.JSInt_methods = J.JSInt.prototype;
 C.JSNull_methods = J.JSNull.prototype;
 C.JSNumber_methods = J.JSNumber.prototype;
@@ -18967,11 +19981,11 @@ Isolate.$lazy($, "_dartProxyCtor", "_dartProxyCtor", "get$_dartProxyCtor", funct
     this.o = o;
   };
 });
-Isolate.$lazy($, "_dummyCanvas", "_dummyCanvas", "get$_dummyCanvas", function() {
+Isolate.$lazy($, "_dummyCanvas", "_dummyCanvas0", "get$_dummyCanvas0", function() {
   return W.CanvasElement_CanvasElement(16, 16);
 });
-Isolate.$lazy($, "_dummyCanvasContext", "_dummyCanvasContext", "get$_dummyCanvasContext", function() {
-  return J.get$context2D$x($.get$_dummyCanvas());
+Isolate.$lazy($, "_dummyCanvasContext", "_dummyCanvasContext0", "get$_dummyCanvasContext0", function() {
+  return J.get$context2D$x($.get$_dummyCanvas0());
 });
 Isolate.$lazy($, "defaultLoadOptions", "BitmapData_defaultLoadOptions", "get$BitmapData_defaultLoadOptions", function() {
   return new A.BitmapDataLoadOptions(true, true, false, true, false);
@@ -19048,6 +20062,15 @@ Isolate.$lazy($, "isLittleEndianSystem", "isLittleEndianSystem", "get$isLittleEn
   if (0 >= byteList.length)
     return H.ioore(byteList, 0);
   return byteList[0] === 68;
+});
+Isolate.$lazy($, "_dummyCanvas", "_dummyCanvas", "get$_dummyCanvas", function() {
+  return W.CanvasElement_CanvasElement(16, 16);
+});
+Isolate.$lazy($, "_dummyCanvasContext", "_dummyCanvasContext", "get$_dummyCanvasContext", function() {
+  return J.get$context2D$x($.get$_dummyCanvas());
+});
+Isolate.$lazy($, "_fontStyleMetrics", "_fontStyleMetrics", "get$_fontStyleMetrics", function() {
+  return P.LinkedHashMap_LinkedHashMap(null, null, null, P.String, Y._FontStyleMetrics);
 });
 Isolate.$lazy($, "_cursorDatas", "Mouse__cursorDatas", "get$Mouse__cursorDatas", function() {
   return P.LinkedHashMap_LinkedHashMap(null, null, null, P.String, Q.MouseCursorData);
@@ -19178,7 +20201,6 @@ D.Context,
 {func: "dynamic__Event", args: [R.Event]},
 {func: "dynamic__MouseEvent", args: [R.MouseEvent]},
 "res",
-{func: "void__MouseEvent", void: true, args: [R.MouseEvent]},
 "renderTexture",
 {func: "dynamic__MouseEvent0", args: [W.MouseEvent0]},
 "event",
@@ -19197,6 +20219,11 @@ D.Context,
 {func: "void__Event", void: true, args: [W.Event0]},
 "r",
 "resource",
+{func: "dynamic__KeyboardEvent0", args: [R.KeyboardEvent0]},
+"keyboardEvent",
+{func: "dynamic__TextEvent", args: [R.TextEvent0]},
+"textEvent",
+"mouseEvent",
 ];
 $ = null;
 Isolate = Isolate.$finishIsolateConstructor(Isolate);

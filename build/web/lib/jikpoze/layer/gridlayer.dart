@@ -4,15 +4,7 @@ class GridLayer extends Layer {
 
 	BlueBear.Pencil pencil;
 
-	GridLayer(SquareMap map, int index) : super (map, index) {
-		void mouseClickEvent(MouseEvent e){
-			if(this.map.board.dragging == null){
-				print(e);
-				return;
-			}
-		}
-		onMouseClick.listen(mouseClickEvent);
-	}
+	GridLayer(SquareMap map, int index) : super (map, index);
 
 	void renderCells() {
 		removeChildren();

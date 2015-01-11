@@ -19,8 +19,15 @@ class SquareMap extends DisplayObjectContainer {
 		this.board = board;
 	}
 
-	Cell createCell(Layer layer, Point point, Pencil pencil) =>
-			layer.cells[point] = new Cell(layer, point, pencil);
+	Cell createCell(Layer layer, Point point, Pencil pencil) {
+		if (null == layer) {
+			throw 'layer cannot be null';
+		}
+		if (null == point) {
+			throw 'point cannot be null';
+		}
+		return layer.cells[point] = new Cell(layer, point, pencil);
+	}
 
 	void renderCells() {
 		for(Layer layer in layers.values) {

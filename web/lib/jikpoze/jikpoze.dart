@@ -27,6 +27,7 @@ part 'pencil/pencil.dart';
 part 'pencil/gridpencil.dart';
 part 'pencil/isogridpencil.dart';
 part 'pencil/hexgridpencil.dart';
+part 'pencil/coordinatedgridpencil.dart';
 
 // Bitmaps
 part 'bitmap/hitboxbitmap.dart';

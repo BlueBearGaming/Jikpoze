@@ -16,6 +16,7 @@ class Cell extends DisplayObjectContainer {
 			throw "pencil cannot be null";
 		}
 		layer.addChild(this);
+		attachEvents();
 		draw();
 	}
 
@@ -24,7 +25,7 @@ class Cell extends DisplayObjectContainer {
 		Point viewPoint = layer.map.gamePointToViewPoint(position);
 		x = viewPoint.x;
 		y = viewPoint.y;
-		addChild(pencil.getDisplayObject());
+		addChild(pencil.getDisplayObject(position));
 	}
 
 	void clear() {
@@ -34,6 +35,20 @@ class Cell extends DisplayObjectContainer {
 		}
 		removeCache();
 		layer.addChild(this);
+	}
+
+	void attachEvents() {
+		onMouseClick.listen((MouseEvent e){
+			if(layer.map.board.dragging != null){
+				return;
+			}
+			Layer targetLayer = layer.map.layers['land_main'];
+			if (targetLayer.cells.containsKey(position)) {
+				return;
+			}
+			layer.map.createCell(targetLayer, position, layer.map.board.pencils['grass_01']);
+			targetLayer.renderCells();
+		});
 	}
 
 	List<Point> getAdjacentPoints() {
