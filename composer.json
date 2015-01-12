@@ -1,9 +1,9 @@
 {
-    "name": "clevergaming/jikpoze",
+    "name": "clever-gaming/jikpoze",
     "description": "2D game rendering engine with Dart and StageXL",
     "keywords": [ "game", "tiles", "engine", "dart", "stagexl" ],
     "homepage": "https://github.com/CleverGaming/Jikpoze",
-    "type": "game_engine",
+    "type": "game-engine",
     "license": "GPL",
     "authors": [
         {
