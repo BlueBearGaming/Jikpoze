@@ -1,0 +1,16 @@
+{
+    "name": "clevergaming/jikpoze",
+    "description": "2D game rendering engine with Dart and StageXL",
+    "keywords": [ "game", "tiles", "engine", "dart", "stagexl" ],
+    "homepage": "https://github.com/CleverGaming/Jikpoze",
+    "type": "game_engine",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "Vincent Chalnot",
+            "email": "vchalnot@clever-age.com",
+            "homepage": "http://chalnot.fr"
+        }
+    ],
+    "target-dir": "."
+}
