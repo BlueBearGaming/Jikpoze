@@ -1299,7 +1299,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         return;
       t1 = this.pauseTokens;
       t1.remove$1(0, resume);
-      if (t1._collection$_length === 0) {
+      if (t1._length === 0) {
         for (t1 = this.delayedEvents; t2 = t1.length, t2 !== 0;) {
           if (0 >= t2)
             return H.ioore(t1, 0);
@@ -1394,7 +1394,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     handleUncaughtError$2: function(error, stackTrace) {
       var t1, message;
       t1 = this.errorPorts;
-      if (t1._collection$_length === 0) {
+      if (t1._length === 0) {
         if (this.errorsAreFatal === true && this === init.globalState.rootContext)
           return;
         if (self.console && self.console.error)
@@ -1486,7 +1486,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       t1.$indexSet(0, portId, port);
     },
     _updateGlobalState$0: function() {
-      if (this.ports._collection$_length - this.weakPorts._collection$_length > 0 || this.isPaused || !this.initialized)
+      if (this.ports._length - this.weakPorts._length > 0 || this.isPaused || !this.initialized)
         init.globalState.isolates.$indexSet(0, this.id, this);
       else
         this.kill$0();
@@ -1497,7 +1497,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       if (t1 != null)
         t1.clear$0(0);
       for (t1 = this.ports, t2 = t1.get$values(t1), t2 = H.setRuntimeTypeInfo(new H.MappedIterator(null, J.get$iterator$ax(t2._iterable), t2._f), [H.getTypeArgumentByIndex(t2, 0), H.getTypeArgumentByIndex(t2, 1)]); t2.moveNext$0();)
-        t2.__internal$_current.__isolate_helper$_close$0();
+        t2._current.__isolate_helper$_close$0();
       t1.clear$0(0);
       this.weakPorts.clear$0(0);
       init.globalState.isolates.remove$1(0, this.id);
@@ -1505,7 +1505,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       t1 = this.doneHandlers;
       if (t1 != null) {
         for (t1 = H.setRuntimeTypeInfo(new H.ListIterator(t1, t1.length, 0, null), [H.getTypeArgumentByIndex(t1, 0)]); t1.moveNext$0();)
-          J.send$1$x(t1.__internal$_current, null);
+          J.send$1$x(t1._current, null);
         this.doneHandlers = null;
       }
     }, "call$0", "get$kill", 0, 0, 18],
@@ -1529,10 +1529,10 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       var $event, t1, t2;
       $event = this.dequeue$0();
       if ($event == null) {
-        if (init.globalState.rootContext != null && init.globalState.isolates.containsKey$1(init.globalState.rootContext.id) && init.globalState.fromCommandLine === true && init.globalState.rootContext.ports._collection$_length === 0)
+        if (init.globalState.rootContext != null && init.globalState.isolates.containsKey$1(init.globalState.rootContext.id) && init.globalState.fromCommandLine === true && init.globalState.rootContext.ports._length === 0)
           H.throwExpression(P.Exception_Exception("Program exited with open ReceivePorts."));
         t1 = init.globalState;
-        if (t1.isWorker === true && t1.isolates._collection$_length === 0 && t1.topEventLoop._activeJsAsyncCount === 0) {
+        if (t1.isWorker === true && t1.isolates._length === 0 && t1.topEventLoop._activeJsAsyncCount === 0) {
           t1 = t1.mainManager;
           t2 = H._serializeMessage(P.LinkedHashMap_LinkedHashMap$_literal(["command", "close"], null, null));
           t1.toString;
@@ -1934,15 +1934,13 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       return ["list", t1, this._serializeList$1(list)];
     },
     visitMap$1: function(map) {
-      var copyId, t1, keys, t2;
+      var copyId, t1;
       copyId = this._visited.$index(0, map);
       if (copyId != null)
         return ["ref", copyId];
       t1 = this._nextFreeRefId++;
       this._visited.$indexSet(0, map, t1);
-      keys = this._serializeList$1(map.get$keys().toList$0(0));
-      t2 = map.get$values(map);
-      return ["map", t1, keys, this._serializeList$1(P.List_List$from(t2, true, H.getRuntimeTypeArgument(t2, "IterableBase", 0)))];
+      return ["map", t1, this._serializeList$1(J.toList$0$ax(map.get$keys())), this._serializeList$1(J.toList$0$ax(map.get$values(map)))];
     },
     _serializeList$1: function(list) {
       var t1, len, result, i, t2;
@@ -2274,7 +2272,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     t1 = new H.ListIterator(codePoints, codePoints.length, 0, null);
     t1.$builtinTypeInfo = [H.getTypeArgumentByIndex(codePoints, 0)];
     for (; t1.moveNext$0();) {
-      i = t1.__internal$_current;
+      i = t1._current;
       if (typeof i !== "number" || Math.floor(i) !== i)
         throw H.wrapException(P.ArgumentError$(i));
       if (i <= 65535)
@@ -2290,7 +2288,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
   Primitives_stringFromCharCodes: function(charCodes) {
     var t1, i;
     for (t1 = H.setRuntimeTypeInfo(new H.ListIterator(charCodes, charCodes.length, 0, null), [H.getTypeArgumentByIndex(charCodes, 0)]); t1.moveNext$0();) {
-      i = t1.__internal$_current;
+      i = t1._current;
       if (typeof i !== "number" || Math.floor(i) !== i)
         throw H.wrapException(P.ArgumentError$(i));
       if (i < 0)
@@ -3271,16 +3269,16 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     "^": "Object;"
   },
   JSInvocationMirror: {
-    "^": "Object;__js_helper$_memberName,_internalName,_kind,_arguments,_namedArgumentNames,_namedIndices",
+    "^": "Object;__js_helper$_memberName,_internalName,__js_helper$_kind,_arguments,_namedArgumentNames,_namedIndices",
     get$memberName: function() {
       return this.__js_helper$_memberName;
     },
     get$isSetter: function() {
-      return this._kind === 2;
+      return this.__js_helper$_kind === 2;
     },
     get$positionalArguments: function() {
       var t1, argumentCount, list, index;
-      if (this._kind === 1)
+      if (this.__js_helper$_kind === 1)
         return C.List_empty;
       t1 = this._arguments;
       argumentCount = t1.length - this._namedArgumentNames.length;
@@ -3298,15 +3296,15 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     },
     get$namedArguments: function() {
       var t1, namedArgumentCount, t2, namedArgumentsStartIndex, map, i, t3, t4;
-      if (this._kind !== 0)
-        return P.LinkedHashMap_LinkedHashMap$_empty(P.Symbol, null);
+      if (this.__js_helper$_kind !== 0)
+        return P.LinkedHashMap_LinkedHashMap$_empty(P.Symbol0, null);
       t1 = this._namedArgumentNames;
       namedArgumentCount = t1.length;
       t2 = this._arguments;
       namedArgumentsStartIndex = t2.length - namedArgumentCount;
       if (namedArgumentCount === 0)
-        return P.LinkedHashMap_LinkedHashMap$_empty(P.Symbol, null);
-      map = P.LinkedHashMap_LinkedHashMap(null, null, null, P.Symbol, null);
+        return P.LinkedHashMap_LinkedHashMap$_empty(P.Symbol0, null);
+      map = P.LinkedHashMap_LinkedHashMap(null, null, null, P.Symbol0, null);
       for (i = 0; i < namedArgumentCount; ++i) {
         if (i >= t1.length)
           return H.ioore(t1, i);
@@ -3314,7 +3312,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         t4 = namedArgumentsStartIndex + i;
         if (t4 < 0 || t4 >= t2.length)
           return H.ioore(t2, t4);
-        map.$indexSet(0, new H.Symbol0(t3), t2[t4]);
+        map.$indexSet(0, new H.Symbol(t3), t2[t4]);
       }
       return map;
     },
@@ -4088,7 +4086,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       this.timestamp = P.DateTime$fromMillisecondsSinceEpoch(t1.$index(decoded, "timestamp"), false);
       t2 = H.Symbol_validatePublicSymbol(this.type);
       $.get$currentJsMirrorSystem().toString;
-      classMirror = J.get$single$ax(H.JsMirrorSystem_librariesByName().$index(0, "bluebear")).get$declarations()._map.$index(0, new H.Symbol0(t2));
+      classMirror = J.get$single$ax(H.JsMirrorSystem_librariesByName().$index(0, "bluebear")).get$declarations()._map.$index(0, new H.Symbol(t2));
       if (null == classMirror)
         throw H.wrapException("Class not found : " + H.S(this.type));
       this.data = classMirror.newInstance$2(C.Symbol_fromJsonData, [t1.$index(decoded, "data")]).reflectee;
@@ -4556,9 +4554,9 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       }}
   },
   ListIterator: {
-    "^": "Object;_iterable,__internal$_length,_index,__internal$_current",
+    "^": "Object;_iterable,__internal$_length,_index,_current",
     get$current: function() {
-      return this.__internal$_current;
+      return this._current;
     },
     moveNext$0: function() {
       var t1, t2, $length, t3;
@@ -4571,10 +4569,10 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       if (typeof $length !== "number")
         return H.iae($length);
       if (t3 >= $length) {
-        this.__internal$_current = null;
+        this._current = null;
         return false;
       }
-      this.__internal$_current = t2.elementAt$1(t1, t3);
+      this._current = t2.elementAt$1(t1, t3);
       ++this._index;
       return true;
     }
@@ -4618,21 +4616,21 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     $isEfficientLength: true
   },
   MappedIterator: {
-    "^": "Iterator;__internal$_current,_iterator,_f",
+    "^": "Iterator;_current,_iterator,_f",
     _f$1: function(arg0) {
       return this._f.call$1(arg0);
     },
     moveNext$0: function() {
       var t1 = this._iterator;
       if (t1.moveNext$0()) {
-        this.__internal$_current = this._f$1(t1.get$current());
+        this._current = this._f$1(t1.get$current());
         return true;
       }
-      this.__internal$_current = null;
+      this._current = null;
       return false;
     },
     get$current: function() {
-      return this.__internal$_current;
+      return this._current;
     },
     $asIterator: function($S, $T) {
       return [$T];
@@ -4685,7 +4683,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     static: {IterableMixinWorkaround_any: function(iterable, f) {
         var t1;
         for (t1 = H.setRuntimeTypeInfo(new H.ListIterator(iterable, iterable.length, 0, null), [H.getTypeArgumentByIndex(iterable, 0)]); t1.moveNext$0();)
-          if (f.call$1(t1.__internal$_current) === true)
+          if (f.call$1(t1._current) === true)
             return true;
         return false;
       }, IterableMixinWorkaround__rangeCheck: function(list, start, end) {
@@ -4738,24 +4736,24 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     $asList: null,
     $isEfficientLength: true
   },
-  Symbol0: {
-    "^": "Object;_name<",
+  Symbol: {
+    "^": "Object;__internal$_name<",
     $eq: function(_, other) {
       if (other == null)
         return false;
-      return !!J.getInterceptor(other).$isSymbol0 && J.$eq(this._name, other._name);
+      return !!J.getInterceptor(other).$isSymbol && J.$eq(this.__internal$_name, other.__internal$_name);
     },
     get$hashCode: function(_) {
-      var t1 = J.get$hashCode$(this._name);
+      var t1 = J.get$hashCode$(this.__internal$_name);
       if (typeof t1 !== "number")
         return H.iae(t1);
       return 536870911 & 664597 * t1;
     },
     toString$0: function(_) {
-      return "Symbol(\"" + H.S(this._name) + "\")";
+      return "Symbol(\"" + H.S(this.__internal$_name) + "\")";
     },
-    $isSymbol0: true,
     $isSymbol: true,
+    $isSymbol0: true,
     static: {"^": "Symbol_reservedWordRE,Symbol_publicIdentifierRE,Symbol_identifierRE,Symbol_operatorRE,Symbol_publicSymbolPattern,Symbol_symbolPattern", Symbol_validatePublicSymbol: function($name) {
         var t1 = J.getInterceptor$asx($name);
         if (t1.get$isEmpty($name) === true || $.get$Symbol_publicSymbolPattern()._nativeRegExp.test(H.checkString($name)))
@@ -4769,12 +4767,12 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
 ["dart._js_mirrors", "dart:_js_mirrors", , H, {
   "^": "",
   n: function(symbol) {
-    return symbol._name;
+    return symbol.__internal$_name;
   },
   s: function($name) {
     if ($name == null)
       return;
-    return new H.Symbol0($name);
+    return new H.Symbol($name);
   },
   reflect: [function(reflectee) {
     if (!!J.getInterceptor(reflectee).$isClosure)
@@ -4861,7 +4859,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     var result, t1, method;
     result = P.LinkedHashMap_LinkedHashMap(null, null, null, null, null);
     for (t1 = H.setRuntimeTypeInfo(new H.ListIterator(methods, methods.length, 0, null), [H.getTypeArgumentByIndex(methods, 0)]); t1.moveNext$0();) {
-      method = t1.__internal$_current;
+      method = t1._current;
       if (method.get$isConstructor())
         result.$indexSet(0, method.get$simpleName(), method);
     }
@@ -4872,9 +4870,9 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     result = P.LinkedHashMap_LinkedHashMap(null, null, null, null, null);
     result.addAll$1(0, variables);
     for (t1 = H.setRuntimeTypeInfo(new H.ListIterator(methods, methods.length, 0, null), [H.getTypeArgumentByIndex(methods, 0)]); t1.moveNext$0();) {
-      method = t1.__internal$_current;
+      method = t1._current;
       if (method.get$isSetter()) {
-        $name = method.get$simpleName()._name;
+        $name = method.get$simpleName().__internal$_name;
         t2 = J.getInterceptor$asx($name);
         if (!!J.getInterceptor(result.$index(0, H.s(t2.substring$2($name, 0, J.$sub$n(t2.get$length($name), 1))))).$isVariableMirror)
           continue;
@@ -4889,12 +4887,12 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     var mixins, t1, it, superclass;
     mixins = [];
     for (t1 = H.setRuntimeTypeInfo(new H.ListIterator(mixinNames, mixinNames.length, 0, null), [H.getTypeArgumentByIndex(mixinNames, 0)]); t1.moveNext$0();)
-      mixins.push(H.reflectClassByMangledName(t1.__internal$_current));
+      mixins.push(H.reflectClassByMangledName(t1._current));
     it = H.setRuntimeTypeInfo(new H.ListIterator(mixins, mixins.length, 0, null), [H.getTypeArgumentByIndex(mixins, 0)]);
     it.moveNext$0();
-    superclass = it.__internal$_current;
+    superclass = it._current;
     for (; it.moveNext$0();)
-      superclass = new H.JsMixinApplication(superclass, it.__internal$_current, null, null, H.s(mangledName));
+      superclass = new H.JsMixinApplication(superclass, it._current, null, null, H.s(mangledName));
     return superclass;
   },
   findTypeVariableIndex: function(typeVariables, $name) {
@@ -4963,7 +4961,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
   computeQualifiedName: function(owner, simpleName) {
     if (owner == null)
       return simpleName;
-    return H.s(H.S(owner.get$qualifiedName()._name) + "." + H.S(simpleName._name));
+    return H.s(H.S(owner.get$qualifiedName().__internal$_name) + "." + H.S(simpleName.__internal$_name));
   },
   extractMetadata: function(victim) {
     var metadataFunction, t1;
@@ -4990,7 +4988,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       fieldsMetadata = null;
     }
     for (t1 = H.setRuntimeTypeInfo(new H.ListIterator(fields, fields.length, 0, null), [H.getTypeArgumentByIndex(fields, 0)]), t2 = fieldsMetadata != null, fieldNumber = 0; t1.moveNext$0();) {
-      field = t1.__internal$_current;
+      field = t1._current;
       if (t2) {
         fieldNumber0 = fieldNumber + 1;
         if (fieldNumber >= fieldsMetadata.length)
@@ -5066,7 +5064,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         if (jsLibraries == null)
           return result;
         for (t1 = H.setRuntimeTypeInfo(new H.ListIterator(jsLibraries, jsLibraries.length, 0, null), [H.getTypeArgumentByIndex(jsLibraries, 0)]); t1.moveNext$0();) {
-          data = t1.__internal$_current;
+          data = t1._current;
           t2 = J.getInterceptor$asx(data);
           $name = t2.$index(data, 0);
           uriString = t2.$index(data, 1);
@@ -5134,7 +5132,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       return H.computeQualifiedName(this.get$owner(), this.get$simpleName());
     },
     toString$0: function(_) {
-      return this.get$_prettyName() + " on '" + H.S(this.get$simpleName()._name) + "'";
+      return this.get$_prettyName() + " on '" + H.S(this.get$simpleName().__internal$_name) + "'";
     },
     _invoke$2: function(positionalArguments, namedArguments) {
       throw H.wrapException(H.RuntimeError$("Should not call _invoke"));
@@ -5228,7 +5226,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         } else if (!!t2.$isJsTypedefMirror)
           result.$indexSet(0, cls.simpleName, cls);
       }
-      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(result), [P.Symbol, P.ClassMirror]);
+      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(result), [P.Symbol0, P.ClassMirror]);
       this._cachedClasses = t1;
       return t1;
     },
@@ -5285,11 +5283,11 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         return t1;
       result = P.LinkedHashMap_LinkedHashMap(null, null, null, null, null);
       for (t1 = this.get$_functionMirrors(), t1 = H.setRuntimeTypeInfo(new H.ListIterator(t1, t1.length, 0, null), [H.getTypeArgumentByIndex(t1, 0)]); t1.moveNext$0();) {
-        mirror = t1.__internal$_current;
+        mirror = t1._current;
         if (!mirror.get$isConstructor())
           result.$indexSet(0, mirror.get$simpleName(), mirror);
       }
-      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(result), [P.Symbol, P.MethodMirror]);
+      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(result), [P.Symbol0, P.MethodMirror]);
       this._cachedFunctions = t1;
       return t1;
     },
@@ -5297,7 +5295,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       var t1 = this._cachedGetters;
       if (t1 != null)
         return t1;
-      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)), [P.Symbol, P.MethodMirror]);
+      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)), [P.Symbol0, P.MethodMirror]);
       this._cachedGetters = t1;
       return t1;
     },
@@ -5305,7 +5303,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       var t1 = this._cachedSetters;
       if (t1 != null)
         return t1;
-      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)), [P.Symbol, P.MethodMirror]);
+      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)), [P.Symbol0, P.MethodMirror]);
       this._cachedSetters = t1;
       return t1;
     },
@@ -5316,10 +5314,10 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         return t1;
       result = P.LinkedHashMap_LinkedHashMap(null, null, null, null, null);
       for (t1 = this.get$_fields(), t1 = H.setRuntimeTypeInfo(new H.ListIterator(t1, t1.length, 0, null), [H.getTypeArgumentByIndex(t1, 0)]); t1.moveNext$0();) {
-        mirror = t1.__internal$_current;
+        mirror = t1._current;
         result.$indexSet(0, mirror.get$simpleName(), mirror);
       }
-      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(result), [P.Symbol, P.VariableMirror]);
+      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(result), [P.Symbol0, P.VariableMirror]);
       this._cachedVariables = t1;
       return t1;
     },
@@ -5336,7 +5334,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       this.get$__getters()._map.forEach$1(0, t1);
       this.get$__setters()._map.forEach$1(0, t1);
       this.get$__variables()._map.forEach$1(0, t1);
-      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(result), [P.Symbol, P.Mirror]);
+      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(result), [P.Symbol0, P.Mirror]);
       this._cachedMembers = t1;
       return t1;
     },
@@ -5345,9 +5343,9 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       t1 = this._cachedDeclarations;
       if (t1 != null)
         return t1;
-      result = P.LinkedHashMap_LinkedHashMap(null, null, null, P.Symbol, P.DeclarationMirror);
+      result = P.LinkedHashMap_LinkedHashMap(null, null, null, P.Symbol0, P.DeclarationMirror);
       this.get$__members()._map.forEach$1(0, new H.JsLibraryMirror_declarations_addToResult(result));
-      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(result), [P.Symbol, P.DeclarationMirror]);
+      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(result), [P.Symbol0, P.DeclarationMirror]);
       this._cachedDeclarations = t1;
       return t1;
     },
@@ -5390,9 +5388,9 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       t1 = this._cachedSimpleName;
       if (t1 != null)
         return t1;
-      superName = this.superclass.get$qualifiedName()._name;
+      superName = this.superclass.get$qualifiedName().__internal$_name;
       t1 = this.mixin;
-      t1 = J.contains$1$asx(superName, " with ") === true ? H.s(H.S(superName) + ", " + H.S(t1.get$qualifiedName()._name)) : H.s(H.S(superName) + " with " + H.S(t1.get$qualifiedName()._name));
+      t1 = J.contains$1$asx(superName, " with ") === true ? H.s(H.S(superName) + ", " + H.S(t1.get$qualifiedName().__internal$_name)) : H.s(H.S(superName) + " with " + H.S(t1.get$qualifiedName().__internal$_name));
       this._cachedSimpleName = t1;
       return t1;
     },
@@ -5473,7 +5471,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     },
     toString$0: function(_) {
       var result, t1, t2;
-      result = "ClassMirror on " + H.S(this._class.get$simpleName()._name);
+      result = "ClassMirror on " + H.S(this._class.get$simpleName().__internal$_name);
       if (this.get$typeArguments() != null) {
         t1 = result + "<";
         t2 = this.get$typeArguments();
@@ -5483,7 +5481,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     },
     get$_mangledName: function() {
       for (var t1 = this.get$typeArguments(), t1 = t1.get$iterator(t1); t1.moveNext$0();)
-        if (!J.$eq(t1.__internal$_current, $.get$JsMirrorSystem__dynamicType()))
+        if (!J.$eq(t1._current, $.get$JsMirrorSystem__dynamicType()))
           return H.S(this._class.get$_mangledName()) + "<" + this._typeArguments + ">";
       return this._class.get$_mangledName();
     },
@@ -5539,7 +5537,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       var t1 = this._cachedConstructors;
       if (t1 != null)
         return t1;
-      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(H.filterConstructors(this.get$_methods())), [P.Symbol, P.MethodMirror]);
+      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(H.filterConstructors(this.get$_methods())), [P.Symbol0, P.MethodMirror]);
       this._cachedConstructors = t1;
       return t1;
     },
@@ -5550,10 +5548,10 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         return t1;
       result = P.LinkedHashMap_LinkedHashMap(null, null, null, null, null);
       for (t1 = this._class._getFieldsWithOwner$1(this), t1 = H.setRuntimeTypeInfo(new H.ListIterator(t1, t1.length, 0, null), [H.getTypeArgumentByIndex(t1, 0)]); t1.moveNext$0();) {
-        mirror = t1.__internal$_current;
+        mirror = t1._current;
         result.$indexSet(0, mirror.get$simpleName(), mirror);
       }
-      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(result), [P.Symbol, P.VariableMirror]);
+      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(result), [P.Symbol0, P.VariableMirror]);
       this._cachedVariables = t1;
       return t1;
     },
@@ -5561,7 +5559,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       var t1 = this._cachedMembers;
       if (t1 != null)
         return t1;
-      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(H.filterMembers(this.get$_methods(), this.get$__variables())), [P.Symbol, P.DeclarationMirror]);
+      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(H.filterMembers(this.get$_methods(), this.get$__variables())), [P.Symbol0, P.DeclarationMirror]);
       this._cachedMembers = t1;
       return t1;
     },
@@ -5570,11 +5568,11 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       t1 = this._cachedDeclarations;
       if (t1 != null)
         return t1;
-      result = P.LinkedHashMap_LinkedHashMap(null, null, null, P.Symbol, P.DeclarationMirror);
+      result = P.LinkedHashMap_LinkedHashMap(null, null, null, P.Symbol0, P.DeclarationMirror);
       result.addAll$1(0, this.get$__members());
       result.addAll$1(0, this.get$__constructors());
       J.forEach$1$ax(this._class.get$typeVariables(), new H.JsTypeBoundClassMirror_declarations_closure(result));
-      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(result), [P.Symbol, P.DeclarationMirror]);
+      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(result), [P.Symbol0, P.DeclarationMirror]);
       this._cachedDeclarations = t1;
       return t1;
     },
@@ -5668,7 +5666,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       var t1 = this._cachedConstructors;
       if (t1 != null)
         return t1;
-      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(H.filterConstructors(this.get$_methods())), [P.Symbol, P.MethodMirror]);
+      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(H.filterConstructors(this.get$_methods())), [P.Symbol0, P.MethodMirror]);
       this._cachedConstructors = t1;
       return t1;
     },
@@ -5695,7 +5693,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       keys = H.extractKeys($prototype);
       result = H.setRuntimeTypeInfo([], [H.JsMethodMirror]);
       for (t1 = H.setRuntimeTypeInfo(new H.ListIterator(keys, keys.length, 0, null), [H.getTypeArgumentByIndex(keys, 0)]); t1.moveNext$0();) {
-        key = t1.__internal$_current;
+        key = t1._current;
         if (H.isReflectiveDataInPrototype(key))
           continue;
         simpleName = $.get$mangledNames().$index(0, key);
@@ -5710,7 +5708,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       }
       keys = H.extractKeys(init.statics[this._mangledName]);
       for (t1 = H.setRuntimeTypeInfo(new H.ListIterator(keys, keys.length, 0, null), [H.getTypeArgumentByIndex(keys, 0)]); t1.moveNext$0();) {
-        mangledName = t1.__internal$_current;
+        mangledName = t1._current;
         if (H.isReflectiveDataInPrototype(mangledName))
           continue;
         jsFunction = this.get$owner()._globalObject[mangledName];
@@ -5772,10 +5770,10 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         return t1;
       result = P.LinkedHashMap_LinkedHashMap(null, null, null, null, null);
       for (t1 = this.get$_fields(), t1 = H.setRuntimeTypeInfo(new H.ListIterator(t1, t1.length, 0, null), [H.getTypeArgumentByIndex(t1, 0)]); t1.moveNext$0();) {
-        mirror = t1.__internal$_current;
+        mirror = t1._current;
         result.$indexSet(0, mirror.get$simpleName(), mirror);
       }
-      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(result), [P.Symbol, P.VariableMirror]);
+      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(result), [P.Symbol0, P.VariableMirror]);
       this._cachedVariables = t1;
       return t1;
     },
@@ -5783,7 +5781,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       var t1 = this._cachedMembers;
       if (t1 != null)
         return t1;
-      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(H.filterMembers(this.get$_methods(), this.get$__variables())), [P.Symbol, P.Mirror]);
+      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(H.filterMembers(this.get$_methods(), this.get$__variables())), [P.Symbol0, P.Mirror]);
       this._cachedMembers = t1;
       return t1;
     },
@@ -5792,19 +5790,19 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       t1 = this._cachedDeclarations;
       if (t1 != null)
         return t1;
-      result = P.LinkedHashMap_LinkedHashMap(null, null, null, P.Symbol, P.DeclarationMirror);
+      result = P.LinkedHashMap_LinkedHashMap(null, null, null, P.Symbol0, P.DeclarationMirror);
       t1 = new H.JsClassMirror_declarations_addToResult(result);
       this.get$__members()._map.forEach$1(0, t1);
       this.get$__constructors()._map.forEach$1(0, t1);
       J.forEach$1$ax(this.get$typeVariables(), new H.JsClassMirror_declarations_closure(result));
-      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(result), [P.Symbol, P.DeclarationMirror]);
+      t1 = H.setRuntimeTypeInfo(new P.UnmodifiableMapView(result), [P.Symbol0, P.DeclarationMirror]);
       this._cachedDeclarations = t1;
       return t1;
     },
     _getInvokedInstance$3: function(constructorName, positionalArguments, namedArguments) {
       var t1, t2, mirror, t3;
       t1 = this._jsConstructorCache;
-      t2 = constructorName._name;
+      t2 = constructorName.__internal$_name;
       mirror = t1[t2];
       if (mirror == null) {
         t3 = this.get$__constructors()._map;
@@ -5828,7 +5826,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         t2 = new H.MappedIterator(null, J.get$iterator$ax(t1._iterable), t1._f);
         t2.$builtinTypeInfo = [H.getTypeArgumentByIndex(t1, 0), H.getTypeArgumentByIndex(t1, 1)];
         for (; t2.moveNext$0();)
-          for (t1 = J.get$iterator$ax(t2.__internal$_current); t1.moveNext$0();)
+          for (t1 = J.get$iterator$ax(t2._current); t1.moveNext$0();)
             t1.get$current().get$__classes();
         t1 = this._owner;
         if (t1 == null)
@@ -5950,7 +5948,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
               isFinal = true;
               break;
             }
-            if (J.$eq(t2.__internal$_current.get$simpleName(), setterName)) {
+            if (J.$eq(t2._current.get$simpleName(), setterName)) {
               isFinal = false;
               break;
             }
@@ -6014,7 +6012,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
             this._returnType = type.get$returnType();
           isNamed = info.areOptionalParametersNamed;
           for (t1 = type.get$parameters(), t1 = t1.get$iterator(t1), t2 = formals.length, t3 = info.requiredParameterCount, t4 = info.data, t5 = info.optionalParameterCount, i = 0; t1.moveNext$0(); i = i0) {
-            parameter = t1.__internal$_current;
+            parameter = t1._current;
             $name = info.parameterName$1(i);
             result = t4[2 * i + t5 + 3 + 1];
             if (i < t3)
@@ -6039,7 +6037,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       var $name, t1, index, t2;
       if (!this.isConstructor)
         return C.Symbol_0c4;
-      $name = this.simpleName._name;
+      $name = this.simpleName.__internal$_name;
       t1 = J.getInterceptor$asx($name);
       index = t1.indexOf$1($name, ".");
       t2 = J.getInterceptor(index);
@@ -6217,18 +6215,18 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       if ("args" in t1)
         for (t2 = t1.args, t2 = H.setRuntimeTypeInfo(new H.ListIterator(t2, t2.length, 0, null), [H.getTypeArgumentByIndex(t2, 0)]), parameterCount = 0; t2.moveNext$0(); parameterCount = parameterCount0) {
           parameterCount0 = parameterCount + 1;
-          result.push(new H.JsParameterMirror(this, t2.__internal$_current, false, false, null, C.List_empty1, H.s("argument" + parameterCount)));
+          result.push(new H.JsParameterMirror(this, t2._current, false, false, null, C.List_empty1, H.s("argument" + parameterCount)));
         }
       else
         parameterCount = 0;
       if ("opt" in t1)
         for (t2 = t1.opt, t2 = H.setRuntimeTypeInfo(new H.ListIterator(t2, t2.length, 0, null), [H.getTypeArgumentByIndex(t2, 0)]); t2.moveNext$0(); parameterCount = parameterCount0) {
           parameterCount0 = parameterCount + 1;
-          result.push(new H.JsParameterMirror(this, t2.__internal$_current, false, false, null, C.List_empty1, H.s("argument" + parameterCount)));
+          result.push(new H.JsParameterMirror(this, t2._current, false, false, null, C.List_empty1, H.s("argument" + parameterCount)));
         }
       if ("named" in t1)
         for (t2 = H.extractKeys(t1.named), t2 = H.setRuntimeTypeInfo(new H.ListIterator(t2, t2.length, 0, null), [H.getTypeArgumentByIndex(t2, 0)]); t2.moveNext$0();) {
-          $name = t2.__internal$_current;
+          $name = t2._current;
           result.push(new H.JsParameterMirror(this, t1.named[$name], false, false, null, C.List_empty1, H.s($name)));
         }
       t1 = H.setRuntimeTypeInfo(new P.UnmodifiableListView(result), [P.ParameterMirror]);
@@ -6249,7 +6247,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       t1 = this._typeData;
       if ("args" in t1)
         for (t2 = t1.args, t2 = H.setRuntimeTypeInfo(new H.ListIterator(t2, t2.length, 0, null), [H.getTypeArgumentByIndex(t2, 0)]), s = "FunctionTypeMirror on '(", sep = ""; t2.moveNext$0(); sep = ", ") {
-          argument = t2.__internal$_current;
+          argument = t2._current;
           s = C.JSString_methods.$add(s + sep, this._unmangleIfPreserved$1(H.runtimeTypeToString(argument, null)));
         }
       else {
@@ -6259,7 +6257,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       if ("opt" in t1) {
         s += sep + "[";
         for (t2 = t1.opt, t2 = H.setRuntimeTypeInfo(new H.ListIterator(t2, t2.length, 0, null), [H.getTypeArgumentByIndex(t2, 0)]), sep = ""; t2.moveNext$0(); sep = ", ") {
-          argument = t2.__internal$_current;
+          argument = t2._current;
           s = C.JSString_methods.$add(s + sep, this._unmangleIfPreserved$1(H.runtimeTypeToString(argument, null)));
         }
         s += "]";
@@ -6267,7 +6265,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       if ("named" in t1) {
         s += sep + "{";
         for (t2 = H.extractKeys(t1.named), t2 = H.setRuntimeTypeInfo(new H.ListIterator(t2, t2.length, 0, null), [H.getTypeArgumentByIndex(t2, 0)]), sep = ""; t2.moveNext$0(); sep = ", ") {
-          $name = t2.__internal$_current;
+          $name = t2._current;
           s = C.JSString_methods.$add(s + sep + (H.S($name) + ": "), this._unmangleIfPreserved$1(H.runtimeTypeToString(t1.named[$name], null)));
         }
         s += "}";
@@ -6327,13 +6325,13 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     }, "call$1", null, 2, 0, null, 70, [], "call"]
   },
   NoSuchStaticMethodError: {
-    "^": "Error;_cls,__js_mirrors$_name,_positionalArguments,__js_mirrors$_namedArguments,__js_mirrors$_kind",
+    "^": "Error;_cls,__js_mirrors$_name,_positionalArguments,__js_mirrors$_namedArguments,_kind",
     toString$0: function(_) {
-      switch (this.__js_mirrors$_kind) {
+      switch (this._kind) {
         case 0:
-          return "NoSuchMethodError: No constructor named '" + H.S(this.__js_mirrors$_name._name) + "' in class '" + H.S(this._cls.get$qualifiedName().get$_name()) + "'.";
+          return "NoSuchMethodError: No constructor named '" + H.S(this.__js_mirrors$_name.__internal$_name) + "' in class '" + H.S(this._cls.get$qualifiedName().get$__internal$_name()) + "'.";
         case 1:
-          return "NoSuchMethodError: No top-level method named '" + H.S(this.__js_mirrors$_name._name) + "'.";
+          return "NoSuchMethodError: No top-level method named '" + H.S(this.__js_mirrors$_name.__internal$_name) + "'.";
         default:
           return "NoSuchMethodError";
       }
@@ -6351,7 +6349,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     keys = H.extractKeys(jsMangledNames);
     result = P.LinkedHashMap_LinkedHashMap$_empty(P.String, P.String);
     for (t1 = H.setRuntimeTypeInfo(new H.ListIterator(keys, keys.length, 0, null), [H.getTypeArgumentByIndex(keys, 0)]), t2 = !isGlobal; t1.moveNext$0();) {
-      key = t1.__internal$_current;
+      key = t1._current;
       value = jsMangledNames[key];
       result.$indexSet(0, key, value);
       if (t2) {
@@ -6424,7 +6422,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     t1.stackTrace_3 = null;
     t2 = new P.Future_wait_handleError(t1, eagerError, result);
     for (t3 = H.setRuntimeTypeInfo(new H.ListIterator(futures, futures.get$length(futures), 0, null), [H.getRuntimeTypeArgument(futures, "ListIterable", 0)]); t3.moveNext$0();)
-      t3.__internal$_current.then$2$onError(new P.Future_wait_closure(t1, eagerError, result, t1.remaining_1++), t2);
+      t3._current.then$2$onError(new P.Future_wait_closure(t1, eagerError, result, t1.remaining_1++), t2);
     t2 = t1.remaining_1;
     if (t2 === 0) {
       t1 = H.setRuntimeTypeInfo(new P._Future(0, $.Zone__current, null), [null]);
@@ -6767,7 +6765,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       subscription.set$_async$_previous(subscription);
       subscription.set$_async$_next(subscription);
     },
-    _subscribe$4: function(onData, onError, onDone, cancelOnError) {
+    _async$_subscribe$4: function(onData, onError, onDone, cancelOnError) {
       var t1, t2, subscription;
       if ((this._state & 4) !== 0) {
         if (onDone == null)
@@ -7040,7 +7038,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         throw H.wrapException(P.StateError$("Future already completed"));
       this._state = 1;
     },
-    get$_async$_value: function() {
+    get$_value: function() {
       return this._resultOrListeners;
     },
     get$_error: function() {
@@ -7174,7 +7172,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
             P._Future__propagateToListeners(t1.source_4, listeners);
           }
           t3.listenerHasValue_1 = true;
-          sourceValue = hasError ? null : t1.source_4.get$_async$_value();
+          sourceValue = hasError ? null : t1.source_4.get$_value();
           t3.listenerValueOrError_2 = sourceValue;
           t3.isPropagationAborted_3 = false;
           t2 = !hasError;
@@ -7697,7 +7695,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
   _ControllerStream: {
     "^": "_StreamImpl;",
     _createSubscription$4: function(onData, onError, onDone, cancelOnError) {
-      return this._controller._subscribe$4(onData, onError, onDone, cancelOnError);
+      return this._controller._async$_subscribe$4(onData, onError, onDone, cancelOnError);
     },
     get$hashCode: function(_) {
       return (H.Primitives_objectHashCode(this._controller) ^ 892482866) >>> 0;
@@ -7978,11 +7976,11 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     listen$4$cancelOnError$onDone$onError: function(onData, cancelOnError, onDone, onError) {
       return this._createSubscription$4(onData, onError, onDone, true === cancelOnError);
     },
-    listen$1: function(onData) {
-      return this.listen$4$cancelOnError$onDone$onError(onData, null, null, null);
-    },
     listen$3$onDone$onError: function(onData, onDone, onError) {
       return this.listen$4$cancelOnError$onDone$onError(onData, null, onDone, onError);
+    },
+    listen$1: function(onData) {
+      return this.listen$4$cancelOnError$onDone$onError(onData, null, null, null);
     },
     _createSubscription$4: function(onData, onError, onDone, cancelOnError) {
       return P._BufferingStreamSubscription$(onData, onError, onDone, cancelOnError, H.getTypeArgumentByIndex(this, 0));
@@ -8553,15 +8551,15 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     return t1.charCodeAt(0) == 0 ? t1 : t1;
   },
   _HashMap: {
-    "^": "Object;_collection$_length,_strings,_nums,_rest,_keys",
+    "^": "Object;_length,_strings,_nums,_rest,_keys",
     get$length: function(_) {
-      return this._collection$_length;
+      return this._length;
     },
     get$isEmpty: function(_) {
-      return this._collection$_length === 0;
+      return this._length === 0;
     },
     get$isNotEmpty: function(_) {
-      return this._collection$_length !== 0;
+      return this._length !== 0;
     },
     get$keys: function() {
       return H.setRuntimeTypeInfo(new P.HashMapKeyIterable(this), [H.getTypeArgumentByIndex(this, 0)]);
@@ -8645,7 +8643,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       bucket = rest[hash];
       if (bucket == null) {
         P._HashMap__setTableEntry(rest, hash, [key, value]);
-        ++this._collection$_length;
+        ++this._length;
         this._keys = null;
       } else {
         index = this._findBucketIndex$2(bucket, key);
@@ -8653,7 +8651,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
           bucket[index + 1] = value;
         else {
           bucket.push(key, value);
-          ++this._collection$_length;
+          ++this._length;
           this._keys = null;
         }
       }
@@ -8673,7 +8671,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       t1 = this._keys;
       if (t1 != null)
         return t1;
-      result = Array(this._collection$_length);
+      result = Array(this._length);
       result.fixed$length = init;
       strings = this._strings;
       if (strings != null) {
@@ -8712,7 +8710,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     },
     _addHashTableEntry$3: function(table, key, value) {
       if (table[key] == null) {
-        ++this._collection$_length;
+        ++this._length;
         this._keys = null;
       }
       P._HashMap__setTableEntry(table, key, value);
@@ -8752,10 +8750,10 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
   HashMapKeyIterable: {
     "^": "IterableBase;_map",
     get$length: function(_) {
-      return this._map._collection$_length;
+      return this._map._length;
     },
     get$isEmpty: function(_) {
-      return this._map._collection$_length === 0;
+      return this._map._length === 0;
     },
     get$iterator: function(_) {
       var t1 = this._map;
@@ -8801,15 +8799,15 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     }
   },
   _LinkedHashMap: {
-    "^": "Object;_collection$_length,_strings,_nums,_rest,_first,_last,_modifications",
+    "^": "Object;_length,_strings,_nums,_rest,_first,_last,_modifications",
     get$length: function(_) {
-      return this._collection$_length;
+      return this._length;
     },
     get$isEmpty: function(_) {
-      return this._collection$_length === 0;
+      return this._length === 0;
     },
     get$isNotEmpty: function(_) {
-      return this._collection$_length !== 0;
+      return this._length !== 0;
     },
     get$keys: function() {
       return H.setRuntimeTypeInfo(new P.LinkedHashMapKeyIterable(this), [H.getTypeArgumentByIndex(this, 0)]);
@@ -8848,13 +8846,13 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         if (strings == null)
           return;
         cell = strings[key];
-        return cell == null ? null : cell.get$_value();
+        return cell == null ? null : cell.get$_collection$_value();
       } else if (typeof key === "number" && (key & 0x3ffffff) === key) {
         nums = this._nums;
         if (nums == null)
           return;
         cell = nums[key];
-        return cell == null ? null : cell.get$_value();
+        return cell == null ? null : cell.get$_collection$_value();
       } else
         return this._get$1(key);
     },
@@ -8867,7 +8865,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       index = this._findBucketIndex$2(bucket, key);
       if (index < 0)
         return;
-      return bucket[index].get$_value();
+      return bucket[index].get$_collection$_value();
     },
     $indexSet: function(_, key, value) {
       var strings, nums;
@@ -8902,7 +8900,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       else {
         index = this._findBucketIndex$2(bucket, key);
         if (index >= 0)
-          bucket[index].set$_value(value);
+          bucket[index].set$_collection$_value(value);
         else
           bucket.push(this._newLinkedCell$2(key, value));
       }
@@ -8934,16 +8932,16 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         return;
       cell = bucket.splice(index, 1)[0];
       this._unlinkCell$1(cell);
-      return cell.get$_value();
+      return cell.get$_collection$_value();
     },
     clear$0: function(_) {
-      if (this._collection$_length > 0) {
+      if (this._length > 0) {
         this._last = null;
         this._first = null;
         this._rest = null;
         this._nums = null;
         this._strings = null;
-        this._collection$_length = 0;
+        this._length = 0;
         this._modifications = this._modifications + 1 & 67108863;
       }
     },
@@ -8952,7 +8950,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       cell = this._first;
       modifications = this._modifications;
       for (; cell != null;) {
-        action.call$2(cell.get$_key(), cell.get$_value());
+        action.call$2(cell.get$_key(), cell.get$_collection$_value());
         if (modifications !== this._modifications)
           throw H.wrapException(P.ConcurrentModificationError$(this));
         cell = cell.get$_next();
@@ -8963,7 +8961,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       if (cell == null)
         table[key] = this._newLinkedCell$2(key, value);
       else
-        cell.set$_value(value);
+        cell.set$_collection$_value(value);
     },
     _removeHashTableEntry$2: function(table, key) {
       var cell;
@@ -8974,7 +8972,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         return;
       this._unlinkCell$1(cell);
       delete table[key];
-      return cell.get$_value();
+      return cell.get$_collection$_value();
     },
     _newLinkedCell$2: function(key, value) {
       var cell, last;
@@ -8988,7 +8986,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         last.set$_next(cell);
         this._last = cell;
       }
-      ++this._collection$_length;
+      ++this._length;
       this._modifications = this._modifications + 1 & 67108863;
       return cell;
     },
@@ -9004,7 +9002,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         this._last = previous;
       else
         next.set$_previous(previous);
-      --this._collection$_length;
+      --this._length;
       this._modifications = this._modifications + 1 & 67108863;
     },
     _computeHashCode$1: function(key) {
@@ -9049,7 +9047,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     }
   },
   _LinkedIdentityHashMap: {
-    "^": "_LinkedHashMap;_collection$_length,_strings,_nums,_rest,_first,_last,_modifications",
+    "^": "_LinkedHashMap;_length,_strings,_nums,_rest,_first,_last,_modifications",
     _computeHashCode$1: function(key) {
       return H.objectHashCode(key) & 0x3ffffff;
     },
@@ -9067,7 +9065,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     }
   },
   _LinkedCustomHashMap: {
-    "^": "_LinkedHashMap;_equals,_hashCode,_validKey,_collection$_length,_strings,_nums,_rest,_first,_last,_modifications",
+    "^": "_LinkedHashMap;_equals,_hashCode,_validKey,_length,_strings,_nums,_rest,_first,_last,_modifications",
     _equals$2: function(arg0, arg1) {
       return this._equals.call$2(arg0, arg1);
     },
@@ -9121,15 +9119,15 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     }
   },
   LinkedHashMapCell: {
-    "^": "Object;_key<,_value@,_next@,_previous@"
+    "^": "Object;_key<,_collection$_value@,_next@,_previous@"
   },
   LinkedHashMapKeyIterable: {
     "^": "IterableBase;_map",
     get$length: function(_) {
-      return this._map._collection$_length;
+      return this._map._length;
     },
     get$isEmpty: function(_) {
-      return this._map._collection$_length === 0;
+      return this._map._length === 0;
     },
     get$iterator: function(_) {
       var t1, t2;
@@ -9179,20 +9177,20 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     }
   },
   _LinkedHashSet: {
-    "^": "_HashSetBase;_collection$_length,_strings,_nums,_rest,_first,_last,_modifications",
+    "^": "_HashSetBase;_length,_strings,_nums,_rest,_first,_last,_modifications",
     get$iterator: function(_) {
       var t1 = H.setRuntimeTypeInfo(new P.LinkedHashSetIterator(this, this._modifications, null, null), [null]);
       t1._cell = t1._set._first;
       return t1;
     },
     get$length: function(_) {
-      return this._collection$_length;
+      return this._length;
     },
     get$isEmpty: function(_) {
-      return this._collection$_length === 0;
+      return this._length === 0;
     },
     get$isNotEmpty: function(_) {
-      return this._collection$_length !== 0;
+      return this._length !== 0;
     },
     contains$1: function(_, object) {
       var strings, nums;
@@ -9318,13 +9316,13 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       return true;
     },
     clear$0: function(_) {
-      if (this._collection$_length > 0) {
+      if (this._length > 0) {
         this._last = null;
         this._first = null;
         this._rest = null;
         this._nums = null;
         this._strings = null;
-        this._collection$_length = 0;
+        this._length = 0;
         this._modifications = this._modifications + 1 & 67108863;
       }
     },
@@ -9357,7 +9355,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         last.set$_next(cell);
         this._last = cell;
       }
-      ++this._collection$_length;
+      ++this._length;
       this._modifications = this._modifications + 1 & 67108863;
       return cell;
     },
@@ -9373,7 +9371,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         this._last = previous;
       else
         next.set$_previous(previous);
-      --this._collection$_length;
+      --this._length;
       this._modifications = this._modifications + 1 & 67108863;
     },
     _computeHashCode$1: function(element) {
@@ -9602,6 +9600,35 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         return {func: "Iterable__dynamic__E2", ret: P.Iterable, args: [{func: "dynamic__E2", args: [E]}]};
       }, this.$receiver, "ListMixin");
     }],
+    toList$1$growable: function(receiver, growable) {
+      var result, t1, i;
+      if (growable) {
+        result = H.setRuntimeTypeInfo([], [H.getRuntimeTypeArgument(receiver, "ListMixin", 0)]);
+        C.JSArray_methods.set$length(result, this.get$length(receiver));
+      } else {
+        t1 = this.get$length(receiver);
+        if (typeof t1 !== "number")
+          return H.iae(t1);
+        result = H.setRuntimeTypeInfo(Array(t1), [H.getRuntimeTypeArgument(receiver, "ListMixin", 0)]);
+      }
+      i = 0;
+      while (true) {
+        t1 = this.get$length(receiver);
+        if (typeof t1 !== "number")
+          return H.iae(t1);
+        if (!(i < t1))
+          break;
+        t1 = this.$index(receiver, i);
+        if (i >= result.length)
+          return H.ioore(result, i);
+        result[i] = t1;
+        ++i;
+      }
+      return result;
+    },
+    toList$0: function($receiver) {
+      return this.toList$1$growable($receiver, true);
+    },
     add$1: function(receiver, element) {
       var t1 = this.get$length(receiver);
       this.set$length(receiver, J.$add$ns(t1, 1));
@@ -9684,13 +9711,13 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       this._map.forEach$1(0, action);
     },
     get$isEmpty: function(_) {
-      return this._map._collection$_length === 0;
+      return this._map._length === 0;
     },
     get$isNotEmpty: function(_) {
-      return this._map._collection$_length !== 0;
+      return this._map._length !== 0;
     },
     get$length: function(_) {
-      return this._map._collection$_length;
+      return this._map._length;
     },
     get$keys: function() {
       var t1 = this._map;
@@ -9787,6 +9814,22 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         return H.ioore(t1, t2);
       return t1[t2];
     },
+    toList$1$growable: function(_, growable) {
+      var list, t1;
+      if (growable) {
+        list = H.setRuntimeTypeInfo([], [H.getTypeArgumentByIndex(this, 0)]);
+        C.JSArray_methods.set$length(list, this.get$length(this));
+      } else {
+        t1 = Array(this.get$length(this));
+        t1.fixed$length = init;
+        list = H.setRuntimeTypeInfo(t1, [H.getTypeArgumentByIndex(this, 0)]);
+      }
+      this._writeToList$1(list);
+      return list;
+    },
+    toList$0: function($receiver) {
+      return this.toList$1$growable($receiver, true);
+    },
     add$1: function(_, element) {
       this._add$1(element);
     },
@@ -9855,6 +9898,27 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       this._tail = this._table.length;
       this._table = newTable;
     },
+    _writeToList$1: function(target) {
+      var t1, t2, t3, $length, firstPartSize;
+      t1 = this._head;
+      t2 = this._tail;
+      t3 = this._table;
+      if (t1 <= t2) {
+        $length = t2 - t1;
+        C.JSArray_methods.checkMutable$1(target, "set range");
+        H.IterableMixinWorkaround_setRangeList(target, 0, $length, t3, t1);
+        return $length;
+      } else {
+        firstPartSize = t3.length - t1;
+        C.JSArray_methods.checkMutable$1(target, "set range");
+        H.IterableMixinWorkaround_setRangeList(target, 0, firstPartSize, t3, t1);
+        t1 = this._tail;
+        t2 = this._table;
+        C.JSArray_methods.checkMutable$1(target, "set range");
+        H.IterableMixinWorkaround_setRangeList(target, firstPartSize, firstPartSize + t1, t2, 0);
+        return this._tail + firstPartSize;
+      }
+    },
     ListQueue$1: function(initialCapacity, $E) {
       var t1 = Array(8);
       t1.fixed$length = init;
@@ -9898,6 +9962,25 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     },
     get$isNotEmpty: function(_) {
       return this.get$length(this) !== 0;
+    },
+    toList$1$growable: function(_, growable) {
+      var result, t1, i, element, i0;
+      if (growable) {
+        result = H.setRuntimeTypeInfo([], [H.getTypeArgumentByIndex(this, 0)]);
+        C.JSArray_methods.set$length(result, this.get$length(this));
+      } else
+        result = H.setRuntimeTypeInfo(Array(this.get$length(this)), [H.getTypeArgumentByIndex(this, 0)]);
+      for (t1 = this.get$iterator(this), i = 0; t1.moveNext$0(); i = i0) {
+        element = t1._collection$_current;
+        i0 = i + 1;
+        if (i >= result.length)
+          return H.ioore(result, i);
+        result[i] = element;
+      }
+      return result;
+    },
+    toList$0: function($receiver) {
+      return this.toList$1$growable($receiver, true);
     },
     map$1: [function(_, f) {
       return H.setRuntimeTypeInfo(new H.EfficientLengthMappedIterable(this, f), [H.getTypeArgumentByIndex(this, 0), null]);
@@ -10338,7 +10421,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
   Function__toMangledNames_closure: {
     "^": "Closure:47;result_0",
     call$2: function(symbol, value) {
-      this.result_0.$indexSet(0, symbol.get$_name(), value);
+      this.result_0.$indexSet(0, symbol.get$__internal$_name(), value);
     }
   },
   NoSuchMethodError_toString_closure: {
@@ -10347,7 +10430,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       var t1 = this.box_0;
       if (t1.i_1 > 0)
         t1.sb_0.write$1(", ");
-      t1.sb_0.write$1(key.get$_name());
+      t1.sb_0.write$1(key.get$__internal$_name());
       t1.sb_0.write$1(": ");
       t1.sb_0.write$1(P.Error_safeToString(value));
       ++t1.i_1;
@@ -10967,9 +11050,9 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         return t1;
       }}
   },
-  Symbol: {
+  Symbol0: {
     "^": "Object;",
-    $isSymbol: true
+    $isSymbol0: true
   },
   Type: {
     "^": "Object;",
@@ -11895,6 +11978,15 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
   },
   CanvasRenderingContext2D: {
     "^": "Interceptor;fillStyle},lineCap},lineJoin},lineWidth},strokeStyle}",
+    beginPath$0: function(receiver) {
+      return receiver.beginPath();
+    },
+    isPointInPath$4: function(receiver, path_OR_x, x_OR_y, winding_OR_y, winding) {
+      return receiver.isPointInPath(path_OR_x, x_OR_y, winding_OR_y, winding);
+    },
+    isPointInPath$2: function($receiver, path_OR_x, x_OR_y) {
+      return $receiver.isPointInPath(path_OR_x, x_OR_y);
+    },
     isPointInStroke$3: function(receiver, path_OR_x, x_OR_y, y) {
       return receiver.isPointInStroke(path_OR_x, x_OR_y, y);
     },
@@ -12043,7 +12135,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       t2 = J.get$hashCode$(receiver.top);
       t3 = J.get$hashCode$(this.get$width(receiver));
       t4 = J.get$hashCode$(this.get$height(receiver));
-      return W._JenkinsSmiHash_finish0(W._JenkinsSmiHash_combine0(W._JenkinsSmiHash_combine0(W._JenkinsSmiHash_combine0(W._JenkinsSmiHash_combine0(0, t1), t2), t3), t4));
+      return W._JenkinsSmiHash_finish(W._JenkinsSmiHash_combine(W._JenkinsSmiHash_combine(W._JenkinsSmiHash_combine(W._JenkinsSmiHash_combine(0, t1), t2), t3), t4));
     },
     boundingBox$1: [function(receiver, other) {
       var t1, t2, right, bottom, left, $top;
@@ -12683,7 +12775,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       t2 = J.get$hashCode$(receiver.top);
       t3 = J.get$hashCode$(receiver.width);
       t4 = J.get$hashCode$(receiver.height);
-      return W._JenkinsSmiHash_finish0(W._JenkinsSmiHash_combine0(W._JenkinsSmiHash_combine0(W._JenkinsSmiHash_combine0(W._JenkinsSmiHash_combine0(0, t1), t2), t3), t4));
+      return W._JenkinsSmiHash_finish(W._JenkinsSmiHash_combine(W._JenkinsSmiHash_combine(W._JenkinsSmiHash_combine(W._JenkinsSmiHash_combine(0, t1), t2), t3), t4));
     },
     boundingBox$1: [function(receiver, other) {
       var t1, t2, right, bottom, left, $top;
@@ -12744,6 +12836,49 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     $isEventTarget: true,
     "%": "HTMLFrameSetElement"
   },
+  _NamedNodeMap: {
+    "^": "Interceptor_ListMixin_ImmutableListMixin2;",
+    get$length: function(receiver) {
+      return receiver.length;
+    },
+    $index: function(receiver, index) {
+      if (index >>> 0 !== index || index >= receiver.length)
+        throw H.wrapException(P.IndexError$(index, receiver, null, null, null));
+      return receiver[index];
+    },
+    $indexSet: function(receiver, index, value) {
+      throw H.wrapException(P.UnsupportedError$("Cannot assign element of immutable List."));
+    },
+    set$length: function(receiver, value) {
+      throw H.wrapException(P.UnsupportedError$("Cannot resize immutable List."));
+    },
+    get$last: function(receiver) {
+      var len = receiver.length;
+      if (len > 0)
+        return receiver[len - 1];
+      throw H.wrapException(P.StateError$("No elements"));
+    },
+    get$single: function(receiver) {
+      var len = receiver.length;
+      if (len === 1)
+        return receiver[0];
+      if (len === 0)
+        throw H.wrapException(P.StateError$("No elements"));
+      throw H.wrapException(P.StateError$("More than one element"));
+    },
+    elementAt$1: function(receiver, index) {
+      if (index >>> 0 !== index || index >= receiver.length)
+        return H.ioore(receiver, index);
+      return receiver[index];
+    },
+    $isList: true,
+    $asList: function() {
+      return [W.Node];
+    },
+    $isEfficientLength: true,
+    $isJavaScriptIndexingBehavior: true,
+    "%": "MozNamedAttrMap|NamedNodeMap"
+  },
   CanvasElement_CanvasElement: function(height, width) {
     var e = document.createElement("canvas", null);
     J.set$width$x(e, width);
@@ -12784,12 +12919,12 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     var e = document.createElement("img", null);
     return e;
   },
-  _JenkinsSmiHash_combine0: function(hash, value) {
+  _JenkinsSmiHash_combine: function(hash, value) {
     hash = 536870911 & hash + value;
     hash = 536870911 & hash + ((524287 & hash) << 10 >>> 0);
     return hash ^ hash >>> 6;
   },
-  _JenkinsSmiHash_finish0: function(hash) {
+  _JenkinsSmiHash_finish: function(hash) {
     hash = 536870911 & hash + ((67108863 & hash) << 3 >>> 0);
     hash ^= hash >>> 11;
     return 536870911 & hash + ((16383 & hash) << 15 >>> 0);
@@ -12932,6 +13067,22 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     },
     $isEfficientLength: true
   },
+  Interceptor_ListMixin2: {
+    "^": "Interceptor+ListMixin;",
+    $isList: true,
+    $asList: function() {
+      return [W.Node];
+    },
+    $isEfficientLength: true
+  },
+  Interceptor_ListMixin_ImmutableListMixin2: {
+    "^": "Interceptor_ListMixin2+ImmutableListMixin;",
+    $isList: true,
+    $asList: function() {
+      return [W.Node];
+    },
+    $isEfficientLength: true
+  },
   EventStreamProvider: {
     "^": "Object;_eventType",
     forTarget$2$useCapture: function(e, useCapture) {
@@ -13067,26 +13218,26 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       return this._html$_iterator.moveNext$0();
     },
     get$current: function() {
-      return this._html$_iterator._current;
+      return this._html$_iterator._html$_current;
     }
   },
   FixedSizeListIterator: {
-    "^": "Object;_array,_length,_position,_current",
+    "^": "Object;_array,_html$_length,_position,_html$_current",
     moveNext$0: function() {
       var nextPosition, t1;
       nextPosition = this._position + 1;
-      t1 = this._length;
+      t1 = this._html$_length;
       if (nextPosition < t1) {
-        this._current = J.$index$asx(this._array, nextPosition);
+        this._html$_current = J.$index$asx(this._array, nextPosition);
         this._position = nextPosition;
         return true;
       }
-      this._current = null;
+      this._html$_current = null;
       this._position = t1;
       return false;
     },
     get$current: function() {
-      return this._current;
+      return this._html$_current;
     }
   },
   _DOMWindowCrossFrame: {
@@ -13537,12 +13688,12 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
 }],
 ["dart.math", "dart:math", , P, {
   "^": "",
-  _JenkinsSmiHash_combine: function(hash, value) {
+  _JenkinsSmiHash_combine0: function(hash, value) {
     hash = 536870911 & hash + value;
     hash = 536870911 & hash + ((524287 & hash) << 10 >>> 0);
     return hash ^ hash >>> 6;
   },
-  _JenkinsSmiHash_finish: function(hash) {
+  _JenkinsSmiHash_finish0: function(hash) {
     hash = 536870911 & hash + ((67108863 & hash) << 3 >>> 0);
     hash ^= hash >>> 11;
     return 536870911 & hash + ((16383 & hash) << 15 >>> 0);
@@ -13614,7 +13765,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       var t1, t2;
       t1 = J.get$hashCode$(this.x);
       t2 = J.get$hashCode$(this.y);
-      return P._JenkinsSmiHash_finish(P._JenkinsSmiHash_combine(P._JenkinsSmiHash_combine(0, t1), t2));
+      return P._JenkinsSmiHash_finish0(P._JenkinsSmiHash_combine0(P._JenkinsSmiHash_combine0(0, t1), t2));
     },
     $add: function(_, other) {
       var t1, t2, t3, t4;
@@ -13704,7 +13855,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       t4 = this.get$width(this);
       t5 = this.get$top(this);
       t6 = this.get$height(this);
-      return P._JenkinsSmiHash_finish(P._JenkinsSmiHash_combine(P._JenkinsSmiHash_combine(P._JenkinsSmiHash_combine(P._JenkinsSmiHash_combine(0, t1), t2), t3 + t4 & 0x1FFFFFFF), t5 + t6 & 0x1FFFFFFF));
+      return P._JenkinsSmiHash_finish0(P._JenkinsSmiHash_combine0(P._JenkinsSmiHash_combine0(P._JenkinsSmiHash_combine0(P._JenkinsSmiHash_combine0(0, t1), t2), t3 + t4 & 0x1FFFFFFF), t5 + t6 & 0x1FFFFFFF));
     },
     boundingBox$1: [function(_, other) {
       var right, bottom, left, $top;
@@ -14302,7 +14453,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         copy = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
         this.writeSlot_7.call$2(slot, copy);
         for (t1 = Object.keys(e), t1 = H.setRuntimeTypeInfo(new H.ListIterator(t1, t1.length, 0, null), [H.getTypeArgumentByIndex(t1, 0)]); t1.moveNext$0();) {
-          key = t1.__internal$_current;
+          key = t1._current;
           copy.$indexSet(0, key, this.call$1(e[key]));
         }
         return copy;
@@ -14352,7 +14503,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
 ["jikpoze", "lib/jikpoze/jikpoze.dart", , S, {
   "^": "",
   HitboxBitmap: {
-    "^": "Bitmap;bitmapData,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    "^": "Bitmap;bitmapData,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     hitTestInput$2: function(localX, localY) {
       var x, y, t1;
       x = C.JSNumber_methods.toInt$0(localX);
@@ -14372,7 +14523,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     }
   },
   Board: {
-    "^": "DisplayObjectContainer;canvas,renderLoop,map*,context@,pencils@,selected,cellSize,dragMouseEvent,dragging,resourceManager,endPoint,editionMode,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    "^": "DisplayObjectContainer;canvas,renderLoop,map*,context@,pencils@,selected,cellSize,dragMouseEvent,dragging,resourceManager,endPoint,editionMode,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     map$1: function($receiver, arg0) {
       return this.map.call$1(arg0);
     },
@@ -14385,9 +14536,6 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     },
     renderCells$0: function() {
       return this.map.renderCells$0();
-    },
-    init$0: function() {
-      W.HttpRequest_getString(this.endPoint, null, null).then$1(this.get$loadMap());
     },
     loadMap$1: [function(responseText) {
       var response, t1, contextMap, t2, t3, t4, contextLayer, t5, t6, t7, layer, pencil;
@@ -14420,7 +14568,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
           t2 = S.SquareMap$(this);
           this.map = t2;
       }
-      t2._display$_name = C.JSString_methods.$add("map.", t1.get$name(contextMap));
+      t2._name = C.JSString_methods.$add("map.", t1.get$name(contextMap));
       this.cellSize = 128;
       for (t1 = J.get$iterator$ax(contextMap.get$layers()); t1.moveNext$0();) {
         contextLayer = t1.get$current();
@@ -14439,19 +14587,19 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
           t2.addChildAt$2(layer, t2._children.length);
         else
           t2.addChildAt$2(layer, t4);
-        layer._display$_name = C.JSString_methods.$add("layer.", t3.get$name(contextLayer));
+        layer._name = C.JSString_methods.$add("layer.", t3.get$name(contextLayer));
         this.map.layers.$indexSet(0, t3.get$name(contextLayer), layer);
       }
       if (this.editionMode) {
         t1 = this.map;
-        t2 = t1.layers._collection$_length - 1;
+        t2 = t1.layers._length - 1;
         t3 = P.LinkedHashMap_LinkedHashMap(S.Cell_pointEquals$closure(), S.Cell_getPointHashCode$closure(), null, null, null);
         t4 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
         t5 = $.DisplayObject__nextID;
         $.DisplayObject__nextID = t5 + 1;
         layer = new S.GridLayer(null, t1, t2, t3, t4, true, true, false, true, "auto", true, 0, t5, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
         layer.Layer$2(t1, t2);
-        layer._display$_name = "layer.edition";
+        layer._name = "layer.edition";
         this.map.layers.$indexSet(0, "edition", layer);
       }
       for (t1 = J.get$iterator$ax(contextMap.get$pencilSets()); t1.moveNext$0();)
@@ -14484,6 +14632,8 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       t1 = this.canvas;
       if (null == t1)
         throw H.wrapException("Canvas cannot be null");
+      if (null == this.endPoint)
+        throw H.wrapException("EndPoint cannot be null");
       stage = A.Stage$(t1, false, 4294967295, 30, null, false, null);
       stage._stageScaleMode = C.StageScaleMode_2;
       stage._updateCanvasSize$0();
@@ -14511,18 +14661,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       stage._renderLoop = t1;
       stage.addChildAt$2(this, stage._children.length);
     },
-    static: {"^": "Board_maxZoom,Board_minZoom,Board_zoomIncrement", Board$: function(canvas, endPoint) {
-        var t1, t2, t3, t4, t5;
-        t1 = P.LinkedHashMap_LinkedHashMap(null, null, null, P.String, S.Pencil);
-        t2 = P.LinkedHashMap_LinkedHashMap(null, null, null, P.String, O.ResourceManagerResource);
-        t3 = P.StreamController_StreamController$broadcast(null, null, false, P.num);
-        t4 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
-        t5 = $.DisplayObject__nextID;
-        $.DisplayObject__nextID = t5 + 1;
-        t5 = new S.Board(canvas, null, null, null, t1, null, null, null, null, new O.ResourceManager(t2, t3), endPoint, true, t4, true, true, false, true, "auto", true, 0, t5, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
-        t5.Board$2(canvas, endPoint);
-        return t5;
-      }}
+    static: {"^": "Board_maxZoom,Board_minZoom,Board_zoomIncrement"}
   },
   Board_attachEvents_onResizeEvent: {
     "^": "Closure:104;this_0",
@@ -14618,7 +14757,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     }, "call$1", null, 2, 0, null, 106, [], "call"]
   },
   Cell: {
-    "^": "DisplayObjectContainer;layer,position,pencil,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    "^": "DisplayObjectContainer;layer,position,pencil,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     draw$0: function() {
       var t1, t2, t3, viewPoint;
       this.removeChildren$0();
@@ -14683,10 +14822,10 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     }, "call$1", null, 2, 0, null, 3, [], "call"]
   },
   HexCell: {
-    "^": "Cell;layer,position,pencil,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams"
+    "^": "Cell;layer,position,pencil,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams"
   },
   GridLayer: {
-    "^": "Layer;pencil,map,index,cells,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    "^": "Layer;pencil,map,index,cells,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     renderCells$0: function() {
       var topLeft, bottomRight, cx, point, cy, t1;
       this.removeChildren$0();
@@ -14702,7 +14841,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     }
   },
   Layer: {
-    "^": "DisplayObjectContainer;map*,index*,cells>,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    "^": "DisplayObjectContainer;map*,index*,cells>,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     map$1: function($receiver, arg0) {
       return this.map.call$1(arg0);
     },
@@ -14733,7 +14872,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
   },
   "+Layer": 0,
   HexMap: {
-    "^": "SquareMap;board,gridPencil,layers,skewFactor,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    "^": "SquareMap;board,gridPencil,layers,skewFactor,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     createCell$3: function(layer, point, pencil) {
       var t1, t2, t3;
       t1 = J.get$cells$x(layer);
@@ -14771,7 +14910,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       return H.setRuntimeTypeInfo(new U.Point(viewX, viewY), [null]);
     },
     viewPointToGamePoint$1: function(viewPoint) {
-      return H.setRuntimeTypeInfo(new U.Point(J.floor$0$n(J.$div$n(viewPoint.x, this.board.cellSize)), J.floor$0$n(J.$div$n(J.$div$n(viewPoint.y, this.board.cellSize), this.skewFactor))), [null]);
+      return H.setRuntimeTypeInfo(new U.Point(C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(viewPoint.x, this.board.cellSize))), C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(viewPoint.y, this.board.cellSize) / this.skewFactor))), [null]);
     },
     HexMap$1: function(board) {
       this.skewFactor = Math.cos(H.checkNum(0.5235987755982988));
@@ -14789,7 +14928,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       }}
   },
   IsoMap: {
-    "^": "HexMap;board,gridPencil,layers,skewFactor,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    "^": "HexMap;board,gridPencil,layers,skewFactor,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     getGridPencil$0: function() {
       var t1, t2;
       t1 = this.gridPencil;
@@ -14805,7 +14944,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     }
   },
   SquareMap: {
-    "^": "DisplayObjectContainer;board<,gridPencil,layers@,skewFactor,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    "^": "DisplayObjectContainer;board<,gridPencil,layers@,skewFactor,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     createCell$3: function(layer, point, pencil) {
       var t1, t2;
       if (null == layer)
@@ -14817,7 +14956,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     },
     renderCells$0: function() {
       for (var t1 = this.layers, t1 = t1.get$values(t1), t1 = H.setRuntimeTypeInfo(new H.MappedIterator(null, J.get$iterator$ax(t1._iterable), t1._f), [H.getTypeArgumentByIndex(t1, 0), H.getTypeArgumentByIndex(t1, 1)]); t1.moveNext$0();)
-        t1.__internal$_current.renderCells$0();
+        t1._current.renderCells$0();
     },
     getGridPencil$0: function() {
       var t1, t2;
@@ -14836,7 +14975,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       return H.setRuntimeTypeInfo(new U.Point(J.$mul$ns(gamePoint.x, this.board.cellSize), J.$mul$ns(gamePoint.y, this.board.cellSize)), [null]);
     },
     viewPointToGamePoint$1: function(viewPoint) {
-      return H.setRuntimeTypeInfo(new U.Point(J.floor$0$n(J.$div$n(viewPoint.x, this.board.cellSize)), J.floor$0$n(J.$div$n(viewPoint.y, this.board.cellSize))), [null]);
+      return H.setRuntimeTypeInfo(new U.Point(C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(viewPoint.x, this.board.cellSize))), C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(viewPoint.y, this.board.cellSize)))), [null]);
     },
     SquareMap$1: function(board) {
       board.addChildAt$2(this, board._children.length);
@@ -14854,7 +14993,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       }}
   },
   CoordinatedGridPencil: {
-    "^": "DisplayObjectContainer;_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    "^": "DisplayObjectContainer;_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     CoordinatedGridPencil$2: function(shape, point) {
       var t1, t2, t3, t4, coordinates;
       t1 = this._children;
@@ -14873,24 +15012,16 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
   GridPencil: {
     "^": "Pencil;board,pencil",
     getDisplayObject$1: function(point) {
-      var t1, t2, t3, shape, t4;
-      t1 = H.setRuntimeTypeInfo([], [A._GraphicsCommand]);
-      t2 = new A.Graphics(t1, H.setRuntimeTypeInfo(new U.Rectangle0(0, 0, 0, 0), [P.num]), true);
+      var t1, t2, t3, shape;
+      t1 = H.setRuntimeTypeInfo([], [U._GraphicsCommand]);
+      t2 = new U.Graphics(t1, H.setRuntimeTypeInfo(new U.Rectangle0(0, 0, 0, 0), [P.num]), true);
       t3 = $.DisplayObject__nextID;
       $.DisplayObject__nextID = t3 + 1;
       shape = new A.Shape(t2, t3, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
       this.buildGraphics$1(t2);
-      t3 = V.color2rgba(4286611584);
-      t4 = new A._GraphicsCommandStrokeColor(null, null, null, null);
-      t4._lineWidth = 0.2;
-      t4._lineJoin = "round";
-      t4._lineCap = "round";
-      t4._color = t3;
-      t1.push(t4);
+      t1.push(new U._GraphicsCommandStrokeColor(V.color2rgba(4286611584), 0.2, "round", "round"));
       t2._boundsRefresh = true;
-      t4 = new A._GraphicsCommandFillColor(null);
-      t4._color = V.color2rgba(16777215);
-      t1.push(t4);
+      t1.push(new U._GraphicsCommandFillColor(V.color2rgba(16777215)));
       t2._boundsRefresh = true;
       t1 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
       t2 = $.DisplayObject__nextID;
@@ -14900,44 +15031,29 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       return t2;
     },
     buildGraphics$1: function(g) {
-      var t1, size, t2, t3;
+      var t1, size, t2;
       t1 = this.board.cellSize;
       if (typeof t1 !== "number")
         return t1.$div();
       size = C.JSNumber_methods.toInt$0(Math.floor(t1 / 2));
-      t1 = new A._GraphicsCommandMoveTo(null, null);
-      t1._x = C.JSInt_methods.toDouble$0(size);
-      t1._y = C.JSInt_methods.toDouble$0(size);
-      t2 = g._commands;
-      t2.push(t1);
+      t1 = g._commands;
+      t1.push(new U._GraphicsCommandMoveTo(C.JSInt_methods.toDouble$0(size), C.JSInt_methods.toDouble$0(size)));
       g._boundsRefresh = true;
-      t1 = -size;
-      t3 = new A._GraphicsCommandLineTo(null, null);
-      t3._x = C.JSInt_methods.toDouble$0(size);
-      t3._y = C.JSInt_methods.toDouble$0(t1);
-      t2.push(t3);
+      t2 = -size;
+      t1.push(new U._GraphicsCommandLineTo(C.JSInt_methods.toDouble$0(size), C.JSInt_methods.toDouble$0(t2)));
       g._boundsRefresh = true;
-      t3 = new A._GraphicsCommandLineTo(null, null);
-      t3._x = C.JSInt_methods.toDouble$0(t1);
-      t3._y = C.JSInt_methods.toDouble$0(t1);
-      t2.push(t3);
+      t1.push(new U._GraphicsCommandLineTo(C.JSInt_methods.toDouble$0(t2), C.JSInt_methods.toDouble$0(t2)));
       g._boundsRefresh = true;
-      t3 = new A._GraphicsCommandLineTo(null, null);
-      t3._x = C.JSInt_methods.toDouble$0(t1);
-      t3._y = C.JSInt_methods.toDouble$0(size);
-      t2.push(t3);
+      t1.push(new U._GraphicsCommandLineTo(C.JSInt_methods.toDouble$0(t2), C.JSInt_methods.toDouble$0(size)));
       g._boundsRefresh = true;
-      t3 = new A._GraphicsCommandLineTo(null, null);
-      t3._x = C.JSInt_methods.toDouble$0(size);
-      t3._y = C.JSInt_methods.toDouble$0(size);
-      t2.push(t3);
+      t1.push(new U._GraphicsCommandLineTo(C.JSInt_methods.toDouble$0(size), C.JSInt_methods.toDouble$0(size)));
       g._boundsRefresh = true;
     }
   },
   HexGridPencil: {
     "^": "GridPencil;board,pencil",
     buildGraphics$1: function(g) {
-      var t1, t2, size, t3, i, t4;
+      var t1, t2, size, t3, i;
       t1 = this.board.cellSize;
       t2 = Math.cos(H.checkNum(2.617993877991494));
       if (typeof t1 !== "number")
@@ -14945,20 +15061,14 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       size = t1 / t2 / 2;
       t2 = Math.cos(H.checkNum(1.5707963267948966));
       t1 = Math.sin(H.checkNum(1.5707963267948966));
-      t3 = new A._GraphicsCommandMoveTo(null, null);
-      t3._x = C.JSNumber_methods.toDouble$0(size * t2);
-      t3._y = C.JSNumber_methods.toDouble$0(size * t1);
-      t1 = g._commands;
-      t1.push(t3);
+      t3 = g._commands;
+      t3.push(new U._GraphicsCommandMoveTo(C.JSNumber_methods.toDouble$0(size * t2), C.JSNumber_methods.toDouble$0(size * t1)));
       g._boundsRefresh = true;
       for (i = 1; i <= 6; ++i) {
-        t2 = 1.5707963267948966 + i * 2 * 3.141592653589793 / 6;
-        t3 = Math.cos(t2);
-        t2 = Math.sin(t2);
-        t4 = new A._GraphicsCommandLineTo(null, null);
-        t4._x = C.JSNumber_methods.toDouble$0(size * t3);
-        t4._y = C.JSNumber_methods.toDouble$0(size * t2);
-        t1.push(t4);
+        t1 = 1.5707963267948966 + i * 2 * 3.141592653589793 / 6;
+        t2 = Math.cos(t1);
+        t1 = Math.sin(t1);
+        t3.push(new U._GraphicsCommandLineTo(C.JSNumber_methods.toDouble$0(size * t2), C.JSNumber_methods.toDouble$0(size * t1)));
         g._boundsRefresh = true;
       }
     }
@@ -14966,7 +15076,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
   IsoGridPencil: {
     "^": "GridPencil;board,pencil",
     buildGraphics$1: function(g) {
-      var t1, t2, size, skewFactor, t3, t4;
+      var t1, t2, size, skewFactor, t3;
       t1 = this.board;
       t2 = t1.cellSize;
       if (typeof t2 !== "number")
@@ -14974,32 +15084,17 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       size = t2 / 2;
       skewFactor = t1.map.skewFactor * 2;
       t1 = size * skewFactor;
-      t2 = new A._GraphicsCommandMoveTo(null, null);
-      t2._x = C.JSInt_methods.toDouble$0(0);
-      t2._y = C.JSNumber_methods.toDouble$0(t1);
-      t3 = g._commands;
-      t3.push(t2);
+      t2 = g._commands;
+      t2.push(new U._GraphicsCommandMoveTo(C.JSInt_methods.toDouble$0(0), C.JSNumber_methods.toDouble$0(t1)));
       g._boundsRefresh = true;
-      t2 = new A._GraphicsCommandLineTo(null, null);
-      t2._x = C.JSInt_methods.toDouble$0(size);
-      t2._y = C.JSInt_methods.toDouble$0(0);
-      t3.push(t2);
+      t2.push(new U._GraphicsCommandLineTo(C.JSInt_methods.toDouble$0(size), C.JSInt_methods.toDouble$0(0)));
       g._boundsRefresh = true;
-      t2 = -size;
-      t4 = new A._GraphicsCommandLineTo(null, null);
-      t4._x = C.JSInt_methods.toDouble$0(0);
-      t4._y = C.JSNumber_methods.toDouble$0(t2 * skewFactor);
-      t3.push(t4);
+      t3 = -size;
+      t2.push(new U._GraphicsCommandLineTo(C.JSInt_methods.toDouble$0(0), C.JSNumber_methods.toDouble$0(t3 * skewFactor)));
       g._boundsRefresh = true;
-      t4 = new A._GraphicsCommandLineTo(null, null);
-      t4._x = C.JSInt_methods.toDouble$0(t2);
-      t4._y = C.JSInt_methods.toDouble$0(0);
-      t3.push(t4);
+      t2.push(new U._GraphicsCommandLineTo(C.JSInt_methods.toDouble$0(t3), C.JSInt_methods.toDouble$0(0)));
       g._boundsRefresh = true;
-      t4 = new A._GraphicsCommandLineTo(null, null);
-      t4._x = C.JSInt_methods.toDouble$0(0);
-      t4._y = C.JSNumber_methods.toDouble$0(t1);
-      t3.push(t4);
+      t2.push(new U._GraphicsCommandLineTo(C.JSInt_methods.toDouble$0(0), C.JSNumber_methods.toDouble$0(t1)));
       g._boundsRefresh = true;
     }
   },
@@ -15059,9 +15154,18 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
 ["", "main.dart", , F, {
   "^": "",
   main: [function() {
-    S.Board$(document.querySelector("#canvas_square"), "resources/map.json").init$0();
-    S.Board$(document.querySelector("#canvas_iso"), "resources/isomap.json").init$0();
-    S.Board$(document.querySelector("#canvas_hex"), "resources/hexmap.json").init$0();
+    var canvas, t1, t2, t3, t4, t5, t6, board;
+    canvas = document.querySelector("#canvas_map");
+    t1 = canvas.getAttribute("data-endpoint");
+    t2 = P.LinkedHashMap_LinkedHashMap(null, null, null, P.String, S.Pencil);
+    t3 = P.LinkedHashMap_LinkedHashMap(null, null, null, P.String, O.ResourceManagerResource);
+    t4 = P.StreamController_StreamController$broadcast(null, null, false, P.num);
+    t5 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
+    t6 = $.DisplayObject__nextID;
+    $.DisplayObject__nextID = t6 + 1;
+    board = new S.Board(canvas, null, null, null, t2, null, null, null, null, new O.ResourceManager(t3, t4), t1, true, t5, true, true, false, true, "auto", true, 0, t6, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
+    board.Board$2(canvas, t1);
+    W.HttpRequest_getString(t1, null, null).then$1(board.get$loadMap());
   }, "call$0", "main$closure", 0, 0, 18]
 },
 1],
@@ -15213,7 +15317,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         return 0;
       isLittleEndianSystem = $.get$isLittleEndianSystem();
       storePixelRatio = renderTextureQuad._renderTexture._storePixelRatio;
-      t3 = renderTextureQuad._engine$_rotation;
+      t3 = renderTextureQuad._rotation;
       if (t3 === 0) {
         left = renderTextureQuad._textureX;
         $top = renderTextureQuad._textureY;
@@ -15243,7 +15347,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       left = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(left * storePixelRatio));
       $top = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0($top * storePixelRatio));
       rect = H.setRuntimeTypeInfo(new U.Rectangle0(left, $top, C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(right * storePixelRatio)) - left, C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(bottom * storePixelRatio)) - $top), [P.$int]);
-      imageData = P.convertNativeToDart_ImageData(J.get$context2D$x(renderTextureQuad._renderTexture._engine$_canvas).getImageData(rect.left, rect.top, rect.width, rect.height));
+      imageData = P.convertNativeToDart_ImageData(J.get$context2D$x(renderTextureQuad._renderTexture._canvas).getImageData(rect.left, rect.top, rect.width, rect.height));
       t1 = J.getInterceptor$x(imageData);
       pixels = J.$mul$ns(t1.get$width(imageData), t1.get$height(imageData));
       data = t1.get$data(imageData);
@@ -15262,7 +15366,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     },
     static: {BitmapDataUpdateBatch$: function(bitmapData) {
         var t1, t2;
-        t1 = bitmapData._renderTextureQuad._renderTexture._engine$_canvas;
+        t1 = bitmapData._renderTextureQuad._renderTexture._canvas;
         t2 = T.Matrix$fromIdentity();
         return new A.BitmapDataUpdateBatch(bitmapData, new L.RenderContextCanvas(t1, J.get$context2D$x(t1), t2, C.BlendMode_bZz, 1, P.StreamController_StreamController$broadcast(null, null, false, L.RenderContextEvent), P.StreamController_StreamController$broadcast(null, null, false, L.RenderContextEvent)), bitmapData._renderTextureQuad.get$drawMatrix());
       }}
@@ -15312,10 +15416,10 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       return this._blendMode;
     },
     get$name: function(_) {
-      return this._display$_name;
+      return this._name;
     },
     set$name: function(_, value) {
-      this._display$_name = value;
+      this._name = value;
     },
     get$cache: function() {
       return this._cacheTextureQuad;
@@ -15356,7 +15460,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       if (this._transformationMatrixRefresh) {
         this._transformationMatrixRefresh = false;
         t1 = this._skewX;
-        t2 = this._rotation;
+        t2 = this._display$_rotation;
         skewXrotation = t1 + t2;
         skewYrotation = this._skewY + t2;
         scaleX = this._scaleX;
@@ -15587,7 +15691,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
           displayObject = child.hitTestInput$2(childX, childY);
           if (displayObject == null)
             continue;
-          if (!!J.getInterceptor(displayObject).$isInteractiveObject && displayObject.mouseEnabled)
+          if (!!displayObject.$isInteractiveObject && displayObject.mouseEnabled)
             return this._mouseChildren ? displayObject : this;
           hit = this;
         }
@@ -15619,236 +15723,6 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         J.dispatchEvent$1$x(descendants[i], $event);
     },
     $isDisplayObjectContainer: true
-  },
-  Graphics: {
-    "^": "Object;_commands,_boundsRectangle,_boundsRefresh",
-    get$bounds: function() {
-      var graphicsBounds, t1, i;
-      if (this._boundsRefresh) {
-        graphicsBounds = new A._GraphicsBounds(1 / 0, -1 / 0, 1 / 0, -1 / 0, 1 / 0, -1 / 0, 1 / 0, -1 / 0, 0 / 0, 0 / 0);
-        for (t1 = this._commands, i = 0; i < t1.length; ++i)
-          t1[i].updateBounds$1(graphicsBounds);
-        this._boundsRefresh = false;
-        this._boundsRectangle = graphicsBounds.getRectangle$0();
-      }
-      t1 = this._boundsRectangle;
-      return H.setRuntimeTypeInfo(new U.Rectangle0(t1.left, t1.top, t1.width, t1.height), [H.getTypeArgumentByIndex(t1, 0)]);
-    },
-    hitTestInput$2: function(localX, localY) {
-      var context, t1, i;
-      if (this.get$bounds().contains$2(0, localX, localY)) {
-        if ($.get$isCocoonJS() === true)
-          return true;
-        context = $.get$_dummyCanvasContext0();
-        context.setTransform(1, 0, 0, 1, 0, 0);
-        context.beginPath();
-        for (t1 = this._commands, i = 0; i < t1.length; ++i)
-          if (t1[i].hitTestInput$3(context, localX, localY) === true)
-            return true;
-      }
-      return false;
-    },
-    render$1: function(renderState) {
-      var renderContext, t1, t2, i;
-      renderContext = renderState._engine$_renderContext;
-      t1 = J.getInterceptor(renderContext);
-      if (!!t1.$isRenderContextCanvas) {
-        t1.setTransform$1(renderContext, renderState._currentContextState.matrix);
-        t1 = renderState._currentContextState.alpha;
-        renderContext._activeAlpha = t1;
-        t2 = renderContext._renderingContext;
-        t2.globalAlpha = t1;
-        t2.beginPath();
-        for (t1 = this._commands, i = 0; i < t1.length; ++i)
-          t1[i].render$1(t2);
-      }
-    },
-    static: {"^": "Graphics__BASE_64"}
-  },
-  _GraphicsCommand: {
-    "^": "Object;",
-    hitTestInput$3: function(context, localX, localY) {
-      this.render$1(context);
-      return false;
-    },
-    updateBounds$1: function(bounds) {
-    },
-    $is_GraphicsCommand: true
-  },
-  _GraphicsBounds: {
-    "^": "Object;pathLeft,pathRight,pathTop,pathBottom,boundsLeft,boundsRight,boundsTop,boundsBottom,cursorX,cursorY",
-    get$hasPath: function() {
-      var t1 = this.pathLeft;
-      if (!(t1 == Infinity || t1 == -Infinity)) {
-        t1 = this.pathRight;
-        if (!(t1 == Infinity || t1 == -Infinity)) {
-          t1 = this.pathTop;
-          if (!(t1 == Infinity || t1 == -Infinity)) {
-            t1 = this.pathBottom;
-            t1 = !(t1 == Infinity || t1 == -Infinity);
-          } else
-            t1 = false;
-        } else
-          t1 = false;
-      } else
-        t1 = false;
-      return t1;
-    },
-    updatePath$2: function(x, y) {
-      if (!isNaN(this.cursorX) && !isNaN(this.cursorY)) {
-        if (this.pathLeft > x)
-          this.pathLeft = x;
-        if (this.pathRight < x)
-          this.pathRight = x;
-        if (this.pathTop > y)
-          this.pathTop = y;
-        if (this.pathBottom < y)
-          this.pathBottom = y;
-      }
-    },
-    getRectangle$0: function() {
-      var t1, t2, t3, t4;
-      t1 = this.boundsLeft;
-      if (!(t1 == Infinity || t1 == -Infinity)) {
-        t2 = this.boundsRight;
-        if (!(t2 == Infinity || t2 == -Infinity)) {
-          t2 = this.boundsTop;
-          if (!(t2 == Infinity || t2 == -Infinity)) {
-            t2 = this.boundsBottom;
-            t2 = !(t2 == Infinity || t2 == -Infinity);
-          } else
-            t2 = false;
-        } else
-          t2 = false;
-      } else
-        t2 = false;
-      if (t2) {
-        t2 = this.boundsRight;
-        t3 = this.boundsBottom;
-        t4 = this.boundsTop;
-        return H.setRuntimeTypeInfo(new U.Rectangle0(t1, t4, t2 - t1, t3 - t4), [P.num]);
-      } else
-        return H.setRuntimeTypeInfo(new U.Rectangle0(0, 0, 0, 0), [P.num]);
-    }
-  },
-  _GraphicsCommandMoveTo: {
-    "^": "_GraphicsCommand;_x,_y",
-    render$1: function(context) {
-      J.moveTo$2$x(context, this._x, this._y);
-    },
-    updateBounds$1: function(bounds) {
-      var t1, t2;
-      t1 = this._x;
-      t2 = this._y;
-      bounds.cursorX = t1;
-      bounds.cursorY = t2;
-    }
-  },
-  _GraphicsCommandLineTo: {
-    "^": "_GraphicsCommand;_x,_y",
-    render$1: function(context) {
-      J.lineTo$2$x(context, this._x, this._y);
-    },
-    updateBounds$1: function(bounds) {
-      var t1, t2;
-      if (!(!isNaN(bounds.cursorX) && !isNaN(bounds.cursorY))) {
-        t1 = this._x;
-        t2 = this._y;
-        bounds.cursorX = t1;
-        bounds.cursorY = t2;
-      }
-      bounds.updatePath$2(bounds.cursorX, bounds.cursorY);
-      bounds.updatePath$2(this._x, this._y);
-      t1 = this._x;
-      t2 = this._y;
-      bounds.cursorX = t1;
-      bounds.cursorY = t2;
-    }
-  },
-  _GraphicsCommandStroke: {
-    "^": "_GraphicsCommand;",
-    hitTestInput$3: function(context, localX, localY) {
-      var t1, exception;
-      J.set$lineWidth$x(context, this._lineWidth);
-      J.set$lineJoin$x(context, this._lineJoin);
-      J.set$lineCap$x(context, this._lineCap);
-      try {
-        t1 = J.isPointInStroke$2$x(context, localX, localY);
-        return t1;
-      } catch (exception) {
-        H.unwrapException(exception);
-        return false;
-      }
-
-    },
-    updateBounds$1: function(bounds) {
-      var t1, lw, left, right, $top, bottom;
-      t1 = this._lineWidth;
-      if (bounds.get$hasPath()) {
-        lw = t1 / 2;
-        left = bounds.pathLeft - lw;
-        right = bounds.pathRight + lw;
-        $top = bounds.pathTop - lw;
-        bottom = bounds.pathBottom + lw;
-        if (bounds.boundsLeft > left)
-          bounds.boundsLeft = left;
-        if (bounds.boundsRight < right)
-          bounds.boundsRight = right;
-        if (bounds.boundsTop > $top)
-          bounds.boundsTop = $top;
-        if (bounds.boundsBottom < bottom)
-          bounds.boundsBottom = bottom;
-      }
-    }
-  },
-  _GraphicsCommandStrokeColor: {
-    "^": "_GraphicsCommandStroke;_color,_lineWidth,_lineJoin,_lineCap",
-    render$1: function(context) {
-      var t1 = J.getInterceptor$x(context);
-      t1.set$strokeStyle(context, this._color);
-      t1.set$lineWidth(context, this._lineWidth);
-      t1.set$lineJoin(context, this._lineJoin);
-      t1.set$lineCap(context, this._lineCap);
-      t1.stroke$0(context);
-    }
-  },
-  _GraphicsCommandFill: {
-    "^": "_GraphicsCommand;",
-    hitTestInput$3: function(context, localX, localY) {
-      return context.isPointInPath(localX, localY);
-    },
-    updateBounds$1: function(bounds) {
-      var t1, t2;
-      if (bounds.get$hasPath()) {
-        t1 = bounds.boundsLeft;
-        t2 = bounds.pathLeft;
-        if (t1 > t2)
-          bounds.boundsLeft = t2;
-        t1 = bounds.boundsRight;
-        t2 = bounds.pathRight;
-        if (t1 < t2)
-          bounds.boundsRight = t2;
-        t1 = bounds.boundsTop;
-        t2 = bounds.pathTop;
-        if (t1 > t2)
-          bounds.boundsTop = t2;
-        t1 = bounds.boundsBottom;
-        t2 = bounds.pathBottom;
-        if (t1 < t2)
-          bounds.boundsBottom = t2;
-      }
-    }
-  },
-  _GraphicsCommandFillColor: {
-    "^": "_GraphicsCommandFill;_color",
-    render$1: function(context) {
-      var t1 = J.getInterceptor$x(context);
-      t1.set$fillStyle(context, this._color);
-      t1.fill$0(context);
-    }
-  },
-  GraphicsGradient: {
-    "^": "Object;"
   },
   InteractiveObject: {
     "^": "DisplayObject;mouseCursor<,tabIndex*",
@@ -15890,12 +15764,12 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     }
   },
   Shape: {
-    "^": "DisplayObject;graphics,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    "^": "DisplayObject;graphics,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     get$bounds: function() {
       return this.graphics.get$bounds();
     },
     hitTestInput$2: function(localX, localY) {
-      if (this.graphics.hitTestInput$2(localX, localY))
+      if (this.graphics.hitTest$2(localX, localY) === true)
         return this;
       return;
     },
@@ -15903,28 +15777,8 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       this.graphics.render$1(renderState);
     }
   },
-  StageScaleMode: {
-    "^": "Object;_ordinal",
-    static: {"^": "StageScaleMode_EXACT_FIT,StageScaleMode_NO_BORDER,StageScaleMode_NO_SCALE,StageScaleMode_SHOW_ALL"}
-  },
-  StageAlign: {
-    "^": "Object;_ordinal",
-    static: {"^": "StageAlign_BOTTOM,StageAlign_BOTTOM_LEFT,StageAlign_BOTTOM_RIGHT,StageAlign_LEFT,StageAlign_RIGHT,StageAlign_TOP,StageAlign_TOP_LEFT,StageAlign_TOP_RIGHT,StageAlign_NONE"}
-  },
-  StageRenderMode: {
-    "^": "Object;_ordinal",
-    static: {"^": "StageRenderMode_AUTO,StageRenderMode_STOP,StageRenderMode_ONCE"}
-  },
-  _MouseButton: {
-    "^": "Object;mouseDownEventType,mouseUpEventType,mouseClickEventType,mouseDoubleClickEventType,target>,buttonDown,clickTime,clickCount"
-  },
-  _Touch: {
-    "^": "Object;touchPointID<,primaryTouchPoint<,target>,currentTarget*",
-    $is_Touch: true,
-    static: {"^": "_Touch__globalTouchPointID"}
-  },
   Stage: {
-    "^": "DisplayObjectContainer;_canvas,_renderContext,_color,_sourceWidth,_sourceHeight,_frameRate,_stageWidth,_stageHeight,_contentRectangle,_clientTransformation,_stageTransformation,_renderLoop,_juggler,_focus,_renderState,_stageRenderMode,_stageScaleMode,_stageAlign,_mouseCursor,_mousePosition,_mouseTarget,_touches,_mouseButtons,_touchEventSubscriptions,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    "^": "DisplayObjectContainer;_display$_canvas,_renderContext,_juggler,_renderLoop,_color,_sourceWidth,_sourceHeight,_frameRate,_stageWidth,_stageHeight,_contentRectangle,_clientTransformation,_stageTransformation,_focus,_renderState,_stageRenderMode,_stageScaleMode,_stageAlign,_mouseCursor,_mousePosition,_mouseTarget,_drags,_touchPoints,_mouseButtons,_touchEventSubscriptions,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     _throwStageException$0: function() {
       throw H.wrapException(P.UnsupportedError$("The Stage class does not implement this property or method."));
     },
@@ -15960,12 +15814,12 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         clientLeft = 0;
         clientTop = 0;
       } else {
-        clientRectangle = this._canvas.getBoundingClientRect();
+        clientRectangle = this._display$_canvas.getBoundingClientRect();
         t1 = J.getInterceptor$x(clientRectangle);
-        clientLeft = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._canvas.clientLeft)) + J.round$0$n(t1.get$left(clientRectangle));
-        clientTop = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._canvas.clientTop)) + J.round$0$n(t1.get$top(clientRectangle));
-        clientWidth = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._canvas.clientWidth));
-        clientHeight = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._canvas.clientHeight));
+        clientLeft = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._display$_canvas.clientLeft)) + J.round$0$n(t1.get$left(clientRectangle));
+        clientTop = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._display$_canvas.clientTop)) + J.round$0$n(t1.get$top(clientRectangle));
+        clientWidth = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._display$_canvas.clientWidth));
+        clientHeight = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._display$_canvas.clientHeight));
       }
       if (typeof clientWidth !== "number")
         throw H.wrapException("dart2js_hint");
@@ -16040,14 +15894,14 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       if (this._stageWidth !== clientWidth || this._stageHeight !== clientHeight) {
         this._stageWidth = clientWidth;
         this._stageHeight = clientHeight;
-        t1 = this._canvas;
+        t1 = this._display$_canvas;
         if (typeof pixelRatio !== "number")
           return H.iae(pixelRatio);
         t1.width = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(clientWidth * pixelRatio));
-        this._canvas.height = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(clientHeight * pixelRatio));
-        if (C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._canvas.clientWidth)) !== clientWidth || C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._canvas.clientHeight)) !== clientHeight) {
-          J.set$width$x(this._canvas.style, H.S(clientWidth) + "px");
-          J.set$height$x(this._canvas.style, H.S(clientHeight) + "px");
+        this._display$_canvas.height = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(clientHeight * pixelRatio));
+        if (C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._display$_canvas.clientWidth)) !== clientWidth || C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._display$_canvas.clientHeight)) !== clientHeight) {
+          J.set$width$x(this._display$_canvas.style, H.S(clientWidth) + "px");
+          J.set$height$x(this._display$_canvas.style, H.S(clientHeight) + "px");
         }
         this.dispatchEvent$1(0, new R.Event("resize", false, C.EventPhase_1, null, null, false, false));
       }
@@ -16066,7 +15920,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       t1 = this._mouseCursor;
       if (t1 == null ? mouseCursor != null : t1 !== mouseCursor) {
         this._mouseCursor = mouseCursor;
-        t1 = this._canvas.style;
+        t1 = this._display$_canvas.style;
         if ($.get$Mouse__cursorDatas().containsKey$1(mouseCursor)) {
           cursorData = $.get$Mouse__cursorDatas().$index(0, mouseCursor);
           cursorDataUrl = J.get$url$x(cursorData);
@@ -16081,7 +15935,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       }
     },
     _onMouseEvent$1: [function($event) {
-      var t1, t2, button, stagePoint, localPoint, t3, mouseButton, target, p, oldTargetList, newTargetList, p0, t4, commonCount, t5, ot, i, target0, mouseEventType, isClick, isDoubleClick;
+      var t1, t2, button, stagePoint, localPoint, t3, mouseButton, target, p, oldTargetList, newTargetList, p0, t4, commonCount, t5, ot, t6, t7, t8, t9, i, target0, mouseEventType, isClick, isDoubleClick;
       t1 = J.getInterceptor$x($event);
       t1.preventDefault$0($event);
       t2 = Date.now();
@@ -16104,6 +15958,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         return H.ioore(t3, button);
       mouseButton = t3[button];
       this._mousePosition = stagePoint;
+      C.JSArray_methods.forEach$1(this._drags, new A.Stage__onMouseEvent_closure(stagePoint));
       if (!J.$eq(t1.get$type($event), "mouseout"))
         target = this.hitTestInput$2(stagePoint.x, stagePoint.y);
       else {
@@ -16135,29 +15990,57 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         }
         if (p != null) {
           p.globalToLocal$2(stagePoint, localPoint);
-          p.dispatchEvent$1(0, new R.MouseEvent(localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, 0, 0, mouseButton.buttonDown, 0, t1.get$altKey($event), t1.get$ctrlKey($event), t1.get$shiftKey($event), "mouseOut", true, C.EventPhase_1, null, null, false, false));
+          t3 = localPoint.x;
+          t4 = localPoint.y;
+          t5 = stagePoint.x;
+          t6 = stagePoint.y;
+          t7 = t1.get$altKey($event);
+          t8 = t1.get$ctrlKey($event);
+          t9 = t1.get$shiftKey($event);
+          p.dispatchEvent$1(0, new R.MouseEvent(0, 0, mouseButton.buttonDown, 0, t3, t4, t5, t6, t7, t8, t9, "mouseOut", true, C.EventPhase_1, null, null, false, false));
         }
         for (i = 0; i < oldTargetList.length - commonCount; ++i) {
           target0 = oldTargetList[i];
           target0.globalToLocal$2(stagePoint, localPoint);
-          target0.dispatchEvent$1(0, new R.MouseEvent(localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, 0, 0, mouseButton.buttonDown, 0, t1.get$altKey($event), t1.get$ctrlKey($event), t1.get$shiftKey($event), "rollOut", false, C.EventPhase_1, null, null, false, false));
+          t3 = localPoint.x;
+          t4 = localPoint.y;
+          t5 = stagePoint.x;
+          t6 = stagePoint.y;
+          t7 = t1.get$altKey($event);
+          t8 = t1.get$ctrlKey($event);
+          t9 = t1.get$shiftKey($event);
+          target0.dispatchEvent$1(0, new R.MouseEvent(0, 0, mouseButton.buttonDown, 0, t3, t4, t5, t6, t7, t8, t9, "rollOut", false, C.EventPhase_1, null, null, false, false));
         }
         for (i = newTargetList.length - commonCount - 1; i >= 0; --i) {
           if (i >= newTargetList.length)
             return H.ioore(newTargetList, i);
           target0 = newTargetList[i];
           target0.globalToLocal$2(stagePoint, localPoint);
-          target0.dispatchEvent$1(0, new R.MouseEvent(localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, 0, 0, mouseButton.buttonDown, 0, t1.get$altKey($event), t1.get$ctrlKey($event), t1.get$shiftKey($event), "rollOver", false, C.EventPhase_1, null, null, false, false));
+          t3 = localPoint.x;
+          t4 = localPoint.y;
+          t5 = stagePoint.x;
+          t6 = stagePoint.y;
+          t7 = t1.get$altKey($event);
+          t8 = t1.get$ctrlKey($event);
+          t9 = t1.get$shiftKey($event);
+          target0.dispatchEvent$1(0, new R.MouseEvent(0, 0, mouseButton.buttonDown, 0, t3, t4, t5, t6, t7, t8, t9, "rollOver", false, C.EventPhase_1, null, null, false, false));
         }
         if (target != null) {
           target.globalToLocal$2(stagePoint, localPoint);
-          target.dispatchEvent$1(0, new R.MouseEvent(localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, 0, 0, mouseButton.buttonDown, 0, t1.get$altKey($event), t1.get$ctrlKey($event), t1.get$shiftKey($event), "mouseOver", true, C.EventPhase_1, null, null, false, false));
+          t3 = localPoint.x;
+          t4 = localPoint.y;
+          t5 = stagePoint.x;
+          t6 = stagePoint.y;
+          t7 = t1.get$altKey($event);
+          t8 = t1.get$ctrlKey($event);
+          t9 = t1.get$shiftKey($event);
+          target.dispatchEvent$1(0, new R.MouseEvent(0, 0, mouseButton.buttonDown, 0, t3, t4, t5, t6, t7, t8, t9, "mouseOver", true, C.EventPhase_1, null, null, false, false));
         }
         this._mouseTarget = target;
       }
       this._updateMouseCursor$0();
       if (J.$eq(t1.get$type($event), "mousedown")) {
-        this._canvas.focus();
+        this._display$_canvas.focus();
         mouseEventType = mouseButton.mouseDownEventType;
         t3 = mouseButton.target;
         if (target == null ? t3 == null : target === t3) {
@@ -16201,21 +16084,42 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         mouseEventType = "contextMenu";
       if (mouseEventType != null && target != null) {
         target.globalToLocal$2(stagePoint, localPoint);
-        target.dispatchEvent$1(0, new R.MouseEvent(localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, 0, 0, mouseButton.buttonDown, mouseButton.clickCount, t1.get$altKey($event), t1.get$ctrlKey($event), t1.get$shiftKey($event), mouseEventType, true, C.EventPhase_1, null, null, false, false));
+        t2 = localPoint.x;
+        t3 = localPoint.y;
+        t4 = stagePoint.x;
+        t5 = stagePoint.y;
+        t6 = t1.get$altKey($event);
+        t7 = t1.get$ctrlKey($event);
+        t8 = t1.get$shiftKey($event);
+        target.dispatchEvent$1(0, new R.MouseEvent(0, 0, mouseButton.buttonDown, mouseButton.clickCount, t2, t3, t4, t5, t6, t7, t8, mouseEventType, true, C.EventPhase_1, null, null, false, false));
         if (isClick) {
           mouseEventType = isDoubleClick && target.doubleClickEnabled ? mouseButton.mouseDoubleClickEventType : mouseButton.mouseClickEventType;
-          target.dispatchEvent$1(0, new R.MouseEvent(localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, 0, 0, mouseButton.buttonDown, 0, t1.get$altKey($event), t1.get$ctrlKey($event), t1.get$shiftKey($event), mouseEventType, true, C.EventPhase_1, null, null, false, false));
+          t2 = localPoint.x;
+          t3 = localPoint.y;
+          t4 = stagePoint.x;
+          t5 = stagePoint.y;
+          t6 = t1.get$altKey($event);
+          t7 = t1.get$ctrlKey($event);
+          t1 = t1.get$shiftKey($event);
+          target.dispatchEvent$1(0, new R.MouseEvent(0, 0, mouseButton.buttonDown, 0, t2, t3, t4, t5, t6, t7, t1, mouseEventType, true, C.EventPhase_1, null, null, false, false));
         }
       }
     }, "call$1", "get$_onMouseEvent", 2, 0, 108, 109, []],
     _onMouseWheelEvent$1: [function($event) {
-      var t1, stagePoint, localPoint, target, mouseEvent;
+      var t1, stagePoint, localPoint, target, t2, t3, t4, t5, t6, t7, t8, mouseEvent;
       t1 = J.getInterceptor$x($event);
       stagePoint = this._clientTransformation.transformPoint$1(t1.get$client($event));
       localPoint = H.setRuntimeTypeInfo(new U.Point(0, 0), [P.num]);
       target = this.hitTestInput$2(stagePoint.x, stagePoint.y);
       target.globalToLocal$2(stagePoint, localPoint);
-      mouseEvent = new R.MouseEvent(localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, t1.get$deltaX($event), t1.get$deltaY($event), false, 0, t1.get$altKey($event), t1.get$ctrlKey($event), t1.get$shiftKey($event), "mouseWheel", true, C.EventPhase_1, null, null, false, false);
+      t2 = localPoint.x;
+      t3 = localPoint.y;
+      t4 = stagePoint.x;
+      t5 = stagePoint.y;
+      t6 = t1.get$altKey($event);
+      t7 = t1.get$ctrlKey($event);
+      t8 = t1.get$shiftKey($event);
+      mouseEvent = new R.MouseEvent(t1.get$deltaX($event), t1.get$deltaY($event), false, 0, t2, t3, t4, t5, t6, t7, t8, "mouseWheel", true, C.EventPhase_1, null, null, false, false);
       target.dispatchEvent$1(0, mouseEvent);
       if (mouseEvent._stopsPropagation)
         t1.preventDefault$0($event);
@@ -16224,22 +16128,22 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       var t1, t2, t3, t4, t5, t6;
       C.JSArray_methods.forEach$1(this._touchEventSubscriptions, new A.Stage__onMultitouchInputModeChanged_closure());
       if (J.$eq(inputMode, C.MultitouchInputMode_TOUCH_POINT)) {
-        t1 = C.EventStreamProvider_touchstart.forElement$1(this._canvas);
+        t1 = C.EventStreamProvider_touchstart.forElement$1(this._display$_canvas);
         t1 = H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t1._html$_target, t1._eventType, W._wrapZone(this.get$_onTouchEvent()), t1._useCapture), [H.getTypeArgumentByIndex(t1, 0)]);
         t1._tryResume$0();
-        t2 = C.EventStreamProvider_touchend.forElement$1(this._canvas);
+        t2 = C.EventStreamProvider_touchend.forElement$1(this._display$_canvas);
         t2 = H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t2._html$_target, t2._eventType, W._wrapZone(this.get$_onTouchEvent()), t2._useCapture), [H.getTypeArgumentByIndex(t2, 0)]);
         t2._tryResume$0();
-        t3 = C.EventStreamProvider_touchmove.forElement$1(this._canvas);
+        t3 = C.EventStreamProvider_touchmove.forElement$1(this._display$_canvas);
         t3 = H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t3._html$_target, t3._eventType, W._wrapZone(this.get$_onTouchEvent()), t3._useCapture), [H.getTypeArgumentByIndex(t3, 0)]);
         t3._tryResume$0();
-        t4 = C.EventStreamProvider_touchenter.forElement$1(this._canvas);
+        t4 = C.EventStreamProvider_touchenter.forElement$1(this._display$_canvas);
         t4 = H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t4._html$_target, t4._eventType, W._wrapZone(this.get$_onTouchEvent()), t4._useCapture), [H.getTypeArgumentByIndex(t4, 0)]);
         t4._tryResume$0();
-        t5 = C.EventStreamProvider_touchleave.forElement$1(this._canvas);
+        t5 = C.EventStreamProvider_touchleave.forElement$1(this._display$_canvas);
         t5 = H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t5._html$_target, t5._eventType, W._wrapZone(this.get$_onTouchEvent()), t5._useCapture), [H.getTypeArgumentByIndex(t5, 0)]);
         t5._tryResume$0();
-        t6 = C.EventStreamProvider_touchcancel.forElement$1(this._canvas);
+        t6 = C.EventStreamProvider_touchcancel.forElement$1(this._display$_canvas);
         t6 = H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t6._html$_target, t6._eventType, W._wrapZone(this.get$_onTouchEvent()), t6._useCapture), [H.getTypeArgumentByIndex(t6, 0)]);
         t6._tryResume$0();
         this._touchEventSubscriptions = [t1, t2, t3, t4, t5, t6];
@@ -16256,7 +16160,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         eventType = V.ensureString(t1.$index(jsEvent, "type"));
         jsEvent.callMethod$1("preventDefault");
         for (t1 = jsChangedTouches.get$iterator(jsChangedTouches); t1.moveNext$0();) {
-          jsChangedTouch = P.JsObject_JsObject$fromBrowserObject(t1.__internal$_current);
+          jsChangedTouch = P.JsObject_JsObject$fromBrowserObject(t1._current);
           t2 = J.getInterceptor$asx(jsChangedTouch);
           identifier = V.ensureInt(t2.$index(jsChangedTouch, "identifier"));
           client = new P.Point0(V.ensureNum(t2.$index(jsChangedTouch, "clientX")), V.ensureNum(t2.$index(jsChangedTouch, "clientY")));
@@ -16271,24 +16175,27 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         ctrlKey = t1.get$ctrlKey($event);
         shiftKey = t1.get$shiftKey($event);
         for (t1 = J.get$iterator$ax(t1.get$changedTouches($event)); t1.moveNext$0();) {
-          changedTouch = t1._current;
+          changedTouch = t1._html$_current;
           t2 = J.getInterceptor$x(changedTouch);
           this._onTouchEventProcessor$6(eventType, t2.get$identifier(changedTouch), t2.get$client(changedTouch), altKey, ctrlKey, shiftKey);
         }
       }
     }, "call$1", "get$_onTouchEvent", 2, 0, 113, 109, []],
     _onTouchEventProcessor$6: function(eventType, identifier, client, altKey, ctrlKey, shiftKey) {
-      var stagePoint, localPoint, target, t1, touch, t2, oldTarget, oldTargetList, newTargetList, p, commonCount, t3, t4, t5, ot, i, target0, touchEventType, isTap;
+      var stagePoint, localPoint, target, t1, touchPoint, touchPointID, primaryTouchPoint, t2, oldTarget, oldTargetList, newTargetList, p, commonCount, t3, t4, t5, ot, i, target0, touchEventType, isTap;
       stagePoint = this._clientTransformation.transformPoint$1(client);
       localPoint = new U.Point(0, 0);
       localPoint.$builtinTypeInfo = [P.num];
       target = A.DisplayObjectContainer.prototype.hitTestInput$2.call(this, stagePoint.x, stagePoint.y);
       target = target != null ? target : this;
-      t1 = this._touches;
-      touch = t1.putIfAbsent$2(identifier, new A.Stage__onTouchEventProcessor_closure(this, target));
-      t2 = J.getInterceptor$x(touch);
-      if (!J.$eq(t2.get$currentTarget(touch), target)) {
-        oldTarget = t2.get$currentTarget(touch);
+      t1 = this._touchPoints;
+      touchPoint = t1.putIfAbsent$2(identifier, new A.Stage__onTouchEventProcessor_closure(this, target));
+      touchPointID = touchPoint.get$touchPointID();
+      primaryTouchPoint = touchPoint.get$primaryTouchPoint();
+      C.JSArray_methods.forEach$1(this._drags, new A.Stage__onTouchEventProcessor_closure0(stagePoint, touchPointID));
+      t2 = J.getInterceptor$x(touchPoint);
+      if (!J.$eq(t2.get$currentTarget(touchPoint), target)) {
+        oldTarget = t2.get$currentTarget(touchPoint);
         oldTargetList = [];
         newTargetList = [];
         for (p = oldTarget; p != null; p = J.get$parent$x(p))
@@ -16314,36 +16221,36 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         }
         if (oldTarget != null) {
           oldTarget.globalToLocal$2(stagePoint, localPoint);
-          J.dispatchEvent$1$x(oldTarget, new R.TouchEvent(touch.get$touchPointID(), touch.get$primaryTouchPoint(), localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, altKey, ctrlKey, shiftKey, "touchOut", true, C.EventPhase_1, null, null, false, false));
+          J.dispatchEvent$1$x(oldTarget, new R.TouchEvent(touchPointID, primaryTouchPoint, localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, altKey, ctrlKey, shiftKey, "touchOut", true, C.EventPhase_1, null, null, false, false));
         }
         for (i = 0; i < oldTargetList.length - commonCount; ++i) {
           target0 = oldTargetList[i];
           target0.globalToLocal$2(stagePoint, localPoint);
-          J.dispatchEvent$1$x(target0, new R.TouchEvent(touch.get$touchPointID(), touch.get$primaryTouchPoint(), localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, altKey, ctrlKey, shiftKey, "touchRollOut", false, C.EventPhase_1, null, null, false, false));
+          J.dispatchEvent$1$x(target0, new R.TouchEvent(touchPointID, primaryTouchPoint, localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, altKey, ctrlKey, shiftKey, "touchRollOut", false, C.EventPhase_1, null, null, false, false));
         }
         for (i = newTargetList.length - commonCount - 1; i >= 0; --i) {
           if (i >= newTargetList.length)
             return H.ioore(newTargetList, i);
           target0 = newTargetList[i];
           target0.globalToLocal$2(stagePoint, localPoint);
-          target0.dispatchEvent$1(0, new R.TouchEvent(touch.get$touchPointID(), touch.get$primaryTouchPoint(), localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, altKey, ctrlKey, shiftKey, "touchRollOver", false, C.EventPhase_1, null, null, false, false));
+          target0.dispatchEvent$1(0, new R.TouchEvent(touchPointID, primaryTouchPoint, localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, altKey, ctrlKey, shiftKey, "touchRollOver", false, C.EventPhase_1, null, null, false, false));
         }
         if (target != null) {
           target.globalToLocal$2(stagePoint, localPoint);
-          target.dispatchEvent$1(0, new R.TouchEvent(touch.get$touchPointID(), touch.get$primaryTouchPoint(), localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, altKey, ctrlKey, shiftKey, "touchOver", true, C.EventPhase_1, null, null, false, false));
+          target.dispatchEvent$1(0, new R.TouchEvent(touchPointID, primaryTouchPoint, localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, altKey, ctrlKey, shiftKey, "touchOver", true, C.EventPhase_1, null, null, false, false));
         }
-        t2.set$currentTarget(touch, target);
+        t2.set$currentTarget(touchPoint, target);
       }
       t3 = J.getInterceptor(eventType);
       if (t3.$eq(eventType, "touchstart")) {
-        this._canvas.focus();
-        t1.$indexSet(0, identifier, touch);
+        this._display$_canvas.focus();
+        t1.$indexSet(0, identifier, touchPoint);
         touchEventType = "touchBegin";
       } else
         touchEventType = null;
       if (t3.$eq(eventType, "touchend")) {
         t1.remove$1(0, identifier);
-        isTap = J.$eq(t2.get$target(touch), target);
+        isTap = J.$eq(t2.get$target(touchPoint), target);
         touchEventType = "touchEnd";
       } else
         isTap = false;
@@ -16355,9 +16262,9 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         touchEventType = "touchMove";
       if (touchEventType != null && target != null) {
         target.globalToLocal$2(stagePoint, localPoint);
-        target.dispatchEvent$1(0, new R.TouchEvent(touch.get$touchPointID(), touch.get$primaryTouchPoint(), localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, altKey, ctrlKey, shiftKey, touchEventType, true, C.EventPhase_1, null, null, false, false));
+        target.dispatchEvent$1(0, new R.TouchEvent(touchPointID, primaryTouchPoint, localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, altKey, ctrlKey, shiftKey, touchEventType, true, C.EventPhase_1, null, null, false, false));
         if (isTap)
-          target.dispatchEvent$1(0, new R.TouchEvent(touch.get$touchPointID(), touch.get$primaryTouchPoint(), localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, altKey, ctrlKey, shiftKey, "touchTap", true, C.EventPhase_1, null, null, false, false));
+          target.dispatchEvent$1(0, new R.TouchEvent(touchPointID, primaryTouchPoint, localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, altKey, ctrlKey, shiftKey, "touchTap", true, C.EventPhase_1, null, null, false, false));
       }
     },
     _onKeyEvent$1: [function($event) {
@@ -16367,10 +16274,10 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       return;
     }, "call$1", "get$_onKeyEvent", 2, 0, 114, 109, []],
     Stage$7$alpha$color$frameRate$height$webGL$width: function(canvas, alpha, color, frameRate, height, webGL, width) {
-      var t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, exception;
+      var t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, exception;
       if (!J.getInterceptor(canvas).$isCanvasElement)
         throw H.wrapException(P.ArgumentError$("The canvas argument is not a CanvasElement"));
-      this._canvas = canvas;
+      this._display$_canvas = canvas;
       if (J.get$tabIndex$x(canvas) === -1)
         J.set$tabIndex$x(canvas, 0);
       if (J.get$outline$x(J.get$style$x(canvas)) === "")
@@ -16388,16 +16295,14 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
           t5 = P.LinkedHashMap_LinkedHashMap(null, null, null, P.String, P.UniformLocation);
           t6 = new Int16Array(H._checkLength(2048));
           t7 = new Float32Array(H._checkLength(8192));
-          t8 = new T.Matrix3D(new Float32Array(H._checkLength(16)));
-          t8.setIdentity$0();
-          t9 = P.LinkedHashMap_LinkedHashMap(null, null, null, P.String, P.$int);
-          t10 = P.LinkedHashMap_LinkedHashMap(null, null, null, P.String, P.UniformLocation);
-          t11 = H.setRuntimeTypeInfo([], [L.RenderFrameBuffer]);
-          t12 = new T.Matrix3D(new Float32Array(H._checkLength(16)));
-          t12.setIdentity$0();
-          t12 = new L.RenderContextWebGL(t1, t2, new L.RenderProgramTriangle(null, null, 0, 0, 0, t3, -1, null, null, t4, t5), new L.RenderProgramMesh(null, null, null, null, null, 0, 0, 0, 0, 0, t6, t7, t8, -1, null, null, t9, t10), t11, null, t12, null, null, null, null, true, 0, 0, 0, 0, P.StreamController_StreamController$broadcast(null, null, false, L.RenderContextEvent), P.StreamController_StreamController$broadcast(null, null, false, L.RenderContextEvent));
-          t12.RenderContextWebGL$3$alpha$antialias(t1, alpha, false);
-          this._renderContext = t12;
+          t8 = P.LinkedHashMap_LinkedHashMap(null, null, null, P.String, P.$int);
+          t9 = P.LinkedHashMap_LinkedHashMap(null, null, null, P.String, P.UniformLocation);
+          t10 = H.setRuntimeTypeInfo([], [L.RenderFrameBuffer]);
+          t11 = new T.Matrix3D(new Float32Array(H._checkLength(16)));
+          t11.setIdentity$0();
+          t11 = new L.RenderContextWebGL(t1, t2, new L.RenderProgramTriangle(null, null, 0, 0, 0, t3, -1, null, null, t4, t5), new L.RenderProgramMesh(null, null, null, null, 0, 0, 0, 0, 0, t6, t7, -1, null, null, t8, t9), t10, null, t11, null, null, null, null, true, 0, 0, 0, 0, P.StreamController_StreamController$broadcast(null, null, false, L.RenderContextEvent), P.StreamController_StreamController$broadcast(null, null, false, L.RenderContextEvent));
+          t11.RenderContextWebGL$3$alpha$antialias(t1, alpha, false);
+          this._renderContext = t11;
         } catch (exception) {
           H.unwrapException(exception);
           t1 = canvas;
@@ -16433,26 +16338,27 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t1._html$_target, t1._eventType, W._wrapZone(this.get$_onMouseWheelEvent()), t1._useCapture), [H.getTypeArgumentByIndex(t1, 0)])._tryResume$0();
       $.get$Mouse_onCursorChanged().listen$1(new A.Stage_closure(this));
       $.get$Multitouch_onInputModeChanged().listen$1(this.get$_onMultitouchInputModeChanged());
-      this._onMultitouchInputModeChanged$1(null);
+      this._onMultitouchInputModeChanged$1($.Multitouch__inputMode);
     },
     $isStage: true,
     static: {"^": "Stage_autoHiDpi,Stage_resizeEvent,Stage_mouseLeaveEvent", Stage$: function(canvas, alpha, color, frameRate, height, webGL, width) {
-        var t1, t2, t3, t4, t5, t6, t7, t8;
-        t1 = H.setRuntimeTypeInfo(new U.Rectangle0(0, 0, 0, 0), [P.num]);
-        t2 = T.Matrix$fromIdentity();
+        var t1, t2, t3, t4, t5, t6, t7, t8, t9;
+        t1 = new K.Juggler(null, null, 0);
+        t2 = new K._AnimatableLink(null, null);
+        t1._firstAnimatableLink = t2;
+        t1._lastAnimatableLink = t2;
+        t2 = H.setRuntimeTypeInfo(new U.Rectangle0(0, 0, 0, 0), [P.num]);
         t3 = T.Matrix$fromIdentity();
-        t4 = new K.Juggler(null, null, 0);
-        t5 = new K._AnimatableLink(null, null);
-        t4._firstAnimatableLink = t5;
-        t4._lastAnimatableLink = t5;
+        t4 = T.Matrix$fromIdentity();
         t5 = H.setRuntimeTypeInfo(new U.Point(0, 0), [P.num]);
-        t6 = P.LinkedHashMap_LinkedHashMap(null, null, null, P.$int, A._Touch);
-        t7 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
-        t8 = $.DisplayObject__nextID;
-        $.DisplayObject__nextID = t8 + 1;
-        t8 = new A.Stage(null, null, 0, 0, 0, 30, 0, 0, t1, t2, t3, null, t4, null, null, C.StageRenderMode_0, C.StageScaleMode_3, C.StageAlign_8, "default", t5, null, t6, [new A._MouseButton("mouseDown", "mouseUp", "click", "doubleClick", null, false, 0, 0), new A._MouseButton("middleMouseDown", "middleMouseUp", "middleClick", "middleClick", null, false, 0, 0), new A._MouseButton("rightMouseDown", "rightMouseUp", "rightClick", "rightClick", null, false, 0, 0)], [], t7, true, true, false, true, "auto", true, 0, t8, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
-        t8.Stage$7$alpha$color$frameRate$height$webGL$width(canvas, alpha, color, frameRate, height, webGL, width);
-        return t8;
+        t6 = H.setRuntimeTypeInfo([], [A._Drag]);
+        t7 = P.LinkedHashMap_LinkedHashMap(null, null, null, P.$int, A._TouchPoint);
+        t8 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
+        t9 = $.DisplayObject__nextID;
+        $.DisplayObject__nextID = t9 + 1;
+        t9 = new A.Stage(null, null, t1, null, 0, 0, 0, 30, 0, 0, t2, t3, t4, null, null, C.StageRenderMode_0, C.StageScaleMode_3, C.StageAlign_8, "default", t5, null, t6, t7, [new A._MouseButton("mouseDown", "mouseUp", "click", "doubleClick", null, false, 0, 0), new A._MouseButton("middleMouseDown", "middleMouseUp", "middleClick", "middleClick", null, false, 0, 0), new A._MouseButton("rightMouseDown", "rightMouseUp", "rightClick", "rightClick", null, false, 0, 0)], [], t8, true, true, false, true, "auto", true, 0, t9, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
+        t9.Stage$7$alpha$color$frameRate$height$webGL$width(canvas, alpha, color, frameRate, height, webGL, width);
+        return t9;
       }}
   },
   Stage_closure: {
@@ -16460,6 +16366,12 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     call$1: [function(cursorName) {
       return this.this_0._updateMouseCursor$0();
     }, "call$1", null, 2, 0, null, 115, [], "call"]
+  },
+  Stage__onMouseEvent_closure: {
+    "^": "Closure:12;stagePoint_0",
+    call$1: function(d) {
+      return d.update$2(0, this.stagePoint_0);
+    }
   },
   Stage__onMultitouchInputModeChanged_closure: {
     "^": "Closure:12;",
@@ -16472,11 +16384,298 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     call$0: function() {
       var t1, t2, t3;
       t1 = this.target_1;
-      t2 = this.this_0._touches._collection$_length;
-      t3 = $._Touch__globalTouchPointID;
-      $._Touch__globalTouchPointID = t3 + 1;
-      return new A._Touch(t3, t2 === 0, t1, t1);
+      t2 = this.this_0._touchPoints._length;
+      t3 = $._TouchPoint__globalTouchPointID;
+      $._TouchPoint__globalTouchPointID = t3 + 1;
+      return new A._TouchPoint(t3, t2 === 0, t1, t1);
     }
+  },
+  Stage__onTouchEventProcessor_closure0: {
+    "^": "Closure:12;stagePoint_2,touchPointID_3",
+    call$1: function(d) {
+      return d.update$2(this.touchPointID_3, this.stagePoint_2);
+    }
+  },
+  StageAlign: {
+    "^": "Object;index>",
+    static: {"^": "StageAlign_BOTTOM,StageAlign_BOTTOM_LEFT,StageAlign_BOTTOM_RIGHT,StageAlign_LEFT,StageAlign_RIGHT,StageAlign_TOP,StageAlign_TOP_LEFT,StageAlign_TOP_RIGHT,StageAlign_NONE"}
+  },
+  StageRenderMode: {
+    "^": "Object;index>",
+    static: {"^": "StageRenderMode_AUTO,StageRenderMode_STOP,StageRenderMode_ONCE"}
+  },
+  StageScaleMode: {
+    "^": "Object;index>",
+    static: {"^": "StageScaleMode_EXACT_FIT,StageScaleMode_NO_BORDER,StageScaleMode_NO_SCALE,StageScaleMode_SHOW_ALL"}
+  },
+  _MouseButton: {
+    "^": "Object;mouseDownEventType,mouseUpEventType,mouseClickEventType,mouseDoubleClickEventType,target>,buttonDown,clickTime,clickCount"
+  },
+  _TouchPoint: {
+    "^": "Object;touchPointID<,primaryTouchPoint<,target>,currentTarget*",
+    $is_TouchPoint: true,
+    static: {"^": "_TouchPoint__globalTouchPointID"}
+  },
+  _Drag: {
+    "^": "Object;",
+    $is_Drag: true
+  }
+}],
+["stagexl.drawing", "package:stagexl/src/drawing.dart", , U, {
+  "^": "",
+  _GraphicsCommandFillColor: {
+    "^": "_GraphicsCommandFill;color",
+    drawCanvas$1: function(context) {
+      var t1 = J.getInterceptor$x(context);
+      t1.set$fillStyle(context, this.color);
+      t1.fill$0(context);
+    }
+  },
+  _GraphicsCommandLineTo: {
+    "^": "_GraphicsCommand;x>,y>",
+    updateBounds$1: function(bounds) {
+      var t1, t2;
+      if (!(!isNaN(bounds.cursorX) && !isNaN(bounds.cursorY))) {
+        bounds.cursorX = this.x;
+        bounds.cursorY = this.y;
+      }
+      bounds.updatePath$2(bounds.cursorX, bounds.cursorY);
+      t1 = this.x;
+      t2 = this.y;
+      bounds.updatePath$2(t1, t2);
+      bounds.cursorX = t1;
+      bounds.cursorY = t2;
+    },
+    drawCanvas$1: function(context) {
+      J.lineTo$2$x(context, this.x, this.y);
+    }
+  },
+  _GraphicsCommandMoveTo: {
+    "^": "_GraphicsCommand;x>,y>",
+    updateBounds$1: function(bounds) {
+      bounds.cursorX = this.x;
+      bounds.cursorY = this.y;
+    },
+    drawCanvas$1: function(context) {
+      J.moveTo$2$x(context, this.x, this.y);
+    }
+  },
+  _GraphicsCommandStrokeColor: {
+    "^": "_GraphicsCommandStroke;color,lineWidth,lineJoin,lineCap",
+    drawCanvas$1: function(context) {
+      var t1 = J.getInterceptor$x(context);
+      t1.set$strokeStyle(context, this.color);
+      t1.set$lineWidth(context, this.lineWidth);
+      t1.set$lineJoin(context, this.lineJoin);
+      t1.set$lineCap(context, this.lineCap);
+      t1.stroke$0(context);
+    }
+  },
+  Graphics: {
+    "^": "Object;_commands,_boundsRectangle,_boundsRefresh",
+    get$bounds: function() {
+      var graphicsBounds, commands, i, t1, t2, t3, t4, t5;
+      if (this._boundsRefresh) {
+        graphicsBounds = new U._GraphicsBounds(0 / 0, 0 / 0, 1 / 0, -1 / 0, 1 / 0, -1 / 0, 1 / 0, -1 / 0, 1 / 0, -1 / 0);
+        commands = this._commands;
+        for (i = 0; i < commands.length; ++i)
+          commands[i].updateBounds$1(graphicsBounds);
+        this._boundsRefresh = false;
+        t1 = this._boundsRectangle;
+        t2 = graphicsBounds.getRectangle$0();
+        t3 = t2.left;
+        t4 = t2.top;
+        t5 = t2.width;
+        t2 = t2.height;
+        t1.left = t3;
+        t1.top = t4;
+        t1.width = t5;
+        t1.height = t2;
+      }
+      t1 = this._boundsRectangle;
+      return H.setRuntimeTypeInfo(new U.Rectangle0(t1.left, t1.top, t1.width, t1.height), [H.getTypeArgumentByIndex(t1, 0)]);
+    },
+    hitTest$2: function(localX, localY) {
+      var context, commands, hit, i, t1;
+      context = $.get$_dummyCanvasContext0();
+      commands = this._commands;
+      if (this.get$bounds().contains$2(0, localX, localY)) {
+        context.setTransform(1, 0, 0, 1, 0, 0);
+        context.beginPath();
+        hit = false;
+        i = 0;
+        while (true) {
+          t1 = commands.length;
+          if (!(i < t1 && hit === false))
+            break;
+          if (i >= t1)
+            return H.ioore(commands, i);
+          hit = commands[i].hitTest$3(context, localX, localY);
+          ++i;
+        }
+      } else
+        hit = false;
+      return hit;
+    },
+    render$1: function(renderState) {
+      if (!!J.getInterceptor(renderState._engine$_renderContext).$isRenderContextWebGL)
+        ;
+      else
+        this._renderCanvas$1(renderState);
+    },
+    _renderCanvas$1: function(renderState) {
+      var renderContext, rawContext, commands, i;
+      renderContext = renderState._engine$_renderContext;
+      rawContext = renderContext.get$rawContext();
+      commands = this._commands;
+      renderContext.setTransform$1(0, renderState._currentContextState.matrix);
+      renderContext.setAlpha$1(renderState._currentContextState.alpha);
+      J.beginPath$0$x(rawContext);
+      for (i = 0; i < commands.length; ++i)
+        commands[i].drawCanvas$1(rawContext);
+    },
+    static: {"^": "Graphics__BASE_64"}
+  },
+  _GraphicsBounds: {
+    "^": "Object;cursorX,cursorY,pathLeft,pathRight,pathTop,pathBottom,boundsLeft,boundsRight,boundsTop,boundsBottom",
+    get$hasPath: function() {
+      var t1 = this.pathLeft;
+      if (!(t1 == Infinity || t1 == -Infinity)) {
+        t1 = this.pathRight;
+        if (!(t1 == Infinity || t1 == -Infinity)) {
+          t1 = this.pathTop;
+          if (!(t1 == Infinity || t1 == -Infinity)) {
+            t1 = this.pathBottom;
+            t1 = !(t1 == Infinity || t1 == -Infinity);
+          } else
+            t1 = false;
+        } else
+          t1 = false;
+      } else
+        t1 = false;
+      return t1;
+    },
+    updatePath$2: function(x, y) {
+      if (!isNaN(this.cursorX) && !isNaN(this.cursorY)) {
+        if (this.pathLeft > x)
+          this.pathLeft = x;
+        if (this.pathRight < x)
+          this.pathRight = x;
+        if (this.pathTop > y)
+          this.pathTop = y;
+        if (this.pathBottom < y)
+          this.pathBottom = y;
+      }
+    },
+    getRectangle$0: function() {
+      var t1, t2, t3, t4;
+      t1 = this.boundsLeft;
+      if (!(t1 == Infinity || t1 == -Infinity)) {
+        t2 = this.boundsRight;
+        if (!(t2 == Infinity || t2 == -Infinity)) {
+          t2 = this.boundsTop;
+          if (!(t2 == Infinity || t2 == -Infinity)) {
+            t2 = this.boundsBottom;
+            t2 = !(t2 == Infinity || t2 == -Infinity);
+          } else
+            t2 = false;
+        } else
+          t2 = false;
+      } else
+        t2 = false;
+      if (t2) {
+        t2 = this.boundsRight;
+        t3 = this.boundsBottom;
+        t4 = this.boundsTop;
+        return H.setRuntimeTypeInfo(new U.Rectangle0(t1, t4, t2 - t1, t3 - t4), [P.num]);
+      } else
+        return H.setRuntimeTypeInfo(new U.Rectangle0(0, 0, 0, 0), [P.num]);
+    }
+  },
+  _GraphicsCommand: {
+    "^": "Object;",
+    updateBounds$1: function(bounds) {
+    },
+    drawCanvas$1: function(context) {
+    },
+    hitTest$3: function(context, localX, localY) {
+      this.drawCanvas$1(context);
+      return false;
+    },
+    $is_GraphicsCommand: true
+  },
+  _GraphicsCommandFill: {
+    "^": "_GraphicsCommand;",
+    updateBounds$1: function(bounds) {
+      var t1, t2;
+      if (bounds.get$hasPath()) {
+        t1 = bounds.boundsLeft;
+        t2 = bounds.pathLeft;
+        if (t1 > t2)
+          bounds.boundsLeft = t2;
+        t1 = bounds.boundsRight;
+        t2 = bounds.pathRight;
+        if (t1 < t2)
+          bounds.boundsRight = t2;
+        t1 = bounds.boundsTop;
+        t2 = bounds.pathTop;
+        if (t1 > t2)
+          bounds.boundsTop = t2;
+        t1 = bounds.boundsBottom;
+        t2 = bounds.pathBottom;
+        if (t1 < t2)
+          bounds.boundsBottom = t2;
+      }
+    },
+    hitTest$3: function(context, localX, localY) {
+      var t1, exception;
+      try {
+        t1 = J.isPointInPath$2$x(context, localX, localY);
+        return t1;
+      } catch (exception) {
+        H.unwrapException(exception);
+        return true;
+      }
+
+    }
+  },
+  _GraphicsCommandStroke: {
+    "^": "_GraphicsCommand;",
+    updateBounds$1: function(bounds) {
+      var lw, left, right, $top, bottom;
+      if (bounds.get$hasPath()) {
+        lw = this.lineWidth / 2;
+        left = bounds.pathLeft - lw;
+        right = bounds.pathRight + lw;
+        $top = bounds.pathTop - lw;
+        bottom = bounds.pathBottom + lw;
+        if (bounds.boundsLeft > left)
+          bounds.boundsLeft = left;
+        if (bounds.boundsRight < right)
+          bounds.boundsRight = right;
+        if (bounds.boundsTop > $top)
+          bounds.boundsTop = $top;
+        if (bounds.boundsBottom < bottom)
+          bounds.boundsBottom = bottom;
+      }
+    },
+    hitTest$3: function(context, localX, localY) {
+      var t1, exception;
+      J.set$lineWidth$x(context, this.lineWidth);
+      J.set$lineJoin$x(context, this.lineJoin);
+      J.set$lineCap$x(context, this.lineCap);
+      try {
+        t1 = J.isPointInStroke$2$x(context, localX, localY);
+        return t1;
+      } catch (exception) {
+        H.unwrapException(exception);
+        return false;
+      }
+
+    }
+  },
+  GraphicsGradient: {
+    "^": "Object;"
   }
 }],
 ["stagexl.engine", "package:stagexl/src/engine.dart", , L, {
@@ -16510,6 +16709,9 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
   },
   RenderContextCanvas: {
     "^": "RenderContext;_canvasElement,_renderingContext,_identityMatrix,_activeBlendMode,_activeAlpha,_contextLostEvent,_contextRestoredEvent",
+    get$rawContext: function() {
+      return this._renderingContext;
+    },
     get$renderEngine: function() {
       return "Canvas2D";
     },
@@ -16546,7 +16748,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       var context, source, rotation, xyList, t1, matrix, alpha, blendMode, sourceX, sourceY, t2, destinationX, destinationY, destinationWidth, destinationHeight, t3, t4, t5, t6, t7;
       context = this._renderingContext;
       source = renderTextureQuad._renderTexture._engine$_source;
-      rotation = renderTextureQuad._engine$_rotation;
+      rotation = renderTextureQuad._rotation;
       xyList = renderTextureQuad._xyList;
       t1 = renderState._currentContextState;
       matrix = t1.matrix;
@@ -16655,10 +16857,17 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       var t1 = matrix._data;
       this._renderingContext.setTransform(t1[0], t1[1], t1[2], t1[3], t1[4], t1[5]);
     },
+    setAlpha$1: function(alpha) {
+      this._activeAlpha = alpha;
+      this._renderingContext.globalAlpha = alpha;
+    },
     $isRenderContextCanvas: true
   },
   RenderContextWebGL: {
     "^": "RenderContext;_canvasElement,renderProgramQuad,renderProgramTriangle,renderProgramMesh,_renderFrameBufferPool,_renderingContext,_projectionMatrix,_activeRenderTexture,_activeRenderProgram,_activeRenderFrameBuffer,_activeBlendMode,_contextValid,_contextIdentifier,_stencilDepth@,_viewportWidth,_viewportHeight,_contextLostEvent,_contextRestoredEvent",
+    get$rawContext: function() {
+      return this._renderingContext;
+    },
     get$renderEngine: function() {
       return "WebGL";
     },
@@ -16741,9 +16950,9 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
           if (t2._textureSourceWorkaround) {
             t3 = t2._storeWidth;
             t3 = W.CanvasElement_CanvasElement(t2._storeHeight, t3);
-            t2._engine$_canvas = t3;
+            t2._canvas = t3;
             J.get$context2D$x(t3).drawImage(t2._engine$_source, 0, 0);
-            t2._renderingContext.texImage2D(3553, 0, 6408, 6408, 5121, t2._engine$_canvas);
+            t2._renderingContext.texImage2D(3553, 0, 6408, 6408, 5121, t2._canvas);
           }
         } else {
           t2._renderingContext.activeTexture(33984);
@@ -16870,6 +17079,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       this._contextIdentifier = t1;
       this.reset$0(0);
     },
+    $isRenderContextWebGL: true,
     static: {"^": "RenderContextWebGL__globalContextIdentifier"}
   },
   RenderFrameBuffer: {
@@ -16947,9 +17157,9 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     }
   },
   RenderProgramMesh: {
-    "^": "RenderProgram;_vertexBuffer,_indexBuffer,_uProjectionMatrixLocation,_uGlobalMatrixLocation,_uSamplerLocation,_aVertexPositionLocation,_aVertexTextCoordLocation,_aVertexColorLocation,_vertexCount,_indexCount,_indexList,_vertexList,_globalMatrix,_contextIdentifier,_renderingContext,_program,_attributeLocations,_uniformLocations",
+    "^": "RenderProgram;_vertexBuffer,_indexBuffer,_uProjectionMatrixLocation,_uSamplerLocation,_aVertexPositionLocation,_aVertexTextCoordLocation,_aVertexColorLocation,_vertexCount,_indexCount,_indexList,_vertexList,_contextIdentifier,_renderingContext,_program,_attributeLocations,_uniformLocations",
     get$vertexShaderSource: function() {
-      return "    attribute vec2 aVertexPosition;\r\n    attribute vec2 aVertexTextCoord;\r\n    attribute vec4 aVertexColor;\r\n    uniform mat4 uProjectionMatrix;\r\n    uniform mat4 uGlobalMatrix;\r\n    varying vec2 vTextCoord;\r\n    varying vec4 vColor; \r\n\r\n    void main() {\r\n      vTextCoord = aVertexTextCoord;\r\n      vColor = aVertexColor;\r\n      gl_Position = vec4(aVertexPosition, 0.0, 1.0) * uGlobalMatrix * uProjectionMatrix;\r\n    }\r\n    ";
+      return "    attribute vec2 aVertexPosition;\r\n    attribute vec2 aVertexTextCoord;\r\n    attribute vec4 aVertexColor;\r\n    uniform mat4 uProjectionMatrix;\r\n    varying vec2 vTextCoord;\r\n    varying vec4 vColor; \r\n\r\n    void main() {\r\n      vTextCoord = aVertexTextCoord;\r\n      vColor = aVertexColor;\r\n      gl_Position = vec4(aVertexPosition, 0.0, 1.0) * uProjectionMatrix;\r\n    }\r\n    ";
     },
     get$fragmentShaderSource: function() {
       return "    precision mediump float;\r\n    uniform sampler2D uSampler;\r\n    varying vec2 vTextCoord;\r\n    varying vec4 vColor; \r\n\r\n    void main() {\r\n      vec4 color = texture2D(uSampler, vTextCoord);\r\n      gl_FragColor = vec4(color.rgb * vColor.rgb * vColor.a, color.a * vColor.a);\r\n    }\r\n    ";
@@ -17260,25 +17470,25 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       }}
   },
   RenderTexture: {
-    "^": "Object;_engine$_width,_engine$_height,_transparent,_storePixelRatio,_storeWidth,_storeHeight,_engine$_source,_engine$_canvas,_video,_quad,_filtering,_contextIdentifier,_textureSourceWorkaround,_renderingContext,_texture,_videoUpdateTime",
+    "^": "Object;_width,_height,_transparent,_storePixelRatio,_storeWidth,_storeHeight,_engine$_source,_canvas,_quad,_filtering,_contextIdentifier,_textureSourceWorkaround,_renderingContext,_texture,_videoUpdateTime",
     get$quad: function() {
       return this._quad;
     },
     get$width: function(_) {
-      return this._engine$_width;
+      return this._width;
     },
     get$height: function(_) {
-      return this._engine$_height;
+      return this._height;
     },
     resize$2: function(_, width, height) {
-      if (width !== this._engine$_width || height !== this._engine$_height) {
-        this._engine$_width = V.ensureInt(width);
-        this._engine$_height = V.ensureInt(height);
-        this._storeWidth = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._engine$_width * this._storePixelRatio));
-        this._storeHeight = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._engine$_height * this._storePixelRatio));
-        J.set$width$x(this._engine$_canvas, this._storeWidth);
-        J.set$height$x(this._engine$_canvas, this._storeHeight);
-        this._quad = L.RenderTextureQuad$(this, 0, 0, 0, 0, 0, this._engine$_width, this._engine$_height);
+      if (width !== this._width || height !== this._height) {
+        this._width = V.ensureInt(width);
+        this._height = V.ensureInt(height);
+        this._storeWidth = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._width * this._storePixelRatio));
+        this._storeHeight = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._height * this._storePixelRatio));
+        J.set$width$x(this._canvas, this._storeWidth);
+        J.set$height$x(this._canvas, this._storeHeight);
+        this._quad = L.RenderTextureQuad$(this, 0, 0, 0, 0, 0, this._width, this._height);
       }
     },
     update$0: function() {
@@ -17286,8 +17496,8 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         this._renderingContext.activeTexture(33994);
         this._renderingContext.bindTexture(3553, this._texture);
         if (this._textureSourceWorkaround) {
-          J.get$context2D$x(this._engine$_canvas).drawImage(this._engine$_source, 0, 0);
-          this._renderingContext.texImage2D(3553, 0, 6408, 6408, 5121, this._engine$_canvas);
+          J.get$context2D$x(this._canvas).drawImage(this._engine$_source, 0, 0);
+          this._renderingContext.texImage2D(3553, 0, 6408, 6408, 5121, this._canvas);
         } else
           this._renderingContext.texImage2D(3553, 0, 6408, 6408, 5121, this._engine$_source);
         this._renderingContext.bindTexture(3553, null);
@@ -17297,20 +17507,20 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       var t1, context;
       if (width === 0 && height === 0)
         throw H.wrapException(P.ArgumentError$(null));
-      this._engine$_width = V.ensureInt(width);
-      this._engine$_height = V.ensureInt(height);
+      this._width = V.ensureInt(width);
+      this._height = V.ensureInt(height);
       this._transparent = V.ensureBool(transparent);
       t1 = V.ensureNum(storePixelRatio);
       this._storePixelRatio = t1;
-      this._storeWidth = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._engine$_width * t1));
-      t1 = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._engine$_height * this._storePixelRatio));
+      this._storeWidth = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._width * t1));
+      t1 = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._height * this._storePixelRatio));
       this._storeHeight = t1;
       t1 = W.CanvasElement_CanvasElement(t1, this._storeWidth);
       this._engine$_source = t1;
-      this._engine$_canvas = t1;
-      this._quad = L.RenderTextureQuad$(this, 0, 0, 0, 0, 0, this._engine$_width, this._engine$_height);
+      this._canvas = t1;
+      this._quad = L.RenderTextureQuad$(this, 0, 0, 0, 0, 0, this._width, this._height);
       if (fillColor !== 0 || !transparent) {
-        context = J.get$context2D$x(this._engine$_canvas);
+        context = J.get$context2D$x(this._canvas);
         context.fillStyle = transparent ? V.color2rgba(fillColor) : V.color2rgb(fillColor);
         context.fillRect(0, 0, this._storeWidth, this._storeHeight);
       }
@@ -17319,21 +17529,21 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       var t1, t2;
       this._storePixelRatio = V.ensureNum(imagePixelRatio);
       t1 = J.getInterceptor$x(imageElement);
-      this._engine$_width = C.JSNumber_methods.toInt$0(Math.floor(V.ensureNum(t1.get$width(imageElement)) / this._storePixelRatio));
-      this._engine$_height = C.JSNumber_methods.toInt$0(Math.floor(V.ensureNum(t1.get$height(imageElement)) / this._storePixelRatio));
-      this._storeWidth = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._engine$_width * this._storePixelRatio));
-      t2 = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._engine$_height * this._storePixelRatio));
+      this._width = C.JSNumber_methods.toInt$0(Math.floor(V.ensureNum(t1.get$width(imageElement)) / this._storePixelRatio));
+      this._height = C.JSNumber_methods.toInt$0(Math.floor(V.ensureNum(t1.get$height(imageElement)) / this._storePixelRatio));
+      this._storeWidth = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._width * this._storePixelRatio));
+      t2 = C.JSNumber_methods.toInt$0(C.JSNumber_methods.roundToDouble$0(this._height * this._storePixelRatio));
       this._storeHeight = t2;
       this._transparent = true;
       t2 = W.CanvasElement_CanvasElement(t2, this._storeWidth);
       this._engine$_source = t2;
-      this._engine$_canvas = t2;
-      this._quad = L.RenderTextureQuad$(this, 0, 0, 0, 0, 0, this._engine$_width, this._engine$_height);
+      this._canvas = t2;
+      this._quad = L.RenderTextureQuad$(this, 0, 0, 0, 0, 0, this._width, this._height);
       this._texture = null;
-      J.get$context2D$x(this._engine$_canvas).drawImage(imageElement, 0, 0, t1.get$width(imageElement), t1.get$height(imageElement), 0, 0, this._storeWidth, this._storeHeight);
+      J.get$context2D$x(this._canvas).drawImage(imageElement, 0, 0, t1.get$width(imageElement), t1.get$height(imageElement), 0, 0, this._storeWidth, this._storeHeight);
     },
     static: {RenderTexture$: function(width, height, transparent, fillColor, storePixelRatio) {
-        var t1 = new L.RenderTexture(0, 0, true, 1, 0, 0, null, null, null, null, C.RenderTextureFiltering_9729, -1, false, null, null, -1);
+        var t1 = new L.RenderTexture(0, 0, true, 1, 0, 0, null, null, null, C.RenderTextureFiltering_9729, -1, false, null, null, -1);
         t1.RenderTexture$5(width, height, transparent, fillColor, storePixelRatio);
         return t1;
       }, RenderTexture_load: function(url, autoHiDpi, webpAvailable, corsEnabled) {
@@ -17356,7 +17566,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     call$1: [function(image) {
       var t1, t2;
       t1 = this.hiDpi_0 ? 2 : 1;
-      t2 = new L.RenderTexture(0, 0, true, 1, 0, 0, null, null, null, null, C.RenderTextureFiltering_9729, -1, false, null, null, -1);
+      t2 = new L.RenderTexture(0, 0, true, 1, 0, 0, null, null, null, C.RenderTextureFiltering_9729, -1, false, null, null, -1);
       t2.RenderTexture$fromImageElement$2(image, t1);
       return t2;
     }, "call$1", null, 2, 0, null, 119, [], "call"]
@@ -17366,11 +17576,11 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     static: {"^": "RenderTextureFiltering_NEAREST,RenderTextureFiltering_LINEAR"}
   },
   RenderTextureQuad: {
-    "^": "Object;_renderTexture,_uvList,_xyList,_engine$_rotation,_offsetX,_offsetY,_textureX,_textureY,_textureWidth,_textureHeight",
+    "^": "Object;_renderTexture,_uvList,_xyList,_rotation,_offsetX,_offsetY,_textureX,_textureY,_textureWidth,_textureHeight",
     get$drawMatrix: function() {
       var s, t1;
       s = this._renderTexture._storePixelRatio;
-      t1 = this._engine$_rotation;
+      t1 = this._rotation;
       if (t1 === 0)
         return T.Matrix$(s, 0, 0, s, s * (this._textureX - this._offsetX), s * (this._textureY - this._offsetY));
       else if (t1 === 1)
@@ -17405,7 +17615,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       bottom0 = $top < t1 ? $top : t1;
       if (bottom > bottom0)
         bottom0 = bottom;
-      t1 = this._engine$_rotation;
+      t1 = this._rotation;
       if (t1 === 0) {
         textureX = this._textureX - right + left0;
         textureY = this._textureY - bottom + top0;
@@ -17427,7 +17637,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     RenderTextureQuad$8: function(renderTexture, rotation, offsetX, offsetY, textureX, textureY, textureWidth, textureHeight) {
       var t1, t2, x4, y2, x3, y4, y3, x2, y1, x1, renderTextureWidth, renderTextureHeight, storePixelRatio;
       this._renderTexture = renderTexture;
-      this._engine$_rotation = V.ensureInt(rotation);
+      this._rotation = V.ensureInt(rotation);
       this._offsetX = V.ensureInt(offsetX);
       this._offsetY = V.ensureInt(offsetY);
       this._textureX = V.ensureInt(textureX);
@@ -17435,7 +17645,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       this._textureWidth = V.ensureInt(textureWidth);
       t1 = V.ensureInt(textureHeight);
       this._textureHeight = t1;
-      t2 = this._engine$_rotation;
+      t2 = this._rotation;
       if (t2 === 0) {
         x4 = this._textureX;
         y2 = this._textureY;
@@ -17477,8 +17687,8 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
         x1 = x2;
       }
       t1 = this._renderTexture;
-      renderTextureWidth = t1._engine$_width;
-      renderTextureHeight = t1._engine$_height;
+      renderTextureWidth = t1._width;
+      renderTextureHeight = t1._height;
       storePixelRatio = t1._storePixelRatio;
       t1 = this._uvList;
       t1[0] = x1 / renderTextureWidth;
@@ -17518,7 +17728,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       if (!subscription._canceled) {
         broadcastEvent._stopsPropagation = false;
         broadcastEvent._stopsImmediatePropagation = false;
-        t1 = subscription._eventStream._events$_target;
+        t1 = subscription._eventStream.target;
         broadcastEvent._events$_target = t1;
         broadcastEvent._currentTarget = t1;
         broadcastEvent._eventPhase = C.EventPhase_1;
@@ -17608,11 +17818,11 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     }
   },
   EventPhase: {
-    "^": "Object;_events$_ordinal",
+    "^": "Object;index>",
     static: {"^": "EventPhase_CAPTURING_PHASE,EventPhase_AT_TARGET,EventPhase_BUBBLING_PHASE"}
   },
   EventStream: {
-    "^": "Stream;_events$_target,_events$_eventType,_subscriptions,_capturingSubscriptionCount",
+    "^": "Stream;target>,eventType,_subscriptions,_capturingSubscriptionCount",
     get$hasSubscriptions: function() {
       return this._subscriptions.length > 0;
     },
@@ -17622,11 +17832,8 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     get$hasBubblingSubscriptions: function() {
       return this._subscriptions.length > this._capturingSubscriptionCount;
     },
-    get$target: function(_) {
-      return this._events$_target;
-    },
     listen$5$cancelOnError$onDone$onError$priority: function(onData, cancelOnError, onDone, onError, priority) {
-      return this._events$_subscribe$3(onData, false, priority);
+      return this._subscribe$3(onData, false, priority);
     },
     listen$4$cancelOnError$onDone$onError: function(onData, cancelOnError, onDone, onError) {
       return this.listen$5$cancelOnError$onDone$onError$priority(onData, cancelOnError, onDone, onError, 0);
@@ -17637,7 +17844,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     listen$1: function(onData) {
       return this.listen$5$cancelOnError$onDone$onError$priority(onData, false, null, null, 0);
     },
-    _events$_subscribe$3: function(eventListener, captures, priority) {
+    _subscribe$3: function(eventListener, captures, priority) {
       var subscription, oldSubscriptions, t1, t2, newSubscriptions, index, o, n, oldSubscription, n0;
       subscription = new R.EventStreamSubscription(priority, 0, false, captures, this, eventListener);
       subscription.$builtinTypeInfo = this.$builtinTypeInfo;
@@ -17665,7 +17872,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       if (captures)
         ++this._capturingSubscriptionCount;
       else
-        switch (this._events$_eventType) {
+        switch (this.eventType) {
           case "enterFrame":
             $.get$_enterFrameSubscriptions().push(subscription);
             break;
@@ -17702,16 +17909,20 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       this._subscriptions = newSubscriptions;
     },
     _dispatchEventInternal$3: function($event, target, eventPhase) {
-      var subscriptions, t1, t2, t3, i, subscription;
+      var subscriptions, isCapturing, inputEvent, t1, t2, i, subscription;
       subscriptions = this._subscriptions;
-      for (t1 = subscriptions.length, t2 = this._events$_target, t3 = eventPhase === C.EventPhase_0, i = 0; i < t1; ++i) {
+      isCapturing = eventPhase === C.EventPhase_0;
+      inputEvent = !!$event.$isInputEvent ? $event : null;
+      for (t1 = subscriptions.length, t2 = this.target, i = 0; i < t1; ++i) {
         subscription = subscriptions[i];
-        if (subscription._canceled || subscription._events$_pauseCount > 0 || subscription._captures !== t3)
+        if (subscription._canceled || subscription._events$_pauseCount > 0 || subscription._captures !== isCapturing)
           continue;
         $event._events$_target = target;
         $event._currentTarget = t2;
         $event._eventPhase = eventPhase;
+        $.InputEvent_current = inputEvent;
         subscription.eventListener$1($event);
+        $.InputEvent_current = null;
         if ($event._stopsImmediatePropagation)
           return;
       }
@@ -17747,18 +17958,22 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       this._events$_pauseCount = t1 - 1;
     }
   },
+  InputEvent: {
+    "^": "Event;localX<,localY<,stageX<,stageY<,altKey>,ctrlKey>,shiftKey>",
+    $isInputEvent: true
+  },
   KeyboardEvent0: {
     "^": "Event;"
   },
   MouseEvent: {
-    "^": "Event;localX<,localY<,stageX<,stageY<,deltaX>,deltaY>,buttonDown,clickCount,altKey>,ctrlKey>,shiftKey>,_type,_bubbles,_eventPhase,_events$_target,_currentTarget,_stopsPropagation,_stopsImmediatePropagation",
+    "^": "InputEvent;deltaX>,deltaY>,buttonDown,clickCount,localX,localY,stageX,stageY,altKey,ctrlKey,shiftKey,_type,_bubbles,_eventPhase,_events$_target,_currentTarget,_stopsPropagation,_stopsImmediatePropagation",
     static: {"^": "MouseEvent_CLICK,MouseEvent_DOUBLE_CLICK,MouseEvent_MOUSE_DOWN,MouseEvent_MOUSE_UP,MouseEvent_MOUSE_MOVE,MouseEvent_MOUSE_OUT,MouseEvent_MOUSE_OVER,MouseEvent_MOUSE_WHEEL,MouseEvent_MIDDLE_CLICK,MouseEvent_MIDDLE_MOUSE_DOWN,MouseEvent_MIDDLE_MOUSE_UP,MouseEvent_RIGHT_CLICK,MouseEvent_RIGHT_MOUSE_DOWN,MouseEvent_RIGHT_MOUSE_UP,MouseEvent_CONTEXT_MENU,MouseEvent_ROLL_OUT,MouseEvent_ROLL_OVER"}
   },
   TextEvent0: {
     "^": "Event;"
   },
   TouchEvent: {
-    "^": "Event;touchPointID<,isPrimaryTouchPoint,localX<,localY<,stageX<,stageY<,altKey>,ctrlKey>,shiftKey>,_type,_bubbles,_eventPhase,_events$_target,_currentTarget,_stopsPropagation,_stopsImmediatePropagation",
+    "^": "InputEvent;touchPointID<,isPrimaryTouchPoint,localX,localY,stageX,stageY,altKey,ctrlKey,shiftKey,_type,_bubbles,_eventPhase,_events$_target,_currentTarget,_stopsPropagation,_stopsImmediatePropagation",
     static: {"^": "TouchEvent_TOUCH_BEGIN,TouchEvent_TOUCH_END,TouchEvent_TOUCH_CANCEL,TouchEvent_TOUCH_MOVE,TouchEvent_TOUCH_OVER,TouchEvent_TOUCH_OUT,TouchEvent_TOUCH_ROLL_OUT,TouchEvent_TOUCH_ROLL_OVER,TouchEvent_TOUCH_TAP"}
   }
 }],
@@ -18207,7 +18422,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       t3 = t2.get$values(t2);
       t3 = H.setRuntimeTypeInfo(new H.WhereIterable(t3, new O.ResourceManager__addResource__closure()), [H.getRuntimeTypeArgument(t3, "IterableBase", 0)]);
       finished = t3.get$length(t3);
-      t2 = t2._collection$_length;
+      t2 = t2._length;
       t1 = t1._progressEvent;
       if (t1._state >= 4)
         H.throwExpression(t1._addEventError$0());
@@ -18363,7 +18578,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
     $is_FontStyleMetrics: true
   },
   TextField: {
-    "^": "InteractiveObject;_text<,_defaultTextFormat,_autoSize,_text$_type,_caretIndex,_caretLine,_caretTime,_caretX,_caretY,_caretWidth,_caretHeight,_wordWrap,_multiline,_displayAsPassword,_background,_border,_passwordChar,_backgroundColor,_borderColor,_maxChars,_text$_width,_text$_height,_textWidth,_textHeight,_textLineMetrics,_refreshPending,_cacheAsBitmap,_text$_renderTexture,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    "^": "InteractiveObject;_text<,_defaultTextFormat,_autoSize,_text$_type,_caretIndex,_caretLine,_caretTime,_caretX,_caretY,_caretWidth,_caretHeight,_wordWrap,_multiline,_displayAsPassword,_background,_border,_passwordChar,_backgroundColor,_borderColor,_maxChars,_text$_width,_text$_height,_textWidth,_textHeight,_textLineMetrics,_refreshPending,_cacheAsBitmap,_text$_renderTexture,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     get$text: function(_) {
       return this._text;
     },
@@ -18670,7 +18885,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
       else
         t1.resize$2(0, width, height);
       matrix = this._text$_renderTexture._quad.get$drawMatrix();
-      context = J.get$context2D$x(this._text$_renderTexture._engine$_canvas);
+      context = J.get$context2D$x(this._text$_renderTexture._canvas);
       t1 = matrix._data;
       context.setTransform(t1[0], t1[1], t1[2], t1[3], t1[4], t1[5]);
       context.clearRect(0, 0, this._text$_width, this._text$_height);
@@ -18939,7 +19154,7 @@ init.mangledNames = {get$allowedLayers: "allowedLayers", get$boundingBox: "bound
   MultitouchInputMode: {
     "^": "Object;name>",
     $isMultitouchInputMode: true,
-    static: {"^": "MultitouchInputMode_GESTURE,MultitouchInputMode_NONE,MultitouchInputMode_TOUCH_POINT0"}
+    static: {"^": "MultitouchInputMode_GESTURE,MultitouchInputMode_NONE0,MultitouchInputMode_TOUCH_POINT0"}
   }
 }],
 ]);
@@ -18960,10 +19175,10 @@ $$ = null;
   _.$isComparable = TRUE;
   _.$asComparable = [P.num];
   _.$isObject = TRUE;
-  W.Touch.$isObject = TRUE;
   _ = W.Node;
   _.$isEventTarget = TRUE;
   _.$isObject = TRUE;
+  W.Touch.$isObject = TRUE;
   _ = P.String;
   _.$isString = TRUE;
   _.$isComparable = TRUE;
@@ -18986,40 +19201,6 @@ $$ = null;
   A.DisplayObject.$isObject = TRUE;
   S.Pencil.$isObject = TRUE;
   O.ResourceManagerResource.$isObject = TRUE;
-  A.Stage.$isObject = TRUE;
-  P.Match.$isObject = TRUE;
-  A._Touch.$isObject = TRUE;
-  L.RenderFrameBuffer.$isObject = TRUE;
-  P.UniformLocation.$isObject = TRUE;
-  L.RenderContextEvent.$isObject = TRUE;
-  _ = W.KeyboardEvent;
-  _.$isKeyboardEvent = TRUE;
-  _.$isEvent0 = TRUE;
-  _.$isObject = TRUE;
-  _ = W.MouseEvent0;
-  _.$isMouseEvent0 = TRUE;
-  _.$isEvent0 = TRUE;
-  _.$isObject = TRUE;
-  _ = W.WheelEvent;
-  _.$isWheelEvent = TRUE;
-  _.$isMouseEvent0 = TRUE;
-  _.$isEvent0 = TRUE;
-  _.$isObject = TRUE;
-  _ = W.TouchEvent0;
-  _.$isTouchEvent0 = TRUE;
-  _.$isEvent0 = TRUE;
-  _.$isObject = TRUE;
-  _ = P.Symbol;
-  _.$isSymbol = TRUE;
-  _.$isObject = TRUE;
-  _ = U.MultitouchInputMode;
-  _.$isMultitouchInputMode = TRUE;
-  _.$isObject = TRUE;
-  Q.MouseCursorData.$isObject = TRUE;
-  _ = P.ContextEvent;
-  _.$isContextEvent = TRUE;
-  _.$isEvent0 = TRUE;
-  _.$isObject = TRUE;
   S.Layer.$isObject = TRUE;
   _ = W.ImageElement;
   _.$isHtmlElement = TRUE;
@@ -19033,10 +19214,14 @@ $$ = null;
   _ = W.Event0;
   _.$isEvent0 = TRUE;
   _.$isObject = TRUE;
+  P.Match.$isObject = TRUE;
   _ = P.LibraryMirror;
   _.$isLibraryMirror = TRUE;
   _.$isMirror = TRUE;
   _.$isMirror = TRUE;
+  _.$isObject = TRUE;
+  _ = P.Symbol0;
+  _.$isSymbol0 = TRUE;
   _.$isObject = TRUE;
   _ = P.DeclarationMirror;
   _.$isMirror = TRUE;
@@ -19074,7 +19259,7 @@ $$ = null;
   _ = R.EventStream;
   _.$isStream = TRUE;
   _.$isObject = TRUE;
-  A._GraphicsCommand.$isObject = TRUE;
+  U._GraphicsCommand.$isObject = TRUE;
   Y.TextLineMetrics.$isObject = TRUE;
   Y._FontStyleMetrics.$isObject = TRUE;
   _ = W.TableCellElement;
@@ -19087,6 +19272,37 @@ $$ = null;
   _.$isEventTarget = TRUE;
   _.$isObject = TRUE;
   _ = W.ProgressEvent;
+  _.$isEvent0 = TRUE;
+  _.$isObject = TRUE;
+  A.Stage.$isObject = TRUE;
+  A._Drag.$isObject = TRUE;
+  A._TouchPoint.$isObject = TRUE;
+  L.RenderFrameBuffer.$isObject = TRUE;
+  P.UniformLocation.$isObject = TRUE;
+  L.RenderContextEvent.$isObject = TRUE;
+  _ = W.KeyboardEvent;
+  _.$isKeyboardEvent = TRUE;
+  _.$isEvent0 = TRUE;
+  _.$isObject = TRUE;
+  _ = W.MouseEvent0;
+  _.$isMouseEvent0 = TRUE;
+  _.$isEvent0 = TRUE;
+  _.$isObject = TRUE;
+  _ = W.WheelEvent;
+  _.$isWheelEvent = TRUE;
+  _.$isMouseEvent0 = TRUE;
+  _.$isEvent0 = TRUE;
+  _.$isObject = TRUE;
+  _ = W.TouchEvent0;
+  _.$isTouchEvent0 = TRUE;
+  _.$isEvent0 = TRUE;
+  _.$isObject = TRUE;
+  _ = U.MultitouchInputMode;
+  _.$isMultitouchInputMode = TRUE;
+  _.$isObject = TRUE;
+  Q.MouseCursorData.$isObject = TRUE;
+  _ = P.ContextEvent;
+  _.$isContextEvent = TRUE;
   _.$isEvent0 = TRUE;
   _.$isObject = TRUE;
   H.RawReceivePortImpl.$isObject = TRUE;
@@ -19103,11 +19319,6 @@ $$ = null;
   _ = P.StackTrace;
   _.$isStackTrace = TRUE;
   _.$isObject = TRUE;
-  _ = P._BufferingStreamSubscription;
-  _.$is_BufferingStreamSubscription = TRUE;
-  _.$is_EventSink = TRUE;
-  _.$isStreamSubscription = TRUE;
-  _.$isObject = TRUE;
   _ = R.Event;
   _.$isEvent = TRUE;
   _.$isObject = TRUE;
@@ -19115,24 +19326,48 @@ $$ = null;
   _.$isMouseEvent = TRUE;
   _.$isEvent = TRUE;
   _.$isObject = TRUE;
-  _ = W.EventTarget;
-  _.$isEventTarget = TRUE;
-  _.$isObject = TRUE;
-  _ = P.Comparable;
-  _.$isComparable = TRUE;
+  _ = P._BufferingStreamSubscription;
+  _.$is_BufferingStreamSubscription = TRUE;
+  _.$is_EventSink = TRUE;
+  _.$isStreamSubscription = TRUE;
   _.$isObject = TRUE;
   _ = P.InstanceMirror;
   _.$isInstanceMirror = TRUE;
   _.$isMirror = TRUE;
   _.$isObject = TRUE;
-  _ = P.AsyncError;
-  _.$isAsyncError = TRUE;
+  _ = P.Comparable;
+  _.$isComparable = TRUE;
+  _.$isObject = TRUE;
+  _ = W.EventTarget;
+  _.$isEventTarget = TRUE;
+  _.$isObject = TRUE;
+  _ = P.Iterable;
+  _.$isIterable = TRUE;
+  _.$isObject = TRUE;
+  _ = P.Stream;
+  _.$isStream = TRUE;
   _.$isObject = TRUE;
   _ = P._EventSink;
   _.$is_EventSink = TRUE;
   _.$isObject = TRUE;
   _ = P.Future;
   _.$isFuture = TRUE;
+  _.$isObject = TRUE;
+  _ = P.Point0;
+  _.$isPoint0 = TRUE;
+  _.$isObject = TRUE;
+  _ = P._DelayedEvent;
+  _.$is_DelayedEvent = TRUE;
+  _.$isObject = TRUE;
+  _ = P.StreamSubscription;
+  _.$isStreamSubscription = TRUE;
+  _.$isObject = TRUE;
+  _ = P.AsyncError;
+  _.$isAsyncError = TRUE;
+  _.$isObject = TRUE;
+  _ = U.Rectangle0;
+  _.$isRectangle0 = TRUE;
+  _.$isRectangle = TRUE;
   _.$isObject = TRUE;
   _ = W.HtmlElement;
   _.$isHtmlElement = TRUE;
@@ -19145,28 +19380,6 @@ $$ = null;
   _.$isComparable = TRUE;
   _.$asComparable = [null];
   _.$isObject = TRUE;
-  _ = P.Point0;
-  _.$isPoint0 = TRUE;
-  _.$isObject = TRUE;
-  _ = K.Animatable;
-  _.$isAnimatable = TRUE;
-  _.$isObject = TRUE;
-  _ = P._DelayedEvent;
-  _.$is_DelayedEvent = TRUE;
-  _.$isObject = TRUE;
-  _ = P.StreamSubscription;
-  _.$isStreamSubscription = TRUE;
-  _.$isObject = TRUE;
-  _ = P.Iterable;
-  _.$isIterable = TRUE;
-  _.$isObject = TRUE;
-  _ = P.Stream;
-  _.$isStream = TRUE;
-  _.$isObject = TRUE;
-  _ = U.Rectangle0;
-  _.$isRectangle0 = TRUE;
-  _.$isRectangle = TRUE;
-  _.$isObject = TRUE;
   _ = R.KeyboardEvent0;
   _.$isKeyboardEvent0 = TRUE;
   _.$isEvent = TRUE;
@@ -19175,7 +19388,7 @@ $$ = null;
   _.$isTextEvent0 = TRUE;
   _.$isEvent = TRUE;
   _.$isObject = TRUE;
-  _ = A.GraphicsGradient;
+  _ = U.GraphicsGradient;
   _.$isGraphicsGradient = TRUE;
   _.$isObject = TRUE;
   _ = F.JenkinsHasher;
@@ -19188,6 +19401,9 @@ $$ = null;
   _.$isObject = TRUE;
   _ = P.Function;
   _.$isFunction = TRUE;
+  _.$isObject = TRUE;
+  _ = K.Animatable;
+  _.$isAnimatable = TRUE;
   _.$isObject = TRUE;
   _ = P.Rectangle;
   _.$isRectangle = TRUE;
@@ -19361,6 +19577,9 @@ J.allMatches$1$s = function(receiver, a0) {
 J.append$1$x = function(receiver, a0) {
   return J.getInterceptor$x(receiver).append$1(receiver, a0);
 };
+J.beginPath$0$x = function(receiver) {
+  return J.getInterceptor$x(receiver).beginPath$0(receiver);
+};
 J.codeUnitAt$1$s = function(receiver, a0) {
   return J.getInterceptor$s(receiver).codeUnitAt$1(receiver, a0);
 };
@@ -19484,6 +19703,9 @@ J.get$width$x = function(receiver) {
 J.indexOf$2$asx = function(receiver, a0, a1) {
   return J.getInterceptor$asx(receiver).indexOf$2(receiver, a0, a1);
 };
+J.isPointInPath$2$x = function(receiver, a0, a1) {
+  return J.getInterceptor$x(receiver).isPointInPath$2(receiver, a0, a1);
+};
 J.isPointInStroke$2$x = function(receiver, a0, a1) {
   return J.getInterceptor$x(receiver).isPointInStroke$2(receiver, a0, a1);
 };
@@ -19576,6 +19798,9 @@ J.substring$2$s = function(receiver, a0, a1) {
 };
 J.toDouble$0$n = function(receiver) {
   return J.getInterceptor$n(receiver).toDouble$0(receiver);
+};
+J.toList$0$ax = function(receiver) {
+  return J.getInterceptor$ax(receiver).toList$0(receiver);
 };
 J.toList$1$growable$ax = function(receiver, a0) {
   return J.getInterceptor$ax(receiver).toList$1$growable(receiver, a0);
@@ -19779,6 +20004,7 @@ C.List_nxB = Isolate.makeConstantList([0, 0, 24576, 1023, 65534, 34815, 65534, 1
 C.List_qNA = Isolate.makeConstantList([0, 0, 32754, 11263, 65534, 34815, 65534, 18431]);
 C.List_qg4 = Isolate.makeConstantList([0, 0, 65490, 12287, 65535, 34815, 65534, 18431]);
 C.List_qg40 = Isolate.makeConstantList([0, 0, 32722, 12287, 65535, 34815, 65534, 18431]);
+C.MultitouchInputMode_NONE = new U.MultitouchInputMode("NONE");
 C.MultitouchInputMode_TOUCH_POINT = new U.MultitouchInputMode("TOUCH_POINT");
 C.RenderTextureFiltering_9729 = new L.RenderTextureFiltering(9729);
 C.StageAlign_0 = new A.StageAlign(0);
@@ -19797,11 +20023,11 @@ C.StageScaleMode_0 = new A.StageScaleMode(0);
 C.StageScaleMode_1 = new A.StageScaleMode(1);
 C.StageScaleMode_2 = new A.StageScaleMode(2);
 C.StageScaleMode_3 = new A.StageScaleMode(3);
-C.Symbol_0c4 = new H.Symbol0("");
-C.Symbol_call = new H.Symbol0("call");
-C.Symbol_dynamic = new H.Symbol0("dynamic");
-C.Symbol_fromJsonData = new H.Symbol0("fromJsonData");
-C.Symbol_void = new H.Symbol0("void");
+C.Symbol_0c4 = new H.Symbol("");
+C.Symbol_call = new H.Symbol("call");
+C.Symbol_dynamic = new H.Symbol("dynamic");
+C.Symbol_fromJsonData = new H.Symbol("fromJsonData");
+C.Symbol_void = new H.Symbol("void");
 C.Type_6L0 = H.createRuntimeType('Uint8List');
 C.Type_AGr = H.createRuntimeType('JsTypeVariableMirror');
 C.Type_Art = H.createRuntimeType('Float32List');
@@ -19867,12 +20093,13 @@ $.Board_maxZoom = 256;
 $.Board_minZoom = 80;
 $.Board_zoomIncrement = 10;
 $.DisplayObject__nextID = 0;
-$.Sprite__dragSprite = null;
-$._Touch__globalTouchPointID = 0;
+$._TouchPoint__globalTouchPointID = 1;
 $.RenderContextWebGL__globalContextIdentifier = 0;
 $._globalFrameTime = 179769313486231570814527423731704356798070567525844996598917476803157260780028538760589558632766878171540458953514382464234321326889464182768467546703537516986049910576551282076245490090389328944075868508455133942304583236903222948165808559332123348274797826204144723168738177180919299881250404026184124858368;
+$.InputEvent_current = null;
 $.Mouse__cursorHidden = false;
 $.Mouse__cursorName = "auto";
+$.Multitouch__inputMode = C.MultitouchInputMode_NONE;
 Isolate.$lazy($, "thisScript", "IsolateNatives_thisScript", "get$IsolateNatives_thisScript", function() {
   return H.IsolateNatives_computeThisScript();
 });
@@ -19981,17 +20208,17 @@ Isolate.$lazy($, "_dartProxyCtor", "_dartProxyCtor", "get$_dartProxyCtor", funct
     this.o = o;
   };
 });
-Isolate.$lazy($, "_dummyCanvas", "_dummyCanvas0", "get$_dummyCanvas0", function() {
-  return W.CanvasElement_CanvasElement(16, 16);
-});
-Isolate.$lazy($, "_dummyCanvasContext", "_dummyCanvasContext0", "get$_dummyCanvasContext0", function() {
-  return J.get$context2D$x($.get$_dummyCanvas0());
-});
 Isolate.$lazy($, "defaultLoadOptions", "BitmapData_defaultLoadOptions", "get$BitmapData_defaultLoadOptions", function() {
   return new A.BitmapDataLoadOptions(true, true, false, true, false);
 });
 Isolate.$lazy($, "autoHiDpi", "Stage_autoHiDpi", "get$Stage_autoHiDpi", function() {
   return $.get$autoHiDPI();
+});
+Isolate.$lazy($, "_dummyCanvas", "_dummyCanvas0", "get$_dummyCanvas0", function() {
+  return W.CanvasElement_CanvasElement(16, 16);
+});
+Isolate.$lazy($, "_dummyCanvasContext", "_dummyCanvasContext0", "get$_dummyCanvasContext0", function() {
+  return J.get$context2D$x($.get$_dummyCanvas0());
 });
 Isolate.$lazy($, "_globalFrameListeners", "_globalFrameListeners", "get$_globalFrameListeners", function() {
   return [];
@@ -20159,7 +20386,7 @@ D.Image,
 [P.List, D.Pencil0],
 P.DateTime,
 D.Context,
-{func: "dynamic__Symbol_Mirror", args: [P.Symbol, P.Mirror]},
+{func: "dynamic__Symbol_Mirror", args: [P.Symbol0, P.Mirror]},
 "t",
 {func: "TypeMirror__int", ret: P.TypeMirror, args: [P.$int]},
 "index",
@@ -20182,7 +20409,7 @@ D.Context,
 {func: "void__dynamic_StackTrace", void: true, args: [null, P.StackTrace]},
 "arg",
 "each",
-{func: "dynamic__Symbol_dynamic", args: [P.Symbol, null]},
+{func: "dynamic__Symbol_dynamic", args: [P.Symbol0, null]},
 {func: "bool__dynamic", ret: P.bool, args: [null]},
 "other",
 {func: "int_", ret: P.$int},
