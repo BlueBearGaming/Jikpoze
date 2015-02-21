@@ -23,4 +23,5 @@ class BitmapDataChannel {
     if (bitmapDataChannel & BitmapDataChannel.ALPHA != 0) return 3;
     throw new ArgumentError("Invalid bitmapDataChannel");
   }
+
 }

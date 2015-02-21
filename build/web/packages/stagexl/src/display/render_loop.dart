@@ -66,4 +66,5 @@ class RenderLoop extends RenderLoopBase {
 
     _exitFrameEvent.dispatch();
   }
+
 }

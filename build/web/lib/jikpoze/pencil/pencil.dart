@@ -16,7 +16,7 @@ class Pencil {
 			throw 'board cannot be null';
 		}
 		if (null != pencil.image) {
-			board.resourceManager.addBitmapData('image.' + pencil.name, 'resources/' + pencil.image.fileName);
+			board.resourceManager.addBitmapData('image.' + pencil.name, board.resourceBasePath + pencil.image.fileName);
 		}
 	}
 

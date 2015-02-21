@@ -249,4 +249,5 @@ class _BitmapContainerProgram extends RenderProgram {
 
     if (_quadCount == _maxQuadCount) flush();
   }
+
 }

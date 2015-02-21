@@ -13,6 +13,7 @@ class TimeGauge extends Gauge implements Animatable {
   static const String TIME_SHORT = 'TIME_SHORT';
 
   bool _isStarted = false;
+  num _currentTime = 0.0;
   num _totalTime = 0.0;
 
   Map<String, num> _alarms;
@@ -107,4 +108,5 @@ class TimeGauge extends Gauge implements Animatable {
       });
     }
   }
+
 }

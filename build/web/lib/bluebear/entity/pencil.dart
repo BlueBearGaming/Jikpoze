@@ -11,7 +11,7 @@ class Pencil {
 	num width;
 	num height;
 	List<Point> boundingBox = new List<Point>();
-	List<String> allowedLayers = new List<String>();
+	List<String> allowedLayerTypes = new List<String>();
 	Image image;
 
 	Pencil.fromJsonData(var data) {
@@ -26,8 +26,8 @@ class Pencil {
 		for (var point in data['boundingBox']) {
 			boundingBox.add(new Point(point[0], point[1]));
 		}
-		for (String allowedLayer in data['allowedLayers']) {
-			allowedLayers.add(allowedLayer);
+		for (String allowedLayerType in data['allowedLayerTypes']) {
+			allowedLayerTypes.add(allowedLayerType);
 		}
 		image = new Image.fromJsonData(data['image']);
 	}

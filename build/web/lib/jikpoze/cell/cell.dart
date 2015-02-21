@@ -39,15 +39,26 @@ class Cell extends DisplayObjectContainer {
 
 	void attachEvents() {
 		onMouseClick.listen((MouseEvent e){
-			if(layer.map.board.dragging != null){
+			Board board = layer.map.board;
+			if(board.dragging != null){
 				return;
 			}
-			Layer targetLayer = layer.map.layers['land_main'];
-			if (targetLayer.cells.containsKey(position)) {
-				return;
+			try {
+				Pencil selectedPencil = board.getSelectedPencil();
+				Layer targetLayer = board.getSelectedLayer();
+				if (targetLayer.cells.containsKey(position)) {
+					Cell cell = targetLayer.cells[position];
+    				targetLayer.cells.remove(position);
+    				cell.clear();
+					if (cell.pencil == selectedPencil) {
+	    				return;
+					}
+    			}
+				layer.map.createCell(targetLayer, position, selectedPencil);
+    			targetLayer.renderCells();
+			} catch (exception) {
+				print(exception);
 			}
-			layer.map.createCell(targetLayer, position, layer.map.board.pencils['grass_01']);
-			targetLayer.renderCells();
 		});
 	}
 

@@ -134,4 +134,6 @@ abstract class BitmapFilterProgram extends RenderProgram {
     renderingContext.bufferSubDataTyped(gl.ARRAY_BUFFER, 0, _vertexList);
     renderingContext.drawArrays(gl.TRIANGLE_FAN, 0, 4);
   }
+
 }
+

@@ -28,8 +28,8 @@ class _AnimatableLink {
 ///     stage.juggler.add(gameJuggler);
 ///     // stop all animations controlled by "gameJuggler".
 ///     stage.juggler.remove(gameJuggler);
-
-class Juggler implements Animatable {
+///
+ class Juggler implements Animatable {
 
   _AnimatableLink _firstAnimatableLink;
   _AnimatableLink _lastAnimatableLink;
@@ -45,18 +45,17 @@ class Juggler implements Animatable {
   //----------------------------------------------------------------------------
 
   /// The total elapsed time.
-
   num get elapsedTime => _elapsedTime;
 
   //----------------------------------------------------------------------------
 
-  /// Adds the [animatable] to this juggler who will take care that it is
+  /// Adds the [animatable] to this juggler who will take care that it is 
   /// animated.
-  ///
-  /// When the animatable is finished it is automatically removed from this
+  /// 
+  /// When the animatable is finished it is automatically removed from this 
   /// juggler.
-
   void add(Animatable animatable) {
+
     if (animatable is! Animatable) {
       throw new ArgumentError(
           "The supplied animatable does not extend type Animatable.");
@@ -73,8 +72,8 @@ class Juggler implements Animatable {
   //----------------------------------------------------------------------------
 
   /// Removes the specified [animatable] from this juggler.
-
   void remove(Animatable animatable) {
+
     if (animatable != null) {
       var link = _firstAnimatableLink;
       while (identical(link, _lastAnimatableLink) == false) {
@@ -90,7 +89,6 @@ class Juggler implements Animatable {
   //----------------------------------------------------------------------------
 
   /// Returns true if this juggler contains the specified [animatable].
-
   bool contains(Animatable animatable) {
 
     if (animatable != null) {
@@ -107,7 +105,6 @@ class Juggler implements Animatable {
   //----------------------------------------------------------------------------
 
   /// Removes all tweens from the specified [tweenObject].
-
   void removeTweens(TweenObject tweenObject) {
 
     var link = _firstAnimatableLink;
@@ -122,9 +119,8 @@ class Juggler implements Animatable {
 
   //----------------------------------------------------------------------------
 
-  /// Returns true if this juggler contains tweens for the specified
+  /// Returns true if this juggler contains tweens for the specified 
   /// [tweenObject].
-
   bool containsTweens(TweenObject tweenObject) {
 
     var link = _firstAnimatableLink;
@@ -143,6 +139,7 @@ class Juggler implements Animatable {
 
   /// Removes all [Animatable]s from this juggler.
   void clear() {
+
     var link = _firstAnimatableLink;
     while (identical(link, _lastAnimatableLink) == false) {
       link.animatable = null;
@@ -156,17 +153,17 @@ class Juggler implements Animatable {
   //----------------------------------------------------------------------------
 
   /// Animates properties of the [tweenObject].
-  ///
-  /// This is a convenience method that creates a [Tween] and adds it to this
+  /// 
+  /// This is a convenience method that creates a [Tween] and adds it to this 
   /// juggler. See [Tween] for more details.
-  ///
+  /// 
   /// Example:
-  ///
+  /// 
   ///     // Create a tween and animate the x and y property of the spaceship
   ///     juggler.tween(spaceship, 2.0, TransitionFunction.linear)
   ///       ..animate.x.to(100)
   ///       ..animate.y.to(200);
-
+  ///       
   Tween tween(TweenObject tweenObject, num time, [EaseFunction transitionFunction]) {
 
     Tween tween = transitionFunction != null
@@ -180,19 +177,19 @@ class Juggler implements Animatable {
   //----------------------------------------------------------------------------
 
   /// Animates a value by calling the [onUpdate] function continuously.
-  ///
-  /// This is a convenience method that creates a [Transition] and adds it to
+  /// 
+  /// This is a convenience method that creates a [Transition] and adds it to 
   /// this juggler. See [Transition] for more details.
-  ///
+  /// 
   /// Example:
-  ///
+  /// 
   ///     // Create a transition for a value from 0.0 to 100.0 within 5.0 seconds.
   ///     juggler.transition(0.0, 100.0, 5.0, TransitionFunction.linear, (num value) => print(value));
-
+  ///     
   Transition transition(num startValue, num targetValue, num time,
-      EaseFunction transitionFunction, void onUpdate(num value)) {
-    Transition transition =
-        new Transition(startValue, targetValue, time, transitionFunction);
+                        EaseFunction transitionFunction, void onUpdate(num value)) {
+
+    Transition transition = new Transition(startValue, targetValue, time, transitionFunction);
     transition.onUpdate = onUpdate;
     add(transition);
 
@@ -201,38 +198,40 @@ class Juggler implements Animatable {
 
   //----------------------------------------------------------------------------
 
-  /// Delays the invocation of the [action] function by the given [delay] in
+  /// Delays the invocation of the [action] function by the given [delay] in 
   /// seconds.
-  ///
-  /// This is a convenience method that creates a [DelayedCall] and adds it to
+  /// 
+  /// This is a convenience method that creates a [DelayedCall] and adds it to 
   /// this juggler. See [DelayedCall] for more details.
-  ///
+  /// 
   /// Example:
-  ///
+  /// 
   ///     // Delay the call of 'action' by 5.0 seconds.
   ///     juggler.delayCall(action, 5.0);
-
+  ///     
   DelayedCall delayCall(Function action, num delay) {
+
     DelayedCall delayedCall = new DelayedCall(action, delay);
     add(delayedCall);
+
     return delayedCall;
   }
 
   //----------------------------------------------------------------------------
 
   /// Groups the specified list of [animatables] and runs them in parallel.
-  ///
-  /// This is a convenience method that creates an [AnimatableGroup] and adds
+  /// 
+  /// This is a convenience method that creates an [AnimatableGroup] and adds 
   /// it to this juggler. See [AnimatableGroup] for more details.
-  ///
+  /// 
   /// Example:
-  ///
+  /// 
   ///     // Group a list of Animatables (run them in parallel).
   ///     juggler.addGroup([
   ///         new Tween(sprite, 2.0, TransitionFunction.easeOutBounce)..animate.x.to(700),
   ///         new Tween(sprite, 2.0, TransitionFunction.linear)..animate.y.to(500)])
   ///       ..onComplete = () => print("complete");
-
+  ///         
   AnimationGroup addGroup(List<Animatable> animatables) {
     var animationGroup = new AnimationGroup();
     for (int i = 0; i < animatables.length; i++) {
@@ -245,18 +244,18 @@ class Juggler implements Animatable {
   //----------------------------------------------------------------------------
 
   /// Chains the specified list of [animatables] and runs them sequentially.
-  ///
-  /// This is a convenience method that creates an [AnimatableChain] and adds
+  /// 
+  /// This is a convenience method that creates an [AnimatableChain] and adds 
   /// it to this juggler. See [AnimatableChain] for more details.
-  ///
+  /// 
   /// Example:
-  ///
+  /// 
   ///     // Chain a list of Animatables (run them sequentially).
   ///     juggler.addChain([
   ///         new Tween(sprite, 2.0, TransitionFunction.easeOutBounce)..animate.x.to(700),
   ///         new Tween(sprite, 2.0, TransitionFunction.linear)..animate.y.to(500)])
   ///       ..onComplete = () => print("complete");
-  ///
+  ///   
   AnimationChain addChain(List<Animatable> animatables) {
     var animationChain = new AnimationChain();
     for (int i = 0; i < animatables.length; i++) {
@@ -281,8 +280,10 @@ class Juggler implements Animatable {
     var lastLink = _lastAnimatableLink;
 
     while (identical(link, lastLink) == false) {
+
       var animatable = link.animatable;
       if (animatable == null) {
+
         var nextLink = link.nextAnimatableLink;
         link.animatable = nextLink.animatable;
         link.nextAnimatableLink = nextLink.nextAnimatableLink;
@@ -299,4 +300,5 @@ class Juggler implements Animatable {
 
     return true;
   }
+
 }

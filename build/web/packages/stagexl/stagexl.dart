@@ -9,8 +9,6 @@ library stagexl;
 //----------------------------------------------------------
 // display
 //----------------------------------------------------------
-// drawing
-//----------------------------------------------------------
 // engine, media
 //----------------------------------------------------------
 // events, animation, ui, geom.*, internal.*
@@ -19,7 +17,6 @@ library stagexl;
 export 'src/animation.dart';
 export 'src/display.dart';
 export 'src/display_ex.dart';
-export 'src/drawing.dart';
 export 'src/engine.dart';
 export 'src/events.dart';
 export 'src/filters.dart';

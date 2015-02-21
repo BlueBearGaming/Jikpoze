@@ -9,7 +9,8 @@ class EngineEvent {
 	EngineEvent.fromJson(String jsonString) {
 		var decoded = JSON.decode(jsonString);
 		code = decoded['code'];
-		type = decoded['type'];
+		type = decoded['type'].split("\\").last;
+
 		timestamp = new DateTime.fromMillisecondsSinceEpoch(decoded['timestamp']);
 
 		// These symbols are the names of the Library, the Class and the constructor for the Class that you want to dynamically load
@@ -28,4 +29,6 @@ class EngineEvent {
 		//Get the reflectee object from the InstanceMirror
 		data = dataClassInstanceMirror.reflectee;
 	}
+
+
 }

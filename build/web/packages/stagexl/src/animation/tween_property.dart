@@ -5,12 +5,13 @@ part of stagexl.animation;
 /// the [TweenPropertyAccessor] implementations.
 
 class TweenProperty {
+
   final TweenPropertyAccessor _tweenPropertyAccessor;
   final int _propertyID;
 
   num _startValue = double.NAN;
   num _targetValue = double.NAN;
-  num _deltaValue = double.NAN;
+  num _deltaValue =  double.NAN;
 
   TweenProperty._(this._tweenPropertyAccessor, this._propertyID);
 
@@ -47,3 +48,4 @@ class TweenProperty {
     }
   }
 }
+

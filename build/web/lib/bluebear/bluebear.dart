@@ -6,6 +6,7 @@ import 'dart:mirrors';
 import 'package:stagexl/src/geom.dart';
 
 part 'event/engineevent.dart';
+part 'event/loadcontextrequest.dart';
 part 'event/loadcontextresponse.dart';
 part 'entity/context.dart';
 part 'entity/map.dart';

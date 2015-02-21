@@ -14,7 +14,7 @@ part of stagexl.display_ex;
 /// to improve the performance and reduce garbage collection. Another
 /// specialized render path improves performance even for the standard
 /// Canvas renderer.
-
+///
 class BitmapContainer extends DisplayObjectContainer {
 
   void addChildAt(DisplayObject child, int index) {
@@ -83,4 +83,5 @@ class BitmapContainer extends DisplayObjectContainer {
       }
     }
   }
+
 }
