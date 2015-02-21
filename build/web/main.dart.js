@@ -3964,17 +3964,18 @@ init.mangledGlobalNames = {LoadContextRequest_code: "code"};
   },
   "+Image": [56],
   Layer0: {
-    "^": "Object;name*-57,label*-57,description@-57,index*-53",
+    "^": "Object;name*-57,label*-57,type*-57,description@-57,index*-53",
     Layer$fromJsonData$1: function(data) {
       var t1 = J.getInterceptor$asx(data);
       this.name = t1.$index(data, "name");
       this.label = t1.$index(data, "label");
+      this.type = t1.$index(data, "type");
       this.description = t1.$index(data, "description");
       this.index = t1.$index(data, "index");
     },
     $isLayer0: true,
     static: {Layer$fromJsonData: [function(data) {
-        var t1 = new D.Layer0(null, null, null, null);
+        var t1 = new D.Layer0(null, null, null, null, null);
         t1.Layer$fromJsonData$1(data);
         return t1;
       }, null, null, 2, 0, 12, 13, [], "new Layer$fromJsonData"]}
@@ -3983,7 +3984,7 @@ init.mangledGlobalNames = {LoadContextRequest_code: "code"};
   Map0: {
     "^": "Object;name*-57,label*-57,type*-57,cellSize@-53,layers@-58,pencilSets@-59",
     Map$fromJsonData$1: function(data) {
-      var t1, t2, layer, t3, t4, t5, pencilSet;
+      var t1, t2, layer, t3, t4, pencilSet;
       t1 = J.getInterceptor$asx(data);
       this.name = t1.$index(data, "name");
       this.label = t1.$index(data, "label");
@@ -3992,12 +3993,8 @@ init.mangledGlobalNames = {LoadContextRequest_code: "code"};
       for (t2 = J.get$iterator$ax(t1.$index(data, "layers")); t2.moveNext$0();) {
         layer = t2.get$current();
         t3 = this.layers;
-        t4 = new D.Layer0(null, null, null, null);
-        t5 = J.getInterceptor$asx(layer);
-        t4.name = t5.$index(layer, "name");
-        t4.label = t5.$index(layer, "label");
-        t4.description = t5.$index(layer, "description");
-        t4.index = t5.$index(layer, "index");
+        t4 = new D.Layer0(null, null, null, null, null);
+        t4.Layer$fromJsonData$1(layer);
         J.add$1$ax(t3, t4);
       }
       for (t1 = J.get$iterator$ax(t1.$index(data, "pencilSets")); t1.moveNext$0();) {
@@ -14957,35 +14954,40 @@ init.mangledGlobalNames = {LoadContextRequest_code: "code"};
       this.cellSize = contextMap.get$cellSize();
       for (t1 = J.get$iterator$ax(contextMap.get$layers()); t1.moveNext$0();) {
         contextLayer = t1.get$current();
-        t2 = this.map;
-        t3 = J.getInterceptor$x(contextLayer);
-        t4 = t3.get$index(contextLayer);
-        t5 = P.LinkedHashMap_LinkedHashMap(S.Cell_pointEquals$closure(), S.Cell_getPointHashCode$closure(), null, null, null);
-        t6 = [];
-        t6.$builtinTypeInfo = [A.DisplayObject];
-        t7 = $.DisplayObject__nextID;
-        $.DisplayObject__nextID = t7 + 1;
-        layer = new S.Layer(t2, t4, t5, t6, true, true, false, true, "auto", true, 0, t7, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
-        if (null == t2)
-          H.throwExpression("map cannot be null");
-        if (null == t4)
-          t2.addChildAt$2(layer, t2._children.length);
-        else
-          t2.addChildAt$2(layer, t4);
-        layer._display$_name = C.JSString_methods.$add("layer.", t3.get$name(contextLayer));
-        this.map.layers.$indexSet(0, t3.get$name(contextLayer), layer);
-      }
-      if (this.editionMode === true) {
-        t1 = this.map;
-        t2 = t1.layers._collection$_length - 1;
-        t3 = P.LinkedHashMap_LinkedHashMap(S.Cell_pointEquals$closure(), S.Cell_getPointHashCode$closure(), null, null, null);
-        t4 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
-        t5 = $.DisplayObject__nextID;
-        $.DisplayObject__nextID = t5 + 1;
-        layer = new S.GridLayer(null, t1, t2, t3, t4, true, true, false, true, "auto", true, 0, t5, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
-        layer.Layer$2(t1, t2);
-        layer._display$_name = "layer.edition";
-        this.map.layers.$indexSet(0, "edition", layer);
+        t2 = J.getInterceptor$x(contextLayer);
+        t3 = t2.get$type(contextLayer);
+        t4 = this.map;
+        if ("grid" === t3) {
+          t3 = t2.get$index(contextLayer);
+          t5 = P.LinkedHashMap_LinkedHashMap(S.Cell_pointEquals$closure(), S.Cell_getPointHashCode$closure(), null, null, null);
+          t6 = [];
+          t6.$builtinTypeInfo = [A.DisplayObject];
+          t7 = $.DisplayObject__nextID;
+          $.DisplayObject__nextID = t7 + 1;
+          layer = new S.GridLayer(null, t4, t3, t5, t6, true, true, false, true, "auto", true, 0, t7, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
+          if (null == t4)
+            H.throwExpression("map cannot be null");
+          if (null == t3)
+            t4.addChildAt$2(layer, t4._children.length);
+          else
+            t4.addChildAt$2(layer, t3);
+        } else {
+          t3 = t2.get$index(contextLayer);
+          t5 = P.LinkedHashMap_LinkedHashMap(S.Cell_pointEquals$closure(), S.Cell_getPointHashCode$closure(), null, null, null);
+          t6 = [];
+          t6.$builtinTypeInfo = [A.DisplayObject];
+          t7 = $.DisplayObject__nextID;
+          $.DisplayObject__nextID = t7 + 1;
+          layer = new S.Layer(t4, t3, t5, t6, true, true, false, true, "auto", true, 0, t7, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
+          if (null == t4)
+            H.throwExpression("map cannot be null");
+          if (null == t3)
+            t4.addChildAt$2(layer, t4._children.length);
+          else
+            t4.addChildAt$2(layer, t3);
+        }
+        layer._display$_name = C.JSString_methods.$add("layer.", t2.get$name(contextLayer));
+        this.map.layers.$indexSet(0, t2.get$name(contextLayer), layer);
       }
       for (t1 = J.get$iterator$ax(contextMap.get$pencilSets()); t1.moveNext$0();)
         for (t2 = J.get$iterator$ax(t1.get$current().get$pencils()); t2.moveNext$0();) {
@@ -15306,17 +15308,6 @@ init.mangledGlobalNames = {LoadContextRequest_code: "code"};
           if (t1.containsKey$1(point))
             t1.$index(0, point).draw$0();
         }
-    },
-    Layer$2: function(map, index) {
-      var t1, t2;
-      t1 = this.map;
-      if (null == t1)
-        throw H.wrapException("map cannot be null");
-      t2 = this.index;
-      if (null == t2)
-        t1.addChildAt$2(this, t1._children.length);
-      else
-        t1.addChildAt$2(this, t2);
     },
     $isLayer: true
   },

@@ -154,15 +154,14 @@ class Board extends DisplayObjectContainer {
 
 		// Create layers
 		for (BlueBear.Layer contextLayer in contextMap.layers) {
-			Layer layer = new Layer(map, contextLayer.index);
+			Layer layer;
+			if ('grid' == contextLayer.type) {
+				layer = new GridLayer(map, contextLayer.index);
+			} else {
+				layer = new Layer(map, contextLayer.index);
+			}
 			layer.name = 'layer.' + contextLayer.name;
 			map.layers[contextLayer.name] = layer;
-		}
-
-		if (editionMode) {
-			Layer layer = new GridLayer(map, map.layers.length - 1);
-			layer.name = 'layer.edition';
-			map.layers['edition'] = layer;
 		}
 
 		for (BlueBear.PencilSet pencilSet in contextMap.pencilSets) {
