@@ -3,6 +3,7 @@ part of jikpoze;
 class Layer extends DisplayObjectContainer {
 	SquareMap map;
 	int index;
+	BlueBear.Layer layer;
 	Col.LinkedHashMap<Point, Cell> cells = new Col.LinkedHashMap(hashCode: Cell.getPointHashCode, equals: Cell.pointEquals);
 
 	Layer(this.map, this.index) {

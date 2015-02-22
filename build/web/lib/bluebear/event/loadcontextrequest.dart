@@ -3,7 +3,7 @@ part of bluebear;
 class LoadContextRequest {
 
 	int contextId;
-	static String code = "bluebear.engine.onMapLoad";
+	static const String code = "bluebear.engine.mapLoad";
 
 	LoadContextRequest(this.contextId);
 

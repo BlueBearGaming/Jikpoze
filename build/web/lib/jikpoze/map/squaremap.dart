@@ -26,7 +26,24 @@ class SquareMap extends DisplayObjectContainer {
 		if (null == point) {
 			throw 'point cannot be null';
 		}
+		Object json = {
+           "contextId": board.contextId,
+           "layerName": layer.layer.name,
+           "pencilName": pencil.pencil.name,
+           "x": point.x,
+           "y": point.y
+       };
+		board.queryApi('bluebear.editor.putPencil', json, (response) {
+			print(response);
+		});
 		return layer.cells[point] = new Cell(layer, point, pencil);
+	}
+
+	Cell removeCell(Layer layer, Point point) {
+		Cell cell = layer.cells[point];
+		layer.cells.remove(point);
+		cell.clear();
+		return cell;
 	}
 
 	void renderCells() {

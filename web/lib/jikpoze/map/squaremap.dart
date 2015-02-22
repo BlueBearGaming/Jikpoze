@@ -19,14 +19,37 @@ class SquareMap extends DisplayObjectContainer {
 		this.board = board;
 	}
 
-	Cell createCell(Layer layer, Point point, Pencil pencil) {
+	Cell createCell(Layer layer, Point point, Pencil pencil, [bool callApi = true]) {
 		if (null == layer) {
 			throw 'layer cannot be null';
 		}
 		if (null == point) {
 			throw 'point cannot be null';
 		}
-		return layer.cells[point] = new Cell(layer, point, pencil);
+		if (null != layer.layer && null != pencil.pencil && callApi) {
+			Object json = {
+	           	"contextId": board.contextId,
+	       		"layerName": layer.layer.name,
+	       		"pencilName": pencil.pencil.name,
+	       		"x": point.x,
+	       		"y": point.y
+	       	};
+			board.queryApi('bluebear.editor.putPencil', json, (response) {
+				print(response);
+			});
+		}
+		return layer.cells[point] = doCreateCell(layer, point, pencil);
+	}
+
+	Cell doCreateCell(layer, point, pencil) {
+		return new Cell(layer, point, pencil);
+	}
+
+	Cell removeCell(Layer layer, Point point) {
+		Cell cell = layer.cells[point];
+		layer.cells.remove(point);
+		cell.clear();
+		return cell;
 	}
 
 	void renderCells() {

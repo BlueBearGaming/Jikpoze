@@ -1,8 +1,6 @@
 library bluebear;
 
 import 'dart:convert';
-@MirrorsUsed(targets: const["bluebear"])
-import 'dart:mirrors';
 import 'package:stagexl/src/geom.dart';
 
 part 'event/engineevent.dart';

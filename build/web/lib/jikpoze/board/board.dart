@@ -108,21 +108,24 @@ class Board extends DisplayObjectContainer {
 	}
 
 	void init() {
+		BlueBear.LoadContextRequest contextRequest = new BlueBear.LoadContextRequest(contextId);
+		queryApi(BlueBear.LoadContextRequest.code, contextRequest.getJson(), loadMap);
+	}
+
+	Html.HttpRequest queryApi(String eventName, Object json, Function handler) {
 		Html.HttpRequest request = new Html.HttpRequest(); // create a new XHR
+		// add an event handler that is called when the request finishes
+		request.onReadyStateChange.listen((_) {
+			if (request.readyState == Html.HttpRequest.DONE && (request.status == 200 || request.status == 0)) {
+				handler(request.responseText);
+			}
+		});
 
-          // add an event handler that is called when the request finishes
-          request.onReadyStateChange.listen((_) {
-            if (request.readyState == Html.HttpRequest.DONE && (request.status == 200 || request.status == 0)) {
-              loadMap(request.responseText);
-            }
-          });
-
-          BlueBear.LoadContextRequest contextRequest = new BlueBear.LoadContextRequest(contextId);
-
-          // POST the data to the server
-          String finalEndPoint = endPoint + BlueBear.LoadContextRequest.code;
-          request.open("POST", finalEndPoint);
-          request.send(Convert.JSON.encode(contextRequest.getJson())); // perform the async POST
+		// POST the data to the server
+		String finalEndPoint = endPoint + eventName;
+		request.open("POST", finalEndPoint);
+		request.send(Convert.JSON.encode(json)); // perform the async POST
+		return request;
 	}
 
 	void loadMap(String responseText) {
@@ -161,6 +164,7 @@ class Board extends DisplayObjectContainer {
 				layer = new Layer(map, contextLayer.index);
 			}
 			layer.name = 'layer.' + contextLayer.name;
+			layer.layer = contextLayer;
 			map.layers[contextLayer.name] = layer;
 		}
 

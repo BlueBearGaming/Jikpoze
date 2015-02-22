@@ -47,9 +47,7 @@ class Cell extends DisplayObjectContainer {
 				Pencil selectedPencil = board.getSelectedPencil();
 				Layer targetLayer = board.getSelectedLayer();
 				if (targetLayer.cells.containsKey(position)) {
-					Cell cell = targetLayer.cells[position];
-    				targetLayer.cells.remove(position);
-    				cell.clear();
+					Cell cell = layer.map.removeCell(targetLayer, position);
 					if (cell.pencil == selectedPencil) {
 	    				return;
 					}
