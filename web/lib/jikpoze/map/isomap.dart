@@ -13,6 +13,25 @@ class IsoMap extends HexMap {
         return gridPencil;
     }
 
+    void renderCells() {
+        for (Layer layer in layers.values) {
+            for (Cell cell in layer.cells.values) {
+                cell.clear();
+            }
+            Point topLeft = board.getTopLeftViewPoint();
+            Point bottomRight = board.getBottomRightViewPoint();
+            int rank = 0;
+            int rankSize = bottomRight.x.floor() - topLeft.x.floor();
+            for (int rank = -renderOffset; rank <= rankSize + renderOffset; rank++) {
+                for (int col = -renderOffset; col <= rankSize + renderOffset; col++) {
+                    int posX = topLeft.x.floor() + rank;
+                    int posY = topLeft.y.floor() + rank - col;
+                    renderCell(layer, new Point(posX, posY));
+                }
+            }
+        }
+    }
+
     Point gamePointToViewPoint(Point gamePoint) {
         num viewX = (gamePoint.x - gamePoint.y) * board.cellSize / 2;
         num viewY = (gamePoint.x + gamePoint.y) * board.cellSize * skewFactor;

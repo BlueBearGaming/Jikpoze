@@ -16,19 +16,4 @@ class Layer extends DisplayObjectContainer {
             map.addChildAt(this, index);
         }
     }
-
-    void renderCells() {
-        Point topLeft = map.board.getTopLeftViewPoint();
-        Point bottomRight = map.board.getBottomRightViewPoint();
-        Point point;
-        for (int cy = topLeft.y.floor(); cy <= bottomRight.y.floor() + 1; cy++) {
-            for (int cx = topLeft.x.floor(); cx <= bottomRight.x.floor() + 1; cx++) {
-                point = new Point(cx, cy);
-                if (cells.containsKey(point)) {
-                    cells[point].draw();
-                }
-            }
-        }
-    }
-
 }

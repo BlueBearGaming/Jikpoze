@@ -53,7 +53,7 @@ class Cell extends DisplayObjectContainer {
                     }
                 }
                 layer.map.createCell(targetLayer, position, selectedPencil);
-                targetLayer.renderCells();
+                layer.map.renderCells();
             } catch (exception) {
                 print(exception);
             }
