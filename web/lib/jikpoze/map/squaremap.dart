@@ -38,6 +38,7 @@ class SquareMap extends DisplayObjectContainer {
 				print(response);
 			});
 		}
+		removeCell(layer, point);
 		return layer.cells[point] = doCreateCell(layer, point, pencil);
 	}
 
@@ -46,6 +47,9 @@ class SquareMap extends DisplayObjectContainer {
 	}
 
 	Cell removeCell(Layer layer, Point point) {
+		if (!layer.cells.containsKey(point)) {
+			return null;
+		}
 		Cell cell = layer.cells[point];
 		layer.cells.remove(point);
 		cell.clear();

@@ -12,4 +12,16 @@ class IsoMap extends HexMap {
 		}
 		return gridPencil;
 	}
+
+	Point gamePointToViewPoint(Point gamePoint){
+		num viewX = (gamePoint.x - gamePoint.y) * board.cellSize / 2;
+		num viewY = (gamePoint.x + gamePoint.y) * board.cellSize * skewFactor;
+		return new Point(viewX, viewY);
+	}
+
+	Point viewPointToGamePoint(Point viewPoint){
+		num gameX = (viewPoint.y / 2 / skewFactor + viewPoint.x) / board.cellSize;
+		num gameY = (viewPoint.y / 2 / skewFactor - viewPoint.x) / board.cellSize;
+		return new Point(gameX.floor(), gameY.floor());
+	}
 }
