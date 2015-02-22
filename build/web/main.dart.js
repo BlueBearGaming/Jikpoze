@@ -563,9 +563,6 @@ var $$ = Object.create(null);
     get$hashCode: function(receiver) {
       return receiver & 0x1FFFFFFF;
     },
-    $negate: function(receiver) {
-      return -receiver;
-    },
     $add: function(receiver, other) {
       if (typeof other !== "number")
         throw H.wrapException(P.ArgumentError$(other));
@@ -8508,6 +8505,15 @@ var $$ = Object.create(null);
   },
   CanvasRenderingContext2D: {
     "^": "Interceptor;fillStyle},lineCap},lineJoin},lineWidth},strokeStyle}",
+    beginPath$0: function(receiver) {
+      return receiver.beginPath();
+    },
+    isPointInPath$4: function(receiver, path_OR_x, x_OR_y, winding_OR_y, winding) {
+      return receiver.isPointInPath(path_OR_x, x_OR_y, winding_OR_y, winding);
+    },
+    isPointInPath$2: function($receiver, path_OR_x, x_OR_y) {
+      return $receiver.isPointInPath(path_OR_x, x_OR_y);
+    },
     isPointInStroke$3: function(receiver, path_OR_x, x_OR_y, y) {
       return receiver.isPointInStroke(path_OR_x, x_OR_y, y);
     },
@@ -10624,9 +10630,6 @@ var $$ = Object.create(null);
       this.get$stage().on$1(0, "mouseUp").listen$1(new S.Board_attachEvents_onMouseUpEvent(this));
       this.get$stage().on$1(0, "mouseMove").listen$1(new S.Board_attachEvents_onMouseMoveEvent(this));
     },
-    renderCells$0: function() {
-      return this.map.renderCells$0();
-    },
     queryApi$3: function(eventName, json, handler) {
       var request, t1;
       request = new XMLHttpRequest();
@@ -10657,7 +10660,7 @@ var $$ = Object.create(null);
           t2 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
           t3 = $.DisplayObject__nextID;
           $.DisplayObject__nextID = t3 + 1;
-          t3 = new S.IsoMap(null, null, t1, 1, t2, true, true, false, true, "auto", true, 0, t3, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
+          t3 = new S.IsoMap(null, null, t1, 1, 2, t2, true, true, false, true, "auto", true, 0, t3, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
           t3.SquareMap$1(this);
           t3.HexMap$1(this);
           t3.skewFactor = 0.3;
@@ -10745,20 +10748,6 @@ var $$ = Object.create(null);
         }
       }
       throw H.wrapException("No pencil selected or missing pencil");
-    },
-    getTopLeftViewPoint$0: function() {
-      var t1, t2;
-      t1 = this.map;
-      t2 = this.get$stage()._contentRectangle;
-      t2 = H.setRuntimeTypeInfo(new U.Rectangle0(t2.left, t2.top, t2.width, t2.height), [H.getTypeArgumentByIndex(t2, 0)]);
-      return t1.viewPointToGamePoint$1(H.setRuntimeTypeInfo(new U.Point(t2.left, t2.top), [H.getTypeArgumentByIndex(t2, 0)]).subtract$1(H.setRuntimeTypeInfo(new U.Point(this._x, this._y), [null])));
-    },
-    getBottomRightViewPoint$0: function() {
-      var t1, t2;
-      t1 = this.map;
-      t2 = this.get$stage()._contentRectangle;
-      t2 = H.setRuntimeTypeInfo(new U.Rectangle0(t2.left, t2.top, t2.width, t2.height), [H.getTypeArgumentByIndex(t2, 0)]);
-      return t1.viewPointToGamePoint$1(H.setRuntimeTypeInfo(new U.Point(t2.left + t2.width, t2.top + t2.height), [H.getTypeArgumentByIndex(t2, 0)]).subtract$1(H.setRuntimeTypeInfo(new U.Point(this._x, this._y), [null])));
     },
     Board$2: function(canvas, options) {
       var t1, stage, t2, t3;
@@ -10982,7 +10971,7 @@ var $$ = Object.create(null);
             return;
         }
         J.get$map$ax(t1.layer).createCell$3(targetLayer, t2, selectedPencil);
-        targetLayer.renderCells$0();
+        J.get$map$ax(t1.layer).renderCells$0();
       } catch (exception0) {
         t1 = H.unwrapException(exception0);
         exception = t1;
@@ -10995,42 +10984,17 @@ var $$ = Object.create(null);
     "^": "Cell;layer,position,pencil,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams"
   },
   GridLayer: {
-    "^": "Layer;pencil<,map,index,layer,cells,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
-    renderCells$0: function() {
-      var topLeft, bottomRight, cx, point, cy, t1;
-      this.removeChildren$0();
-      topLeft = this.map.board.getTopLeftViewPoint$0();
-      bottomRight = this.map.board.getBottomRightViewPoint$0();
-      for (cx = J.floor$0$n(topLeft.x), point = null; cx <= J.floor$0$n(bottomRight.x) + 1; ++cx)
-        for (cy = J.floor$0$n(topLeft.y); cy <= J.floor$0$n(bottomRight.y) + 1; ++cy) {
-          point = new U.Point(cx, cy);
-          point.$builtinTypeInfo = [null];
-          t1 = this.map;
-          t1.createCell$3(this, point, t1.getGridPencil$0());
-        }
-    }
+    "^": "Layer;pencil<,map,index,layer,cells,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams"
   },
   Layer: {
     "^": "DisplayObjectContainer;map>,index>,layer>,cells>,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     map$1: function($receiver, arg0) {
       return this.map.call$1(arg0);
     },
-    renderCells$0: function() {
-      var topLeft, bottomRight, cy, t1, point, cx;
-      topLeft = this.map.board.getTopLeftViewPoint$0();
-      bottomRight = this.map.board.getBottomRightViewPoint$0();
-      for (cy = J.floor$0$n(topLeft.y), t1 = this.cells, point = null; cy <= J.floor$0$n(bottomRight.y) + 1; ++cy)
-        for (cx = J.floor$0$n(topLeft.x); cx <= J.floor$0$n(bottomRight.x) + 1; ++cx) {
-          point = new U.Point(cx, cy);
-          point.$builtinTypeInfo = [null];
-          if (t1.containsKey$1(point))
-            t1.$index(0, point).draw$0();
-        }
-    },
     $isLayer: true
   },
   HexMap: {
-    "^": "SquareMap;board,gridPencil,layers,skewFactor,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    "^": "SquareMap;board,gridPencil,layers,skewFactor,renderOffset,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     doCreateCell$3: function(layer, point, pencil) {
       var t1, t2;
       t1 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
@@ -11062,7 +11026,7 @@ var $$ = Object.create(null);
       return H.setRuntimeTypeInfo(new U.Point(viewX, viewY), [null]);
     },
     viewPointToGamePoint$1: function(viewPoint) {
-      return H.setRuntimeTypeInfo(new U.Point(J.floor$0$n(J.$div$n(viewPoint.x, this.board.cellSize)), J.floor$0$n(J.$div$n(J.$div$n(viewPoint.y, this.board.cellSize), this.skewFactor))), [null]);
+      return H.setRuntimeTypeInfo(new U.Point(C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(viewPoint.x, this.board.cellSize))), C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(viewPoint.y, this.board.cellSize) / this.skewFactor))), [null]);
     },
     HexMap$1: function(board) {
       this.skewFactor = Math.cos(H.checkNum(0.5235987755982988));
@@ -11073,14 +11037,14 @@ var $$ = Object.create(null);
         t2 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
         t3 = $.DisplayObject__nextID;
         $.DisplayObject__nextID = t3 + 1;
-        t3 = new S.HexMap(null, null, t1, 1, t2, true, true, false, true, "auto", true, 0, t3, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
+        t3 = new S.HexMap(null, null, t1, 1, 2, t2, true, true, false, true, "auto", true, 0, t3, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
         t3.SquareMap$1(board);
         t3.HexMap$1(board);
         return t3;
       }}
   },
   IsoMap: {
-    "^": "HexMap;board,gridPencil,layers,skewFactor,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    "^": "HexMap;board,gridPencil,layers,skewFactor,renderOffset,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     getGridPencil$0: function() {
       var t1, t2;
       t1 = this.gridPencil;
@@ -11093,10 +11057,76 @@ var $$ = Object.create(null);
         t1 = t2;
       }
       return t1;
+    },
+    renderCells$0: function() {
+      var t1, t2, rank, layer, t3, t4, root, t5, t6, topLeft, rank0, col;
+      for (t1 = this.layers, t1 = t1.get$values(t1), t1 = H.setRuntimeTypeInfo(new H.MappedIterator(null, J.get$iterator$ax(t1._iterable), t1._f), [H.getTypeArgumentByIndex(t1, 0), H.getTypeArgumentByIndex(t1, 1)]), t2 = this.renderOffset, rank = -t2; t1.moveNext$0();) {
+        layer = t1.__internal$_current;
+        t3 = J.get$cells$x(layer);
+        t3 = t3.get$values(t3);
+        t4 = new H.MappedIterator(null, J.get$iterator$ax(t3._iterable), t3._f);
+        t4.$builtinTypeInfo = [H.getTypeArgumentByIndex(t3, 0), H.getTypeArgumentByIndex(t3, 1)];
+        for (; t4.moveNext$0();)
+          J.clear$0$ax(t4.__internal$_current);
+        t3 = this.board;
+        t4 = t3.map;
+        root = t3.get$root();
+        t5 = (!!J.getInterceptor(root).$isStage ? root : null).get$_contentRectangle();
+        t6 = new U.Rectangle0(t5.left, t5.top, t5.width, t5.height);
+        t6.$builtinTypeInfo = [H.getTypeArgumentByIndex(t5, 0)];
+        t5 = new U.Point(t6.left, t6.top);
+        t5.$builtinTypeInfo = [H.getTypeArgumentByIndex(t6, 0)];
+        t3 = new U.Point(t3._x, t3._y);
+        t3.$builtinTypeInfo = [null];
+        t3 = new U.Point(J.$sub$n(t5.x, t3.x), J.$sub$n(t5.y, t3.y));
+        t3.$builtinTypeInfo = [H.getTypeArgumentByIndex(t5, 0)];
+        topLeft = t4.viewPointToGamePoint$1(t3);
+        t3 = this.board;
+        t4 = t3.map;
+        root = t3.get$root();
+        t5 = (!!J.getInterceptor(root).$isStage ? root : null).get$_contentRectangle();
+        t6 = new U.Rectangle0(t5.left, t5.top, t5.width, t5.height);
+        t6.$builtinTypeInfo = [H.getTypeArgumentByIndex(t5, 0)];
+        t5 = new U.Point(t6.left + t6.width, t6.top + t6.height);
+        t5.$builtinTypeInfo = [H.getTypeArgumentByIndex(t6, 0)];
+        t3 = new U.Point(t3._x, t3._y);
+        t3.$builtinTypeInfo = [null];
+        t3 = new U.Point(J.$sub$n(t5.x, t3.x), J.$sub$n(t5.y, t3.y));
+        t3.$builtinTypeInfo = [H.getTypeArgumentByIndex(t5, 0)];
+        for (t3 = J.floor$0$n(t4.viewPointToGamePoint$1(t3).x) - J.floor$0$n(topLeft.x) + t2, rank0 = rank; rank0 <= t3; ++rank0)
+          for (col = rank; col <= t3; ++col) {
+            t4 = new U.Point(J.floor$0$n(topLeft.x) + col, J.floor$0$n(topLeft.y) - col + rank0);
+            t4.$builtinTypeInfo = [null];
+            this.renderCell$2(layer, t4);
+          }
+      }
+    },
+    gamePointToViewPoint$1: function(gamePoint) {
+      return H.setRuntimeTypeInfo(new U.Point(J.$div$n(J.$mul$ns(J.$sub$n(gamePoint.x, gamePoint.y), this.board.cellSize), 2), J.$mul$ns(J.$mul$ns(J.$add$ns(gamePoint.x, gamePoint.y), this.board.cellSize), this.skewFactor)), [null]);
+    },
+    viewPointToGamePoint$1: function(viewPoint) {
+      var t1, t2, t3, t4, t5, t6, t7, t8;
+      t1 = J.$div$n(viewPoint.y, 2);
+      t2 = this.skewFactor;
+      t3 = viewPoint.x;
+      if (typeof t3 !== "number")
+        return H.iae(t3);
+      t4 = this.board.cellSize;
+      if (typeof t4 !== "number")
+        return H.iae(t4);
+      t5 = J.$div$n(viewPoint.y, 2);
+      t6 = this.skewFactor;
+      t7 = viewPoint.x;
+      if (typeof t7 !== "number")
+        return H.iae(t7);
+      t8 = this.board.cellSize;
+      if (typeof t8 !== "number")
+        return H.iae(t8);
+      return H.setRuntimeTypeInfo(new U.Point(C.JSNumber_methods.toInt$0(Math.floor((t1 / t2 + t3) / t4)), C.JSNumber_methods.toInt$0(Math.floor((t5 / t6 - t7) / t8))), [null]);
     }
   },
   SquareMap: {
-    "^": "DisplayObjectContainer;board<,gridPencil,layers,skewFactor,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    "^": "DisplayObjectContainer;board<,gridPencil,layers,skewFactor,renderOffset,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     createCell$4: function(layer, point, pencil, callApi) {
       var t1, json, t2;
       if (null == layer)
@@ -11106,6 +11136,7 @@ var $$ = Object.create(null);
         json = P.LinkedHashMap_LinkedHashMap$_literal(["contextId", this.board.contextId, "layerName", J.get$name$x(t1.get$layer(layer)), "pencilName", J.get$name$x(pencil.get$pencil()), "x", point.x, "y", point.y], null, null);
         this.board.queryApi$3("bluebear.editor.putPencil", json, new S.SquareMap_createCell_closure());
       }
+      this.removeCell$2(layer, point);
       t1 = t1.get$cells(layer);
       t2 = this.doCreateCell$3(layer, point, pencil);
       t1.$indexSet(0, point, t2);
@@ -11120,14 +11151,63 @@ var $$ = Object.create(null);
     removeCell$2: function(layer, point) {
       var t1, cell;
       t1 = J.getInterceptor$x(layer);
+      if (!t1.get$cells(layer).containsKey$1(point))
+        return;
       cell = t1.get$cells(layer).$index(0, point);
       t1.get$cells(layer).remove$1(0, point);
       J.clear$0$ax(cell);
       return cell;
     },
     renderCells$0: function() {
-      for (var t1 = this.layers, t1 = t1.get$values(t1), t1 = H.setRuntimeTypeInfo(new H.MappedIterator(null, J.get$iterator$ax(t1._iterable), t1._f), [H.getTypeArgumentByIndex(t1, 0), H.getTypeArgumentByIndex(t1, 1)]); t1.moveNext$0();)
-        t1.__internal$_current.renderCells$0();
+      var t1, t2, layer, t3, t4, root, t5, t6, topLeft, bottomRight, cy, cx;
+      for (t1 = this.layers, t1 = t1.get$values(t1), t1 = H.setRuntimeTypeInfo(new H.MappedIterator(null, J.get$iterator$ax(t1._iterable), t1._f), [H.getTypeArgumentByIndex(t1, 0), H.getTypeArgumentByIndex(t1, 1)]), t2 = this.renderOffset; t1.moveNext$0();) {
+        layer = t1.__internal$_current;
+        t3 = J.get$cells$x(layer);
+        t3 = t3.get$values(t3);
+        t4 = new H.MappedIterator(null, J.get$iterator$ax(t3._iterable), t3._f);
+        t4.$builtinTypeInfo = [H.getTypeArgumentByIndex(t3, 0), H.getTypeArgumentByIndex(t3, 1)];
+        for (; t4.moveNext$0();)
+          J.clear$0$ax(t4.__internal$_current);
+        t3 = this.board;
+        t4 = t3.map;
+        root = t3.get$root();
+        t5 = (!!J.getInterceptor(root).$isStage ? root : null).get$_contentRectangle();
+        t6 = new U.Rectangle0(t5.left, t5.top, t5.width, t5.height);
+        t6.$builtinTypeInfo = [H.getTypeArgumentByIndex(t5, 0)];
+        t5 = new U.Point(t6.left, t6.top);
+        t5.$builtinTypeInfo = [H.getTypeArgumentByIndex(t6, 0)];
+        t3 = new U.Point(t3._x, t3._y);
+        t3.$builtinTypeInfo = [null];
+        t3 = new U.Point(J.$sub$n(t5.x, t3.x), J.$sub$n(t5.y, t3.y));
+        t3.$builtinTypeInfo = [H.getTypeArgumentByIndex(t5, 0)];
+        topLeft = t4.viewPointToGamePoint$1(t3);
+        t3 = this.board;
+        t4 = t3.map;
+        root = t3.get$root();
+        t5 = (!!J.getInterceptor(root).$isStage ? root : null).get$_contentRectangle();
+        t6 = new U.Rectangle0(t5.left, t5.top, t5.width, t5.height);
+        t6.$builtinTypeInfo = [H.getTypeArgumentByIndex(t5, 0)];
+        t5 = new U.Point(t6.left + t6.width, t6.top + t6.height);
+        t5.$builtinTypeInfo = [H.getTypeArgumentByIndex(t6, 0)];
+        t3 = new U.Point(t3._x, t3._y);
+        t3.$builtinTypeInfo = [null];
+        t3 = new U.Point(J.$sub$n(t5.x, t3.x), J.$sub$n(t5.y, t3.y));
+        t3.$builtinTypeInfo = [H.getTypeArgumentByIndex(t5, 0)];
+        bottomRight = t4.viewPointToGamePoint$1(t3);
+        for (cy = J.floor$0$n(topLeft.y) - t2; cy <= J.floor$0$n(bottomRight.y) + t2; ++cy)
+          for (cx = J.floor$0$n(topLeft.x) - t2; cx <= J.floor$0$n(bottomRight.x) + t2; ++cx) {
+            t3 = new U.Point(cx, cy);
+            t3.$builtinTypeInfo = [null];
+            this.renderCell$2(layer, t3);
+          }
+      }
+    },
+    renderCell$2: function(layer, point) {
+      var t1 = J.getInterceptor$x(layer);
+      if (t1.get$cells(layer).containsKey$1(point))
+        t1.get$cells(layer).$index(0, point).draw$0();
+      else if (J.$eq(J.get$type$x(t1.get$layer(layer)), "grid"))
+        this.createCell$3(layer, point, this.getGridPencil$0());
     },
     getGridPencil$0: function() {
       var t1, t2;
@@ -11146,7 +11226,7 @@ var $$ = Object.create(null);
       return H.setRuntimeTypeInfo(new U.Point(J.$mul$ns(gamePoint.x, this.board.cellSize), J.$mul$ns(gamePoint.y, this.board.cellSize)), [null]);
     },
     viewPointToGamePoint$1: function(viewPoint) {
-      return H.setRuntimeTypeInfo(new U.Point(J.floor$0$n(J.$div$n(viewPoint.x, this.board.cellSize)), J.floor$0$n(J.$div$n(viewPoint.y, this.board.cellSize))), [null]);
+      return H.setRuntimeTypeInfo(new U.Point(C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(viewPoint.x, this.board.cellSize))), C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(viewPoint.y, this.board.cellSize)))), [null]);
     },
     SquareMap$1: function(board) {
       board.addChildAt$2(this, board._children.length);
@@ -11158,7 +11238,7 @@ var $$ = Object.create(null);
         t2 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
         t3 = $.DisplayObject__nextID;
         $.DisplayObject__nextID = t3 + 1;
-        t3 = new S.SquareMap(null, null, t1, 1, t2, true, true, false, true, "auto", true, 0, t3, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
+        t3 = new S.SquareMap(null, null, t1, 1, 2, t2, true, true, false, true, "auto", true, 0, t3, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
         t3.SquareMap$1(board);
         return t3;
       }}
@@ -11189,24 +11269,16 @@ var $$ = Object.create(null);
   GridPencil: {
     "^": "Pencil;board,pencil",
     getDisplayObject$1: function(point) {
-      var t1, t2, t3, shape, t4;
-      t1 = H.setRuntimeTypeInfo([], [A._GraphicsCommand]);
-      t2 = new A.Graphics(t1, H.setRuntimeTypeInfo(new U.Rectangle0(0, 0, 0, 0), [P.num]), true);
+      var t1, t2, t3, shape;
+      t1 = H.setRuntimeTypeInfo([], [U._GraphicsCommand]);
+      t2 = new U.Graphics(t1, H.setRuntimeTypeInfo(new U.Rectangle0(0, 0, 0, 0), [P.num]), true);
       t3 = $.DisplayObject__nextID;
       $.DisplayObject__nextID = t3 + 1;
       shape = new A.Shape(t2, t3, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
       this.buildGraphics$1(t2);
-      t3 = V.color2rgba(4286611584);
-      t4 = new A._GraphicsCommandStrokeColor(null, null, null, null);
-      t4._lineWidth = 0.2;
-      t4._lineJoin = "round";
-      t4._lineCap = "round";
-      t4._color = t3;
-      t1.push(t4);
+      t1.push(new U._GraphicsCommandStrokeColor(V.color2rgba(4286611584), 0.2, "round", "round"));
       t2._boundsRefresh = true;
-      t4 = new A._GraphicsCommandFillColor(null);
-      t4._color = V.color2rgba(16777215);
-      t1.push(t4);
+      t1.push(new U._GraphicsCommandFillColor(V.color2rgba(16777215)));
       t2._boundsRefresh = true;
       t1 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
       t2 = $.DisplayObject__nextID;
@@ -11216,59 +11288,37 @@ var $$ = Object.create(null);
       return t2;
     },
     buildGraphics$1: function(g) {
-      var size, t1, t2, t3;
-      size = J.floor$0$n(J.$div$n(this.board.cellSize, 2));
-      t1 = new A._GraphicsCommandMoveTo(null, null);
-      t1._x = C.JSInt_methods.toDouble$0(size);
-      t1._y = C.JSInt_methods.toDouble$0(size);
-      t2 = g._commands;
-      t2.push(t1);
+      var size, t1, t2;
+      size = C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(this.board.cellSize, 2)));
+      t1 = g._commands;
+      t1.push(new U._GraphicsCommandMoveTo(C.JSInt_methods.toDouble$0(size), C.JSInt_methods.toDouble$0(size)));
       g._boundsRefresh = true;
-      t1 = -size;
-      t3 = new A._GraphicsCommandLineTo(null, null);
-      t3._x = C.JSInt_methods.toDouble$0(size);
-      t3._y = C.JSInt_methods.toDouble$0(t1);
-      t2.push(t3);
+      t2 = -size;
+      t1.push(new U._GraphicsCommandLineTo(C.JSInt_methods.toDouble$0(size), C.JSInt_methods.toDouble$0(t2)));
       g._boundsRefresh = true;
-      t3 = new A._GraphicsCommandLineTo(null, null);
-      t3._x = C.JSInt_methods.toDouble$0(t1);
-      t3._y = C.JSInt_methods.toDouble$0(t1);
-      t2.push(t3);
+      t1.push(new U._GraphicsCommandLineTo(C.JSInt_methods.toDouble$0(t2), C.JSInt_methods.toDouble$0(t2)));
       g._boundsRefresh = true;
-      t3 = new A._GraphicsCommandLineTo(null, null);
-      t3._x = C.JSInt_methods.toDouble$0(t1);
-      t3._y = C.JSInt_methods.toDouble$0(size);
-      t2.push(t3);
+      t1.push(new U._GraphicsCommandLineTo(C.JSInt_methods.toDouble$0(t2), C.JSInt_methods.toDouble$0(size)));
       g._boundsRefresh = true;
-      t3 = new A._GraphicsCommandLineTo(null, null);
-      t3._x = C.JSInt_methods.toDouble$0(size);
-      t3._y = C.JSInt_methods.toDouble$0(size);
-      t2.push(t3);
+      t1.push(new U._GraphicsCommandLineTo(C.JSInt_methods.toDouble$0(size), C.JSInt_methods.toDouble$0(size)));
       g._boundsRefresh = true;
     }
   },
   HexGridPencil: {
     "^": "GridPencil;board,pencil",
     buildGraphics$1: function(g) {
-      var size, t1, t2, t3, t4, i, t5;
-      size = J.$div$n(J.$div$n(this.board.cellSize, Math.cos(H.checkNum(2.617993877991494))), 2);
-      t1 = J.getInterceptor$ns(size);
-      t2 = t1.$mul(size, Math.cos(H.checkNum(1.5707963267948966)));
-      t3 = t1.$mul(size, Math.sin(H.checkNum(1.5707963267948966)));
-      t4 = new A._GraphicsCommandMoveTo(null, null);
-      t4._x = J.toDouble$0$n(t2);
-      t4._y = J.toDouble$0$n(t3);
+      var size, t1, t2, t3, i;
+      size = J.$div$n(this.board.cellSize, Math.cos(H.checkNum(2.617993877991494))) / 2;
+      t1 = Math.cos(H.checkNum(1.5707963267948966));
+      t2 = Math.sin(H.checkNum(1.5707963267948966));
       t3 = g._commands;
-      t3.push(t4);
+      t3.push(new U._GraphicsCommandMoveTo(C.JSNumber_methods.toDouble$0(size * t1), C.JSNumber_methods.toDouble$0(size * t2)));
       g._boundsRefresh = true;
       for (i = 1; i <= 6; ++i) {
-        t2 = 1.5707963267948966 + i * 2 * 3.141592653589793 / 6;
-        t4 = t1.$mul(size, Math.cos(t2));
-        t2 = t1.$mul(size, Math.sin(t2));
-        t5 = new A._GraphicsCommandLineTo(null, null);
-        t5._x = J.toDouble$0$n(t4);
-        t5._y = J.toDouble$0$n(t2);
-        t3.push(t5);
+        t1 = 1.5707963267948966 + i * 2 * 3.141592653589793 / 6;
+        t2 = Math.cos(t1);
+        t1 = Math.sin(t1);
+        t3.push(new U._GraphicsCommandLineTo(C.JSNumber_methods.toDouble$0(size * t2), C.JSNumber_methods.toDouble$0(size * t1)));
         g._boundsRefresh = true;
       }
     }
@@ -11276,38 +11326,21 @@ var $$ = Object.create(null);
   IsoGridPencil: {
     "^": "GridPencil;board,pencil",
     buildGraphics$1: function(g) {
-      var size, skewFactor, t1, t2, t3, t4;
+      var size, skewFactor, t1, t2, t3;
       size = J.$div$n(this.board.cellSize, 2);
       skewFactor = this.board.map.skewFactor * 2;
-      t1 = J.getInterceptor$ns(size);
-      t2 = t1.$mul(size, skewFactor);
-      t3 = new A._GraphicsCommandMoveTo(null, null);
-      t3._x = C.JSInt_methods.toDouble$0(0);
-      t3._y = J.toDouble$0$n(t2);
+      t1 = size * skewFactor;
       t2 = g._commands;
-      t2.push(t3);
+      t2.push(new U._GraphicsCommandMoveTo(C.JSInt_methods.toDouble$0(0), C.JSNumber_methods.toDouble$0(t1)));
       g._boundsRefresh = true;
-      t3 = new A._GraphicsCommandLineTo(null, null);
-      t3._x = t1.toDouble$0(size);
-      t3._y = C.JSInt_methods.toDouble$0(0);
-      t2.push(t3);
+      t2.push(new U._GraphicsCommandLineTo(C.JSNumber_methods.toDouble$0(size), C.JSInt_methods.toDouble$0(0)));
       g._boundsRefresh = true;
-      t3 = J.$mul$ns(t1.$negate(size), skewFactor);
-      t4 = new A._GraphicsCommandLineTo(null, null);
-      t4._x = C.JSInt_methods.toDouble$0(0);
-      t4._y = J.toDouble$0$n(t3);
-      t2.push(t4);
+      t3 = -size;
+      t2.push(new U._GraphicsCommandLineTo(C.JSInt_methods.toDouble$0(0), C.JSNumber_methods.toDouble$0(t3 * skewFactor)));
       g._boundsRefresh = true;
-      t4 = new A._GraphicsCommandLineTo(null, null);
-      t4._x = J.toDouble$0$n(t1.$negate(size));
-      t4._y = C.JSInt_methods.toDouble$0(0);
-      t2.push(t4);
+      t2.push(new U._GraphicsCommandLineTo(C.JSNumber_methods.toDouble$0(t3), C.JSInt_methods.toDouble$0(0)));
       g._boundsRefresh = true;
-      t1 = t1.$mul(size, skewFactor);
-      t4 = new A._GraphicsCommandLineTo(null, null);
-      t4._x = C.JSInt_methods.toDouble$0(0);
-      t4._y = J.toDouble$0$n(t1);
-      t2.push(t4);
+      t2.push(new U._GraphicsCommandLineTo(C.JSInt_methods.toDouble$0(0), C.JSNumber_methods.toDouble$0(t1)));
       g._boundsRefresh = true;
     }
   },
@@ -11572,13 +11605,11 @@ var $$ = Object.create(null);
       this._transformationMatrixRefresh = true;
     },
     set$scaleX: function(value) {
-      if (typeof value === "number")
-        this._scaleX = value;
+      this._scaleX = value;
       this._transformationMatrixRefresh = true;
     },
     set$scaleY: function(value) {
-      if (typeof value === "number")
-        this._scaleY = value;
+      this._scaleY = value;
       this._transformationMatrixRefresh = true;
     },
     get$visible: function() {
@@ -11804,7 +11835,7 @@ var $$ = Object.create(null);
       for (; child != null;) {
         if (child === this)
           return true;
-        child = J.get$parent$x(child);
+        child = child._parent;
       }
       return false;
     },
@@ -11859,7 +11890,7 @@ var $$ = Object.create(null);
           displayObject = child.hitTestInput$2(childX, childY);
           if (displayObject == null)
             continue;
-          if (!!J.getInterceptor(displayObject).$isInteractiveObject && displayObject.mouseEnabled)
+          if (!!displayObject.$isInteractiveObject && displayObject.mouseEnabled)
             return this._mouseChildren ? displayObject : this;
           hit = this;
         }
@@ -11891,240 +11922,6 @@ var $$ = Object.create(null);
         J.dispatchEvent$1$x(descendants[i], $event);
     },
     $isDisplayObjectContainer: true
-  },
-  Graphics: {
-    "^": "Object;_commands,_boundsRectangle,_boundsRefresh",
-    clear$0: function(_) {
-      C.JSArray_methods.set$length(this._commands, 0);
-      this._boundsRefresh = true;
-    },
-    get$bounds: function() {
-      var graphicsBounds, t1, i;
-      if (this._boundsRefresh) {
-        graphicsBounds = new A._GraphicsBounds(1 / 0, -1 / 0, 1 / 0, -1 / 0, 1 / 0, -1 / 0, 1 / 0, -1 / 0, 0 / 0, 0 / 0);
-        for (t1 = this._commands, i = 0; i < t1.length; ++i)
-          t1[i].updateBounds$1(graphicsBounds);
-        this._boundsRefresh = false;
-        this._boundsRectangle = graphicsBounds.getRectangle$0();
-      }
-      t1 = this._boundsRectangle;
-      return H.setRuntimeTypeInfo(new U.Rectangle0(t1.left, t1.top, t1.width, t1.height), [H.getTypeArgumentByIndex(t1, 0)]);
-    },
-    hitTestInput$2: function(localX, localY) {
-      var context, t1, i;
-      if (this.get$bounds().contains$2(0, localX, localY)) {
-        if ($.get$isCocoonJS() === true)
-          return true;
-        context = $.get$_dummyCanvasContext0();
-        context.setTransform(1, 0, 0, 1, 0, 0);
-        context.beginPath();
-        for (t1 = this._commands, i = 0; i < t1.length; ++i)
-          if (t1[i].hitTestInput$3(context, localX, localY) === true)
-            return true;
-      }
-      return false;
-    },
-    render$1: function(renderState) {
-      var renderContext, t1, t2, i;
-      renderContext = renderState._engine$_renderContext;
-      t1 = J.getInterceptor(renderContext);
-      if (!!t1.$isRenderContextCanvas) {
-        t1.setTransform$1(renderContext, renderState._currentContextState.matrix);
-        t1 = renderState._currentContextState.alpha;
-        renderContext._activeAlpha = t1;
-        t2 = renderContext._renderingContext;
-        t2.globalAlpha = t1;
-        t2.beginPath();
-        for (t1 = this._commands, i = 0; i < t1.length; ++i)
-          t1[i].render$1(t2);
-      }
-    },
-    static: {"^": "Graphics__BASE_64"}
-  },
-  _GraphicsCommand: {
-    "^": "Object;",
-    hitTestInput$3: function(context, localX, localY) {
-      this.render$1(context);
-      return false;
-    },
-    updateBounds$1: function(bounds) {
-    },
-    $is_GraphicsCommand: true
-  },
-  _GraphicsBounds: {
-    "^": "Object;pathLeft,pathRight,pathTop,pathBottom,boundsLeft,boundsRight,boundsTop,boundsBottom,cursorX,cursorY",
-    get$hasPath: function() {
-      var t1 = this.pathLeft;
-      if (!(t1 == Infinity || t1 == -Infinity)) {
-        t1 = this.pathRight;
-        if (!(t1 == Infinity || t1 == -Infinity)) {
-          t1 = this.pathTop;
-          if (!(t1 == Infinity || t1 == -Infinity)) {
-            t1 = this.pathBottom;
-            t1 = !(t1 == Infinity || t1 == -Infinity);
-          } else
-            t1 = false;
-        } else
-          t1 = false;
-      } else
-        t1 = false;
-      return t1;
-    },
-    updatePath$2: function(x, y) {
-      if (!isNaN(this.cursorX) && !isNaN(this.cursorY)) {
-        if (this.pathLeft > x)
-          this.pathLeft = x;
-        if (this.pathRight < x)
-          this.pathRight = x;
-        if (this.pathTop > y)
-          this.pathTop = y;
-        if (this.pathBottom < y)
-          this.pathBottom = y;
-      }
-    },
-    getRectangle$0: function() {
-      var t1, t2, t3, t4;
-      t1 = this.boundsLeft;
-      if (!(t1 == Infinity || t1 == -Infinity)) {
-        t2 = this.boundsRight;
-        if (!(t2 == Infinity || t2 == -Infinity)) {
-          t2 = this.boundsTop;
-          if (!(t2 == Infinity || t2 == -Infinity)) {
-            t2 = this.boundsBottom;
-            t2 = !(t2 == Infinity || t2 == -Infinity);
-          } else
-            t2 = false;
-        } else
-          t2 = false;
-      } else
-        t2 = false;
-      if (t2) {
-        t2 = this.boundsRight;
-        t3 = this.boundsBottom;
-        t4 = this.boundsTop;
-        return H.setRuntimeTypeInfo(new U.Rectangle0(t1, t4, t2 - t1, t3 - t4), [P.num]);
-      } else
-        return H.setRuntimeTypeInfo(new U.Rectangle0(0, 0, 0, 0), [P.num]);
-    }
-  },
-  _GraphicsCommandMoveTo: {
-    "^": "_GraphicsCommand;_x,_y",
-    render$1: function(context) {
-      J.moveTo$2$x(context, this._x, this._y);
-    },
-    updateBounds$1: function(bounds) {
-      var t1, t2;
-      t1 = this._x;
-      t2 = this._y;
-      bounds.cursorX = t1;
-      bounds.cursorY = t2;
-    }
-  },
-  _GraphicsCommandLineTo: {
-    "^": "_GraphicsCommand;_x,_y",
-    render$1: function(context) {
-      J.lineTo$2$x(context, this._x, this._y);
-    },
-    updateBounds$1: function(bounds) {
-      var t1, t2;
-      if (!(!isNaN(bounds.cursorX) && !isNaN(bounds.cursorY))) {
-        t1 = this._x;
-        t2 = this._y;
-        bounds.cursorX = t1;
-        bounds.cursorY = t2;
-      }
-      bounds.updatePath$2(bounds.cursorX, bounds.cursorY);
-      bounds.updatePath$2(this._x, this._y);
-      t1 = this._x;
-      t2 = this._y;
-      bounds.cursorX = t1;
-      bounds.cursorY = t2;
-    }
-  },
-  _GraphicsCommandStroke: {
-    "^": "_GraphicsCommand;",
-    hitTestInput$3: function(context, localX, localY) {
-      var t1, exception;
-      J.set$lineWidth$x(context, this._lineWidth);
-      J.set$lineJoin$x(context, this._lineJoin);
-      J.set$lineCap$x(context, this._lineCap);
-      try {
-        t1 = J.isPointInStroke$2$x(context, localX, localY);
-        return t1;
-      } catch (exception) {
-        H.unwrapException(exception);
-        return false;
-      }
-
-    },
-    updateBounds$1: function(bounds) {
-      var t1, lw, left, right, $top, bottom;
-      t1 = this._lineWidth;
-      if (bounds.get$hasPath()) {
-        lw = t1 / 2;
-        left = bounds.pathLeft - lw;
-        right = bounds.pathRight + lw;
-        $top = bounds.pathTop - lw;
-        bottom = bounds.pathBottom + lw;
-        if (bounds.boundsLeft > left)
-          bounds.boundsLeft = left;
-        if (bounds.boundsRight < right)
-          bounds.boundsRight = right;
-        if (bounds.boundsTop > $top)
-          bounds.boundsTop = $top;
-        if (bounds.boundsBottom < bottom)
-          bounds.boundsBottom = bottom;
-      }
-    }
-  },
-  _GraphicsCommandStrokeColor: {
-    "^": "_GraphicsCommandStroke;_color,_lineWidth,_lineJoin,_lineCap",
-    render$1: function(context) {
-      var t1 = J.getInterceptor$x(context);
-      t1.set$strokeStyle(context, this._color);
-      t1.set$lineWidth(context, this._lineWidth);
-      t1.set$lineJoin(context, this._lineJoin);
-      t1.set$lineCap(context, this._lineCap);
-      t1.stroke$0(context);
-    }
-  },
-  _GraphicsCommandFill: {
-    "^": "_GraphicsCommand;",
-    hitTestInput$3: function(context, localX, localY) {
-      return context.isPointInPath(localX, localY);
-    },
-    updateBounds$1: function(bounds) {
-      var t1, t2;
-      if (bounds.get$hasPath()) {
-        t1 = bounds.boundsLeft;
-        t2 = bounds.pathLeft;
-        if (t1 > t2)
-          bounds.boundsLeft = t2;
-        t1 = bounds.boundsRight;
-        t2 = bounds.pathRight;
-        if (t1 < t2)
-          bounds.boundsRight = t2;
-        t1 = bounds.boundsTop;
-        t2 = bounds.pathTop;
-        if (t1 > t2)
-          bounds.boundsTop = t2;
-        t1 = bounds.boundsBottom;
-        t2 = bounds.pathBottom;
-        if (t1 < t2)
-          bounds.boundsBottom = t2;
-      }
-    }
-  },
-  _GraphicsCommandFillColor: {
-    "^": "_GraphicsCommandFill;_color",
-    render$1: function(context) {
-      var t1 = J.getInterceptor$x(context);
-      t1.set$fillStyle(context, this._color);
-      t1.fill$0(context);
-    }
-  },
-  GraphicsGradient: {
-    "^": "Object;"
   },
   InteractiveObject: {
     "^": "DisplayObject;mouseCursor<,tabIndex*",
@@ -12171,7 +11968,7 @@ var $$ = Object.create(null);
       return this.graphics.get$bounds();
     },
     hitTestInput$2: function(localX, localY) {
-      if (this.graphics.hitTestInput$2(localX, localY))
+      if (this.graphics.hitTest$2(localX, localY) === true)
         return this;
       return;
     },
@@ -12179,28 +11976,8 @@ var $$ = Object.create(null);
       this.graphics.render$1(renderState);
     }
   },
-  StageScaleMode: {
-    "^": "Object;_ordinal",
-    static: {"^": "StageScaleMode_EXACT_FIT,StageScaleMode_NO_BORDER,StageScaleMode_NO_SCALE,StageScaleMode_SHOW_ALL"}
-  },
-  StageAlign: {
-    "^": "Object;_ordinal",
-    static: {"^": "StageAlign_BOTTOM,StageAlign_BOTTOM_LEFT,StageAlign_BOTTOM_RIGHT,StageAlign_LEFT,StageAlign_RIGHT,StageAlign_TOP,StageAlign_TOP_LEFT,StageAlign_TOP_RIGHT,StageAlign_NONE"}
-  },
-  StageRenderMode: {
-    "^": "Object;_ordinal",
-    static: {"^": "StageRenderMode_AUTO,StageRenderMode_STOP,StageRenderMode_ONCE"}
-  },
-  _MouseButton: {
-    "^": "Object;mouseDownEventType,mouseUpEventType,mouseClickEventType,mouseDoubleClickEventType,target>,buttonDown,clickTime,clickCount"
-  },
-  _Touch: {
-    "^": "Object;touchPointID<,primaryTouchPoint<,target>,currentTarget*",
-    $is_Touch: true,
-    static: {"^": "_Touch__globalTouchPointID"}
-  },
   Stage: {
-    "^": "DisplayObjectContainer;_display$_canvas,_renderContext,_color,_sourceWidth,_sourceHeight,_frameRate,_stageWidth,_stageHeight,_contentRectangle,_clientTransformation,_stageTransformation,_renderLoop,_juggler,_focus,_renderState,_stageRenderMode,_stageScaleMode,_stageAlign,_mouseCursor,_mousePosition,_mouseTarget,_touches,_mouseButtons,_touchEventSubscriptions,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    "^": "DisplayObjectContainer;_display$_canvas,_renderContext,_juggler,_renderLoop,_color,_sourceWidth,_sourceHeight,_frameRate,_stageWidth,_stageHeight,_contentRectangle<,_clientTransformation,_stageTransformation,_focus,_renderState,_stageRenderMode,_stageScaleMode,_stageAlign,_mouseCursor,_mousePosition,_mouseTarget,_drags,_touchPoints,_mouseButtons,_touchEventSubscriptions,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     hitTestInput$2: function(localX, localY) {
       var target = A.DisplayObjectContainer.prototype.hitTestInput$2.call(this, localX, localY);
       return target != null ? target : this;
@@ -12336,7 +12113,7 @@ var $$ = Object.create(null);
       }
     },
     _onMouseEvent$1: [function($event) {
-      var t1, t2, button, stagePoint, localPoint, t3, mouseButton, target, p, oldTargetList, newTargetList, p0, t4, commonCount, t5, ot, i, target0, mouseEventType, isClick, isDoubleClick;
+      var t1, t2, button, stagePoint, localPoint, t3, mouseButton, target, p, oldTargetList, newTargetList, p0, t4, commonCount, t5, ot, t6, t7, t8, t9, i, target0, mouseEventType, isClick, isDoubleClick;
       t1 = J.getInterceptor$x($event);
       t1.preventDefault$0($event);
       t2 = Date.now();
@@ -12359,6 +12136,7 @@ var $$ = Object.create(null);
         return H.ioore(t3, button);
       mouseButton = t3[button];
       this._mousePosition = stagePoint;
+      C.JSArray_methods.forEach$1(this._drags, new A.Stage__onMouseEvent_closure(stagePoint));
       if (!J.$eq(t1.get$type($event), "mouseout"))
         target = this.hitTestInput$2(stagePoint.x, stagePoint.y);
       else {
@@ -12390,23 +12168,51 @@ var $$ = Object.create(null);
         }
         if (p != null) {
           p.globalToLocal$2(stagePoint, localPoint);
-          p.dispatchEvent$1(0, new R.MouseEvent(localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, 0, 0, mouseButton.buttonDown, 0, t1.get$altKey($event), t1.get$ctrlKey($event), t1.get$shiftKey($event), "mouseOut", true, C.EventPhase_1, null, null, false, false));
+          t3 = localPoint.x;
+          t4 = localPoint.y;
+          t5 = stagePoint.x;
+          t6 = stagePoint.y;
+          t7 = t1.get$altKey($event);
+          t8 = t1.get$ctrlKey($event);
+          t9 = t1.get$shiftKey($event);
+          p.dispatchEvent$1(0, new R.MouseEvent(0, 0, mouseButton.buttonDown, 0, t3, t4, t5, t6, t7, t8, t9, "mouseOut", true, C.EventPhase_1, null, null, false, false));
         }
         for (i = 0; i < oldTargetList.length - commonCount; ++i) {
           target0 = oldTargetList[i];
           target0.globalToLocal$2(stagePoint, localPoint);
-          target0.dispatchEvent$1(0, new R.MouseEvent(localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, 0, 0, mouseButton.buttonDown, 0, t1.get$altKey($event), t1.get$ctrlKey($event), t1.get$shiftKey($event), "rollOut", false, C.EventPhase_1, null, null, false, false));
+          t3 = localPoint.x;
+          t4 = localPoint.y;
+          t5 = stagePoint.x;
+          t6 = stagePoint.y;
+          t7 = t1.get$altKey($event);
+          t8 = t1.get$ctrlKey($event);
+          t9 = t1.get$shiftKey($event);
+          target0.dispatchEvent$1(0, new R.MouseEvent(0, 0, mouseButton.buttonDown, 0, t3, t4, t5, t6, t7, t8, t9, "rollOut", false, C.EventPhase_1, null, null, false, false));
         }
         for (i = newTargetList.length - commonCount - 1; i >= 0; --i) {
           if (i >= newTargetList.length)
             return H.ioore(newTargetList, i);
           target0 = newTargetList[i];
           target0.globalToLocal$2(stagePoint, localPoint);
-          target0.dispatchEvent$1(0, new R.MouseEvent(localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, 0, 0, mouseButton.buttonDown, 0, t1.get$altKey($event), t1.get$ctrlKey($event), t1.get$shiftKey($event), "rollOver", false, C.EventPhase_1, null, null, false, false));
+          t3 = localPoint.x;
+          t4 = localPoint.y;
+          t5 = stagePoint.x;
+          t6 = stagePoint.y;
+          t7 = t1.get$altKey($event);
+          t8 = t1.get$ctrlKey($event);
+          t9 = t1.get$shiftKey($event);
+          target0.dispatchEvent$1(0, new R.MouseEvent(0, 0, mouseButton.buttonDown, 0, t3, t4, t5, t6, t7, t8, t9, "rollOver", false, C.EventPhase_1, null, null, false, false));
         }
         if (target != null) {
           target.globalToLocal$2(stagePoint, localPoint);
-          target.dispatchEvent$1(0, new R.MouseEvent(localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, 0, 0, mouseButton.buttonDown, 0, t1.get$altKey($event), t1.get$ctrlKey($event), t1.get$shiftKey($event), "mouseOver", true, C.EventPhase_1, null, null, false, false));
+          t3 = localPoint.x;
+          t4 = localPoint.y;
+          t5 = stagePoint.x;
+          t6 = stagePoint.y;
+          t7 = t1.get$altKey($event);
+          t8 = t1.get$ctrlKey($event);
+          t9 = t1.get$shiftKey($event);
+          target.dispatchEvent$1(0, new R.MouseEvent(0, 0, mouseButton.buttonDown, 0, t3, t4, t5, t6, t7, t8, t9, "mouseOver", true, C.EventPhase_1, null, null, false, false));
         }
         this._mouseTarget = target;
       }
@@ -12456,21 +12262,42 @@ var $$ = Object.create(null);
         mouseEventType = "contextMenu";
       if (mouseEventType != null && target != null) {
         target.globalToLocal$2(stagePoint, localPoint);
-        target.dispatchEvent$1(0, new R.MouseEvent(localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, 0, 0, mouseButton.buttonDown, mouseButton.clickCount, t1.get$altKey($event), t1.get$ctrlKey($event), t1.get$shiftKey($event), mouseEventType, true, C.EventPhase_1, null, null, false, false));
+        t2 = localPoint.x;
+        t3 = localPoint.y;
+        t4 = stagePoint.x;
+        t5 = stagePoint.y;
+        t6 = t1.get$altKey($event);
+        t7 = t1.get$ctrlKey($event);
+        t8 = t1.get$shiftKey($event);
+        target.dispatchEvent$1(0, new R.MouseEvent(0, 0, mouseButton.buttonDown, mouseButton.clickCount, t2, t3, t4, t5, t6, t7, t8, mouseEventType, true, C.EventPhase_1, null, null, false, false));
         if (isClick) {
           mouseEventType = isDoubleClick && target.doubleClickEnabled ? mouseButton.mouseDoubleClickEventType : mouseButton.mouseClickEventType;
-          target.dispatchEvent$1(0, new R.MouseEvent(localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, 0, 0, mouseButton.buttonDown, 0, t1.get$altKey($event), t1.get$ctrlKey($event), t1.get$shiftKey($event), mouseEventType, true, C.EventPhase_1, null, null, false, false));
+          t2 = localPoint.x;
+          t3 = localPoint.y;
+          t4 = stagePoint.x;
+          t5 = stagePoint.y;
+          t6 = t1.get$altKey($event);
+          t7 = t1.get$ctrlKey($event);
+          t1 = t1.get$shiftKey($event);
+          target.dispatchEvent$1(0, new R.MouseEvent(0, 0, mouseButton.buttonDown, 0, t2, t3, t4, t5, t6, t7, t1, mouseEventType, true, C.EventPhase_1, null, null, false, false));
         }
       }
     }, "call$1", "get$_onMouseEvent", 2, 0, 68, 69],
     _onMouseWheelEvent$1: [function($event) {
-      var t1, stagePoint, localPoint, target, mouseEvent;
+      var t1, stagePoint, localPoint, target, t2, t3, t4, t5, t6, t7, t8, mouseEvent;
       t1 = J.getInterceptor$x($event);
       stagePoint = this._clientTransformation.transformPoint$1(t1.get$client($event));
       localPoint = H.setRuntimeTypeInfo(new U.Point(0, 0), [P.num]);
       target = this.hitTestInput$2(stagePoint.x, stagePoint.y);
       target.globalToLocal$2(stagePoint, localPoint);
-      mouseEvent = new R.MouseEvent(localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, t1.get$deltaX($event), t1.get$deltaY($event), false, 0, t1.get$altKey($event), t1.get$ctrlKey($event), t1.get$shiftKey($event), "mouseWheel", true, C.EventPhase_1, null, null, false, false);
+      t2 = localPoint.x;
+      t3 = localPoint.y;
+      t4 = stagePoint.x;
+      t5 = stagePoint.y;
+      t6 = t1.get$altKey($event);
+      t7 = t1.get$ctrlKey($event);
+      t8 = t1.get$shiftKey($event);
+      mouseEvent = new R.MouseEvent(t1.get$deltaX($event), t1.get$deltaY($event), false, 0, t2, t3, t4, t5, t6, t7, t8, "mouseWheel", true, C.EventPhase_1, null, null, false, false);
       target.dispatchEvent$1(0, mouseEvent);
       if (mouseEvent._stopsPropagation)
         t1.preventDefault$0($event);
@@ -12533,17 +12360,20 @@ var $$ = Object.create(null);
       }
     }, "call$1", "get$_onTouchEvent", 2, 0, 73, 69],
     _onTouchEventProcessor$6: function(eventType, identifier, client, altKey, ctrlKey, shiftKey) {
-      var stagePoint, localPoint, target, t1, touch, t2, oldTarget, oldTargetList, newTargetList, p, commonCount, t3, t4, t5, ot, i, target0, touchEventType, isTap;
+      var stagePoint, localPoint, target, t1, touchPoint, touchPointID, primaryTouchPoint, t2, oldTarget, oldTargetList, newTargetList, p, commonCount, t3, t4, t5, ot, i, target0, touchEventType, isTap;
       stagePoint = this._clientTransformation.transformPoint$1(client);
       localPoint = new U.Point(0, 0);
       localPoint.$builtinTypeInfo = [P.num];
       target = A.DisplayObjectContainer.prototype.hitTestInput$2.call(this, stagePoint.x, stagePoint.y);
       target = target != null ? target : this;
-      t1 = this._touches;
-      touch = t1.putIfAbsent$2(identifier, new A.Stage__onTouchEventProcessor_closure(this, target));
-      t2 = J.getInterceptor$x(touch);
-      if (!J.$eq(t2.get$currentTarget(touch), target)) {
-        oldTarget = t2.get$currentTarget(touch);
+      t1 = this._touchPoints;
+      touchPoint = t1.putIfAbsent$2(identifier, new A.Stage__onTouchEventProcessor_closure(this, target));
+      touchPointID = touchPoint.get$touchPointID();
+      primaryTouchPoint = touchPoint.get$primaryTouchPoint();
+      C.JSArray_methods.forEach$1(this._drags, new A.Stage__onTouchEventProcessor_closure0(stagePoint, touchPointID));
+      t2 = J.getInterceptor$x(touchPoint);
+      if (!J.$eq(t2.get$currentTarget(touchPoint), target)) {
+        oldTarget = t2.get$currentTarget(touchPoint);
         oldTargetList = [];
         newTargetList = [];
         for (p = oldTarget; p != null; p = J.get$parent$x(p))
@@ -12569,36 +12399,36 @@ var $$ = Object.create(null);
         }
         if (oldTarget != null) {
           oldTarget.globalToLocal$2(stagePoint, localPoint);
-          J.dispatchEvent$1$x(oldTarget, new R.TouchEvent(touch.get$touchPointID(), touch.get$primaryTouchPoint(), localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, altKey, ctrlKey, shiftKey, "touchOut", true, C.EventPhase_1, null, null, false, false));
+          J.dispatchEvent$1$x(oldTarget, new R.TouchEvent(touchPointID, primaryTouchPoint, localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, altKey, ctrlKey, shiftKey, "touchOut", true, C.EventPhase_1, null, null, false, false));
         }
         for (i = 0; i < oldTargetList.length - commonCount; ++i) {
           target0 = oldTargetList[i];
           target0.globalToLocal$2(stagePoint, localPoint);
-          J.dispatchEvent$1$x(target0, new R.TouchEvent(touch.get$touchPointID(), touch.get$primaryTouchPoint(), localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, altKey, ctrlKey, shiftKey, "touchRollOut", false, C.EventPhase_1, null, null, false, false));
+          J.dispatchEvent$1$x(target0, new R.TouchEvent(touchPointID, primaryTouchPoint, localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, altKey, ctrlKey, shiftKey, "touchRollOut", false, C.EventPhase_1, null, null, false, false));
         }
         for (i = newTargetList.length - commonCount - 1; i >= 0; --i) {
           if (i >= newTargetList.length)
             return H.ioore(newTargetList, i);
           target0 = newTargetList[i];
           target0.globalToLocal$2(stagePoint, localPoint);
-          target0.dispatchEvent$1(0, new R.TouchEvent(touch.get$touchPointID(), touch.get$primaryTouchPoint(), localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, altKey, ctrlKey, shiftKey, "touchRollOver", false, C.EventPhase_1, null, null, false, false));
+          target0.dispatchEvent$1(0, new R.TouchEvent(touchPointID, primaryTouchPoint, localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, altKey, ctrlKey, shiftKey, "touchRollOver", false, C.EventPhase_1, null, null, false, false));
         }
         if (target != null) {
           target.globalToLocal$2(stagePoint, localPoint);
-          target.dispatchEvent$1(0, new R.TouchEvent(touch.get$touchPointID(), touch.get$primaryTouchPoint(), localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, altKey, ctrlKey, shiftKey, "touchOver", true, C.EventPhase_1, null, null, false, false));
+          target.dispatchEvent$1(0, new R.TouchEvent(touchPointID, primaryTouchPoint, localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, altKey, ctrlKey, shiftKey, "touchOver", true, C.EventPhase_1, null, null, false, false));
         }
-        t2.set$currentTarget(touch, target);
+        t2.set$currentTarget(touchPoint, target);
       }
       t3 = J.getInterceptor(eventType);
       if (t3.$eq(eventType, "touchstart")) {
         this._display$_canvas.focus();
-        t1.$indexSet(0, identifier, touch);
+        t1.$indexSet(0, identifier, touchPoint);
         touchEventType = "touchBegin";
       } else
         touchEventType = null;
       if (t3.$eq(eventType, "touchend")) {
         t1.remove$1(0, identifier);
-        isTap = J.$eq(t2.get$target(touch), target);
+        isTap = J.$eq(t2.get$target(touchPoint), target);
         touchEventType = "touchEnd";
       } else
         isTap = false;
@@ -12610,9 +12440,9 @@ var $$ = Object.create(null);
         touchEventType = "touchMove";
       if (touchEventType != null && target != null) {
         target.globalToLocal$2(stagePoint, localPoint);
-        target.dispatchEvent$1(0, new R.TouchEvent(touch.get$touchPointID(), touch.get$primaryTouchPoint(), localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, altKey, ctrlKey, shiftKey, touchEventType, true, C.EventPhase_1, null, null, false, false));
+        target.dispatchEvent$1(0, new R.TouchEvent(touchPointID, primaryTouchPoint, localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, altKey, ctrlKey, shiftKey, touchEventType, true, C.EventPhase_1, null, null, false, false));
         if (isTap)
-          target.dispatchEvent$1(0, new R.TouchEvent(touch.get$touchPointID(), touch.get$primaryTouchPoint(), localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, altKey, ctrlKey, shiftKey, "touchTap", true, C.EventPhase_1, null, null, false, false));
+          target.dispatchEvent$1(0, new R.TouchEvent(touchPointID, primaryTouchPoint, localPoint.x, localPoint.y, stagePoint.x, stagePoint.y, altKey, ctrlKey, shiftKey, "touchTap", true, C.EventPhase_1, null, null, false, false));
       }
     },
     _onKeyEvent$1: [function($event) {
@@ -12622,7 +12452,7 @@ var $$ = Object.create(null);
       return;
     }, "call$1", "get$_onKeyEvent", 2, 0, 74, 69],
     Stage$7$alpha$color$frameRate$height$webGL$width: function(canvas, alpha, color, frameRate, height, webGL, width) {
-      var t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, exception;
+      var t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, exception;
       if (!J.getInterceptor(canvas).$isCanvasElement)
         throw H.wrapException(P.ArgumentError$("The canvas argument is not a CanvasElement"));
       this._display$_canvas = canvas;
@@ -12643,16 +12473,14 @@ var $$ = Object.create(null);
           t5 = P.LinkedHashMap_LinkedHashMap(null, null, null, P.String, P.UniformLocation);
           t6 = new Int16Array(H._checkLength(2048));
           t7 = new Float32Array(H._checkLength(8192));
-          t8 = new T.Matrix3D(new Float32Array(H._checkLength(16)));
-          t8.setIdentity$0();
-          t9 = P.LinkedHashMap_LinkedHashMap(null, null, null, P.String, P.$int);
-          t10 = P.LinkedHashMap_LinkedHashMap(null, null, null, P.String, P.UniformLocation);
-          t11 = H.setRuntimeTypeInfo([], [L.RenderFrameBuffer]);
-          t12 = new T.Matrix3D(new Float32Array(H._checkLength(16)));
-          t12.setIdentity$0();
-          t12 = new L.RenderContextWebGL(t1, t2, new L.RenderProgramTriangle(null, null, 0, 0, 0, t3, -1, null, null, t4, t5), new L.RenderProgramMesh(null, null, null, null, null, 0, 0, 0, 0, 0, t6, t7, t8, -1, null, null, t9, t10), t11, null, t12, null, null, null, null, true, 0, 0, 0, 0, P.StreamController_StreamController$broadcast(null, null, false, L.RenderContextEvent), P.StreamController_StreamController$broadcast(null, null, false, L.RenderContextEvent));
-          t12.RenderContextWebGL$3$alpha$antialias(t1, alpha, false);
-          this._renderContext = t12;
+          t8 = P.LinkedHashMap_LinkedHashMap(null, null, null, P.String, P.$int);
+          t9 = P.LinkedHashMap_LinkedHashMap(null, null, null, P.String, P.UniformLocation);
+          t10 = H.setRuntimeTypeInfo([], [L.RenderFrameBuffer]);
+          t11 = new T.Matrix3D(new Float32Array(H._checkLength(16)));
+          t11.setIdentity$0();
+          t11 = new L.RenderContextWebGL(t1, t2, new L.RenderProgramTriangle(null, null, 0, 0, 0, t3, -1, null, null, t4, t5), new L.RenderProgramMesh(null, null, null, null, 0, 0, 0, 0, 0, t6, t7, -1, null, null, t8, t9), t10, null, t11, null, null, null, null, true, 0, 0, 0, 0, P.StreamController_StreamController$broadcast(null, null, false, L.RenderContextEvent), P.StreamController_StreamController$broadcast(null, null, false, L.RenderContextEvent));
+          t11.RenderContextWebGL$3$alpha$antialias(t1, alpha, false);
+          this._renderContext = t11;
         } catch (exception) {
           H.unwrapException(exception);
           t1 = canvas;
@@ -12688,26 +12516,27 @@ var $$ = Object.create(null);
       H.setRuntimeTypeInfo(new W._EventStreamSubscription(0, t1._target, t1._eventType, W._wrapZone(this.get$_onMouseWheelEvent()), t1._useCapture), [H.getTypeArgumentByIndex(t1, 0)])._tryResume$0();
       $.get$Mouse_onCursorChanged().listen$1(new A.Stage_closure(this));
       $.get$Multitouch_onInputModeChanged().listen$1(this.get$_onMultitouchInputModeChanged());
-      this._onMultitouchInputModeChanged$1(null);
+      this._onMultitouchInputModeChanged$1($.Multitouch__inputMode);
     },
     $isStage: true,
     static: {"^": "Stage_autoHiDpi,Stage_resizeEvent,Stage_mouseLeaveEvent", Stage$: function(canvas, alpha, color, frameRate, height, webGL, width) {
-        var t1, t2, t3, t4, t5, t6, t7, t8;
-        t1 = H.setRuntimeTypeInfo(new U.Rectangle0(0, 0, 0, 0), [P.num]);
-        t2 = T.Matrix$fromIdentity();
+        var t1, t2, t3, t4, t5, t6, t7, t8, t9;
+        t1 = new K.Juggler(null, null, 0);
+        t2 = new K._AnimatableLink(null, null);
+        t1._firstAnimatableLink = t2;
+        t1._lastAnimatableLink = t2;
+        t2 = H.setRuntimeTypeInfo(new U.Rectangle0(0, 0, 0, 0), [P.num]);
         t3 = T.Matrix$fromIdentity();
-        t4 = new K.Juggler(null, null, 0);
-        t5 = new K._AnimatableLink(null, null);
-        t4._firstAnimatableLink = t5;
-        t4._lastAnimatableLink = t5;
+        t4 = T.Matrix$fromIdentity();
         t5 = H.setRuntimeTypeInfo(new U.Point(0, 0), [P.num]);
-        t6 = P.LinkedHashMap_LinkedHashMap(null, null, null, P.$int, A._Touch);
-        t7 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
-        t8 = $.DisplayObject__nextID;
-        $.DisplayObject__nextID = t8 + 1;
-        t8 = new A.Stage(null, null, 0, 0, 0, 30, 0, 0, t1, t2, t3, null, t4, null, null, C.StageRenderMode_0, C.StageScaleMode_3, C.StageAlign_8, "default", t5, null, t6, [new A._MouseButton("mouseDown", "mouseUp", "click", "doubleClick", null, false, 0, 0), new A._MouseButton("middleMouseDown", "middleMouseUp", "middleClick", "middleClick", null, false, 0, 0), new A._MouseButton("rightMouseDown", "rightMouseUp", "rightClick", "rightClick", null, false, 0, 0)], [], t7, true, true, false, true, "auto", true, 0, t8, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
-        t8.Stage$7$alpha$color$frameRate$height$webGL$width(canvas, alpha, color, frameRate, height, webGL, width);
-        return t8;
+        t6 = H.setRuntimeTypeInfo([], [A._Drag]);
+        t7 = P.LinkedHashMap_LinkedHashMap(null, null, null, P.$int, A._TouchPoint);
+        t8 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
+        t9 = $.DisplayObject__nextID;
+        $.DisplayObject__nextID = t9 + 1;
+        t9 = new A.Stage(null, null, t1, null, 0, 0, 0, 30, 0, 0, t2, t3, t4, null, null, C.StageRenderMode_0, C.StageScaleMode_3, C.StageAlign_8, "default", t5, null, t6, t7, [new A._MouseButton("mouseDown", "mouseUp", "click", "doubleClick", null, false, 0, 0), new A._MouseButton("middleMouseDown", "middleMouseUp", "middleClick", "middleClick", null, false, 0, 0), new A._MouseButton("rightMouseDown", "rightMouseUp", "rightClick", "rightClick", null, false, 0, 0)], [], t8, true, true, false, true, "auto", true, 0, t9, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
+        t9.Stage$7$alpha$color$frameRate$height$webGL$width(canvas, alpha, color, frameRate, height, webGL, width);
+        return t9;
       }}
   },
   Stage_closure: {
@@ -12715,6 +12544,12 @@ var $$ = Object.create(null);
     call$1: [function(cursorName) {
       return this.this_0._updateMouseCursor$0();
     }, "call$1", null, 2, 0, null, 75, "call"]
+  },
+  Stage__onMouseEvent_closure: {
+    "^": "Closure:30;stagePoint_0",
+    call$1: function(d) {
+      return d.update$2(0, this.stagePoint_0);
+    }
   },
   Stage__onMultitouchInputModeChanged_closure: {
     "^": "Closure:30;",
@@ -12727,11 +12562,302 @@ var $$ = Object.create(null);
     call$0: function() {
       var t1, t2, t3;
       t1 = this.target_1;
-      t2 = this.this_0._touches._collection$_length;
-      t3 = $._Touch__globalTouchPointID;
-      $._Touch__globalTouchPointID = t3 + 1;
-      return new A._Touch(t3, t2 === 0, t1, t1);
+      t2 = this.this_0._touchPoints._collection$_length;
+      t3 = $._TouchPoint__globalTouchPointID;
+      $._TouchPoint__globalTouchPointID = t3 + 1;
+      return new A._TouchPoint(t3, t2 === 0, t1, t1);
     }
+  },
+  Stage__onTouchEventProcessor_closure0: {
+    "^": "Closure:30;stagePoint_2,touchPointID_3",
+    call$1: function(d) {
+      return d.update$2(this.touchPointID_3, this.stagePoint_2);
+    }
+  },
+  StageAlign: {
+    "^": "Object;index>",
+    static: {"^": "StageAlign_BOTTOM,StageAlign_BOTTOM_LEFT,StageAlign_BOTTOM_RIGHT,StageAlign_LEFT,StageAlign_RIGHT,StageAlign_TOP,StageAlign_TOP_LEFT,StageAlign_TOP_RIGHT,StageAlign_NONE"}
+  },
+  StageRenderMode: {
+    "^": "Object;index>",
+    static: {"^": "StageRenderMode_AUTO,StageRenderMode_STOP,StageRenderMode_ONCE"}
+  },
+  StageScaleMode: {
+    "^": "Object;index>",
+    static: {"^": "StageScaleMode_EXACT_FIT,StageScaleMode_NO_BORDER,StageScaleMode_NO_SCALE,StageScaleMode_SHOW_ALL"}
+  },
+  _MouseButton: {
+    "^": "Object;mouseDownEventType,mouseUpEventType,mouseClickEventType,mouseDoubleClickEventType,target>,buttonDown,clickTime,clickCount"
+  },
+  _TouchPoint: {
+    "^": "Object;touchPointID<,primaryTouchPoint<,target>,currentTarget*",
+    $is_TouchPoint: true,
+    static: {"^": "_TouchPoint__globalTouchPointID"}
+  },
+  _Drag: {
+    "^": "Object;",
+    $is_Drag: true
+  }
+}],
+["stagexl.drawing", "package:stagexl/src/drawing.dart", , U, {
+  "^": "",
+  _GraphicsCommandFillColor: {
+    "^": "_GraphicsCommandFill;color",
+    drawCanvas$1: function(context) {
+      var t1 = J.getInterceptor$x(context);
+      t1.set$fillStyle(context, this.color);
+      t1.fill$0(context);
+    }
+  },
+  _GraphicsCommandLineTo: {
+    "^": "_GraphicsCommand;x>,y>",
+    updateBounds$1: function(bounds) {
+      var t1, t2;
+      if (!(!isNaN(bounds.cursorX) && !isNaN(bounds.cursorY))) {
+        bounds.cursorX = this.x;
+        bounds.cursorY = this.y;
+      }
+      bounds.updatePath$2(bounds.cursorX, bounds.cursorY);
+      t1 = this.x;
+      t2 = this.y;
+      bounds.updatePath$2(t1, t2);
+      bounds.cursorX = t1;
+      bounds.cursorY = t2;
+    },
+    drawCanvas$1: function(context) {
+      J.lineTo$2$x(context, this.x, this.y);
+    }
+  },
+  _GraphicsCommandMoveTo: {
+    "^": "_GraphicsCommand;x>,y>",
+    updateBounds$1: function(bounds) {
+      bounds.cursorX = this.x;
+      bounds.cursorY = this.y;
+    },
+    drawCanvas$1: function(context) {
+      J.moveTo$2$x(context, this.x, this.y);
+    }
+  },
+  _GraphicsCommandStrokeColor: {
+    "^": "_GraphicsCommandStroke;color,lineWidth,lineJoin,lineCap",
+    drawCanvas$1: function(context) {
+      var t1 = J.getInterceptor$x(context);
+      t1.set$strokeStyle(context, this.color);
+      t1.set$lineWidth(context, this.lineWidth);
+      t1.set$lineJoin(context, this.lineJoin);
+      t1.set$lineCap(context, this.lineCap);
+      t1.stroke$0(context);
+    }
+  },
+  Graphics: {
+    "^": "Object;_commands,_boundsRectangle,_boundsRefresh",
+    clear$0: function(_) {
+      C.JSArray_methods.set$length(this._commands, 0);
+      this._boundsRefresh = true;
+    },
+    get$bounds: function() {
+      var graphicsBounds, commands, i, t1, t2, t3, t4, t5;
+      if (this._boundsRefresh) {
+        graphicsBounds = new U._GraphicsBounds(0 / 0, 0 / 0, 1 / 0, -1 / 0, 1 / 0, -1 / 0, 1 / 0, -1 / 0, 1 / 0, -1 / 0);
+        commands = this._commands;
+        for (i = 0; i < commands.length; ++i)
+          commands[i].updateBounds$1(graphicsBounds);
+        this._boundsRefresh = false;
+        t1 = this._boundsRectangle;
+        t2 = graphicsBounds.getRectangle$0();
+        t3 = t2.left;
+        t4 = t2.top;
+        t5 = t2.width;
+        t2 = t2.height;
+        t1.left = t3;
+        t1.top = t4;
+        t1.width = t5;
+        t1.height = t2;
+      }
+      t1 = this._boundsRectangle;
+      return H.setRuntimeTypeInfo(new U.Rectangle0(t1.left, t1.top, t1.width, t1.height), [H.getTypeArgumentByIndex(t1, 0)]);
+    },
+    hitTest$2: function(localX, localY) {
+      var context, commands, hit, i, t1;
+      context = $.get$_dummyCanvasContext0();
+      commands = this._commands;
+      if (this.get$bounds().contains$2(0, localX, localY)) {
+        context.setTransform(1, 0, 0, 1, 0, 0);
+        context.beginPath();
+        hit = false;
+        i = 0;
+        while (true) {
+          t1 = commands.length;
+          if (!(i < t1 && hit === false))
+            break;
+          if (i >= t1)
+            return H.ioore(commands, i);
+          hit = commands[i].hitTest$3(context, localX, localY);
+          ++i;
+        }
+      } else
+        hit = false;
+      return hit;
+    },
+    render$1: function(renderState) {
+      if (!!J.getInterceptor(renderState._engine$_renderContext).$isRenderContextWebGL)
+        ;
+      else
+        this._renderCanvas$1(renderState);
+    },
+    _renderCanvas$1: function(renderState) {
+      var renderContext, rawContext, commands, i;
+      renderContext = renderState._engine$_renderContext;
+      rawContext = renderContext.get$rawContext();
+      commands = this._commands;
+      renderContext.setTransform$1(0, renderState._currentContextState.matrix);
+      renderContext.setAlpha$1(renderState._currentContextState.alpha);
+      J.beginPath$0$x(rawContext);
+      for (i = 0; i < commands.length; ++i)
+        commands[i].drawCanvas$1(rawContext);
+    },
+    static: {"^": "Graphics__BASE_64"}
+  },
+  _GraphicsBounds: {
+    "^": "Object;cursorX,cursorY,pathLeft,pathRight,pathTop,pathBottom,boundsLeft,boundsRight,boundsTop,boundsBottom",
+    get$hasPath: function() {
+      var t1 = this.pathLeft;
+      if (!(t1 == Infinity || t1 == -Infinity)) {
+        t1 = this.pathRight;
+        if (!(t1 == Infinity || t1 == -Infinity)) {
+          t1 = this.pathTop;
+          if (!(t1 == Infinity || t1 == -Infinity)) {
+            t1 = this.pathBottom;
+            t1 = !(t1 == Infinity || t1 == -Infinity);
+          } else
+            t1 = false;
+        } else
+          t1 = false;
+      } else
+        t1 = false;
+      return t1;
+    },
+    updatePath$2: function(x, y) {
+      if (!isNaN(this.cursorX) && !isNaN(this.cursorY)) {
+        if (this.pathLeft > x)
+          this.pathLeft = x;
+        if (this.pathRight < x)
+          this.pathRight = x;
+        if (this.pathTop > y)
+          this.pathTop = y;
+        if (this.pathBottom < y)
+          this.pathBottom = y;
+      }
+    },
+    getRectangle$0: function() {
+      var t1, t2, t3, t4;
+      t1 = this.boundsLeft;
+      if (!(t1 == Infinity || t1 == -Infinity)) {
+        t2 = this.boundsRight;
+        if (!(t2 == Infinity || t2 == -Infinity)) {
+          t2 = this.boundsTop;
+          if (!(t2 == Infinity || t2 == -Infinity)) {
+            t2 = this.boundsBottom;
+            t2 = !(t2 == Infinity || t2 == -Infinity);
+          } else
+            t2 = false;
+        } else
+          t2 = false;
+      } else
+        t2 = false;
+      if (t2) {
+        t2 = this.boundsRight;
+        t3 = this.boundsBottom;
+        t4 = this.boundsTop;
+        return H.setRuntimeTypeInfo(new U.Rectangle0(t1, t4, t2 - t1, t3 - t4), [P.num]);
+      } else
+        return H.setRuntimeTypeInfo(new U.Rectangle0(0, 0, 0, 0), [P.num]);
+    }
+  },
+  _GraphicsCommand: {
+    "^": "Object;",
+    updateBounds$1: function(bounds) {
+    },
+    drawCanvas$1: function(context) {
+    },
+    hitTest$3: function(context, localX, localY) {
+      this.drawCanvas$1(context);
+      return false;
+    },
+    $is_GraphicsCommand: true
+  },
+  _GraphicsCommandFill: {
+    "^": "_GraphicsCommand;",
+    updateBounds$1: function(bounds) {
+      var t1, t2;
+      if (bounds.get$hasPath()) {
+        t1 = bounds.boundsLeft;
+        t2 = bounds.pathLeft;
+        if (t1 > t2)
+          bounds.boundsLeft = t2;
+        t1 = bounds.boundsRight;
+        t2 = bounds.pathRight;
+        if (t1 < t2)
+          bounds.boundsRight = t2;
+        t1 = bounds.boundsTop;
+        t2 = bounds.pathTop;
+        if (t1 > t2)
+          bounds.boundsTop = t2;
+        t1 = bounds.boundsBottom;
+        t2 = bounds.pathBottom;
+        if (t1 < t2)
+          bounds.boundsBottom = t2;
+      }
+    },
+    hitTest$3: function(context, localX, localY) {
+      var t1, exception;
+      try {
+        t1 = J.isPointInPath$2$x(context, localX, localY);
+        return t1;
+      } catch (exception) {
+        H.unwrapException(exception);
+        return true;
+      }
+
+    }
+  },
+  _GraphicsCommandStroke: {
+    "^": "_GraphicsCommand;",
+    updateBounds$1: function(bounds) {
+      var lw, left, right, $top, bottom;
+      if (bounds.get$hasPath()) {
+        lw = this.lineWidth / 2;
+        left = bounds.pathLeft - lw;
+        right = bounds.pathRight + lw;
+        $top = bounds.pathTop - lw;
+        bottom = bounds.pathBottom + lw;
+        if (bounds.boundsLeft > left)
+          bounds.boundsLeft = left;
+        if (bounds.boundsRight < right)
+          bounds.boundsRight = right;
+        if (bounds.boundsTop > $top)
+          bounds.boundsTop = $top;
+        if (bounds.boundsBottom < bottom)
+          bounds.boundsBottom = bottom;
+      }
+    },
+    hitTest$3: function(context, localX, localY) {
+      var t1, exception;
+      J.set$lineWidth$x(context, this.lineWidth);
+      J.set$lineJoin$x(context, this.lineJoin);
+      J.set$lineCap$x(context, this.lineCap);
+      try {
+        t1 = J.isPointInStroke$2$x(context, localX, localY);
+        return t1;
+      } catch (exception) {
+        H.unwrapException(exception);
+        return false;
+      }
+
+    }
+  },
+  GraphicsGradient: {
+    "^": "Object;"
   }
 }],
 ["stagexl.engine", "package:stagexl/src/engine.dart", , L, {
@@ -12765,6 +12891,9 @@ var $$ = Object.create(null);
   },
   RenderContextCanvas: {
     "^": "RenderContext;_canvasElement,_renderingContext,_identityMatrix,_activeBlendMode,_activeAlpha,_contextLostEvent,_contextRestoredEvent",
+    get$rawContext: function() {
+      return this._renderingContext;
+    },
     get$renderEngine: function() {
       return "Canvas2D";
     },
@@ -12910,10 +13039,17 @@ var $$ = Object.create(null);
       var t1 = matrix._data;
       this._renderingContext.setTransform(t1[0], t1[1], t1[2], t1[3], t1[4], t1[5]);
     },
+    setAlpha$1: function(alpha) {
+      this._activeAlpha = alpha;
+      this._renderingContext.globalAlpha = alpha;
+    },
     $isRenderContextCanvas: true
   },
   RenderContextWebGL: {
     "^": "RenderContext;_canvasElement,renderProgramQuad,renderProgramTriangle,renderProgramMesh,_renderFrameBufferPool,_renderingContext,_projectionMatrix,_activeRenderTexture,_activeRenderProgram,_activeRenderFrameBuffer,_activeBlendMode,_contextValid,_contextIdentifier,_stencilDepth@,_viewportWidth,_viewportHeight,_contextLostEvent,_contextRestoredEvent",
+    get$rawContext: function() {
+      return this._renderingContext;
+    },
     get$renderEngine: function() {
       return "WebGL";
     },
@@ -13125,6 +13261,7 @@ var $$ = Object.create(null);
       this._contextIdentifier = t1;
       this.reset$0(0);
     },
+    $isRenderContextWebGL: true,
     static: {"^": "RenderContextWebGL__globalContextIdentifier"}
   },
   RenderFrameBuffer: {
@@ -13202,9 +13339,9 @@ var $$ = Object.create(null);
     }
   },
   RenderProgramMesh: {
-    "^": "RenderProgram;_vertexBuffer,_indexBuffer,_uProjectionMatrixLocation,_uGlobalMatrixLocation,_uSamplerLocation,_aVertexPositionLocation,_aVertexTextCoordLocation,_aVertexColorLocation,_vertexCount,_indexCount,_indexList,_vertexList,_globalMatrix,_contextIdentifier,_renderingContext,_program,_attributeLocations,_uniformLocations",
+    "^": "RenderProgram;_vertexBuffer,_indexBuffer,_uProjectionMatrixLocation,_uSamplerLocation,_aVertexPositionLocation,_aVertexTextCoordLocation,_aVertexColorLocation,_vertexCount,_indexCount,_indexList,_vertexList,_contextIdentifier,_renderingContext,_program,_attributeLocations,_uniformLocations",
     get$vertexShaderSource: function() {
-      return "    attribute vec2 aVertexPosition;\r\n    attribute vec2 aVertexTextCoord;\r\n    attribute vec4 aVertexColor;\r\n    uniform mat4 uProjectionMatrix;\r\n    uniform mat4 uGlobalMatrix;\r\n    varying vec2 vTextCoord;\r\n    varying vec4 vColor; \r\n\r\n    void main() {\r\n      vTextCoord = aVertexTextCoord;\r\n      vColor = aVertexColor;\r\n      gl_Position = vec4(aVertexPosition, 0.0, 1.0) * uGlobalMatrix * uProjectionMatrix;\r\n    }\r\n    ";
+      return "    attribute vec2 aVertexPosition;\r\n    attribute vec2 aVertexTextCoord;\r\n    attribute vec4 aVertexColor;\r\n    uniform mat4 uProjectionMatrix;\r\n    varying vec2 vTextCoord;\r\n    varying vec4 vColor; \r\n\r\n    void main() {\r\n      vTextCoord = aVertexTextCoord;\r\n      vColor = aVertexColor;\r\n      gl_Position = vec4(aVertexPosition, 0.0, 1.0) * uProjectionMatrix;\r\n    }\r\n    ";
     },
     get$fragmentShaderSource: function() {
       return "    precision mediump float;\r\n    uniform sampler2D uSampler;\r\n    varying vec2 vTextCoord;\r\n    varying vec4 vColor; \r\n\r\n    void main() {\r\n      vec4 color = texture2D(uSampler, vTextCoord);\r\n      gl_FragColor = vec4(color.rgb * vColor.rgb * vColor.a, color.a * vColor.a);\r\n    }\r\n    ";
@@ -13515,7 +13652,7 @@ var $$ = Object.create(null);
       }}
   },
   RenderTexture: {
-    "^": "Object;_width,_height,_transparent,_storePixelRatio,_storeWidth,_storeHeight,_engine$_source,_canvas,_video,_quad,_filtering,_contextIdentifier,_textureSourceWorkaround,_renderingContext,_texture,_videoUpdateTime",
+    "^": "Object;_width,_height,_transparent,_storePixelRatio,_storeWidth,_storeHeight,_engine$_source,_canvas,_quad,_filtering,_contextIdentifier,_textureSourceWorkaround,_renderingContext,_texture,_videoUpdateTime",
     get$quad: function() {
       return this._quad;
     },
@@ -13588,12 +13725,12 @@ var $$ = Object.create(null);
       J.get$context2D$x(this._canvas).drawImage(imageElement, 0, 0, t1.get$width(imageElement), t1.get$height(imageElement), 0, 0, this._storeWidth, this._storeHeight);
     },
     static: {RenderTexture$: function(width, height, transparent, fillColor, storePixelRatio) {
-        var t1 = new L.RenderTexture(0, 0, true, 1, 0, 0, null, null, null, null, C.RenderTextureFiltering_9729, -1, false, null, null, -1);
+        var t1 = new L.RenderTexture(0, 0, true, 1, 0, 0, null, null, null, C.RenderTextureFiltering_9729, -1, false, null, null, -1);
         t1.RenderTexture$5(width, height, transparent, fillColor, storePixelRatio);
         return t1;
       }, RenderTexture_load: function(url, autoHiDpi, webpAvailable, corsEnabled) {
         var hiDpi, hiDpiUrl, t1, t2;
-        hiDpi = autoHiDpi && J.contains$1$asx(url, "@1x.") === true;
+        hiDpi = autoHiDpi && J.contains$1$asx(url, "@1x.");
         hiDpiUrl = hiDpi ? J.replaceAll$2$s(url, "@1x.", "@2x.") : url;
         t1 = W.ImageElement_ImageElement(null, null, null);
         t2 = W.ImageElement;
@@ -13607,7 +13744,7 @@ var $$ = Object.create(null);
     call$1: [function(image) {
       var t1, t2;
       t1 = this.hiDpi_0 ? 2 : 1;
-      t2 = new L.RenderTexture(0, 0, true, 1, 0, 0, null, null, null, null, C.RenderTextureFiltering_9729, -1, false, null, null, -1);
+      t2 = new L.RenderTexture(0, 0, true, 1, 0, 0, null, null, null, C.RenderTextureFiltering_9729, -1, false, null, null, -1);
       t2.RenderTexture$fromImageElement$2(image, t1);
       return t2;
     }, "call$1", null, 2, 0, null, 79, "call"]
@@ -13769,7 +13906,7 @@ var $$ = Object.create(null);
       if (!subscription._canceled) {
         broadcastEvent._stopsPropagation = false;
         broadcastEvent._stopsImmediatePropagation = false;
-        t1 = subscription._eventStream._events$_target;
+        t1 = subscription._eventStream.target;
         broadcastEvent._events$_target = t1;
         broadcastEvent._currentTarget = t1;
         broadcastEvent._eventPhase = C.EventPhase_1;
@@ -13859,11 +13996,11 @@ var $$ = Object.create(null);
     }
   },
   EventPhase: {
-    "^": "Object;_events$_ordinal",
+    "^": "Object;index>",
     static: {"^": "EventPhase_CAPTURING_PHASE,EventPhase_AT_TARGET,EventPhase_BUBBLING_PHASE"}
   },
   EventStream: {
-    "^": "Stream;_events$_target,_events$_eventType,_subscriptions,_capturingSubscriptionCount",
+    "^": "Stream;target>,eventType,_subscriptions,_capturingSubscriptionCount",
     get$hasSubscriptions: function() {
       return this._subscriptions.length > 0;
     },
@@ -13872,9 +14009,6 @@ var $$ = Object.create(null);
     },
     get$hasBubblingSubscriptions: function() {
       return this._subscriptions.length > this._capturingSubscriptionCount;
-    },
-    get$target: function(_) {
-      return this._events$_target;
     },
     listen$5$cancelOnError$onDone$onError$priority: function(onData, cancelOnError, onDone, onError, priority) {
       return this._subscribe$3(onData, false, priority);
@@ -13916,7 +14050,7 @@ var $$ = Object.create(null);
       if (captures)
         ++this._capturingSubscriptionCount;
       else
-        switch (this._events$_eventType) {
+        switch (this.eventType) {
           case "enterFrame":
             $.get$_enterFrameSubscriptions().push(subscription);
             break;
@@ -13953,16 +14087,20 @@ var $$ = Object.create(null);
       this._subscriptions = newSubscriptions;
     },
     _dispatchEventInternal$3: function($event, target, eventPhase) {
-      var subscriptions, t1, t2, t3, i, subscription;
+      var subscriptions, isCapturing, inputEvent, t1, t2, i, subscription;
       subscriptions = this._subscriptions;
-      for (t1 = subscriptions.length, t2 = this._events$_target, t3 = eventPhase === C.EventPhase_0, i = 0; i < t1; ++i) {
+      isCapturing = eventPhase === C.EventPhase_0;
+      inputEvent = !!$event.$isInputEvent ? $event : null;
+      for (t1 = subscriptions.length, t2 = this.target, i = 0; i < t1; ++i) {
         subscription = subscriptions[i];
-        if (subscription._canceled || subscription._events$_pauseCount > 0 || subscription._captures !== t3)
+        if (subscription._canceled || subscription._events$_pauseCount > 0 || subscription._captures !== isCapturing)
           continue;
         $event._events$_target = target;
         $event._currentTarget = t2;
         $event._eventPhase = eventPhase;
+        $.InputEvent_current = inputEvent;
         subscription.eventListener$1($event);
+        $.InputEvent_current = null;
         if ($event._stopsImmediatePropagation)
           return;
       }
@@ -13998,18 +14136,22 @@ var $$ = Object.create(null);
       this._events$_pauseCount = t1 - 1;
     }
   },
+  InputEvent: {
+    "^": "Event;localX<,localY<,stageX<,stageY<,altKey>,ctrlKey>,shiftKey>",
+    $isInputEvent: true
+  },
   KeyboardEvent0: {
     "^": "Event;"
   },
   MouseEvent: {
-    "^": "Event;localX<,localY<,stageX<,stageY<,deltaX>,deltaY>,buttonDown,clickCount,altKey>,ctrlKey>,shiftKey>,_type,_bubbles,_eventPhase,_events$_target,_currentTarget,_stopsPropagation,_stopsImmediatePropagation",
+    "^": "InputEvent;deltaX>,deltaY>,buttonDown,clickCount,localX,localY,stageX,stageY,altKey,ctrlKey,shiftKey,_type,_bubbles,_eventPhase,_events$_target,_currentTarget,_stopsPropagation,_stopsImmediatePropagation",
     static: {"^": "MouseEvent_CLICK,MouseEvent_DOUBLE_CLICK,MouseEvent_MOUSE_DOWN,MouseEvent_MOUSE_UP,MouseEvent_MOUSE_MOVE,MouseEvent_MOUSE_OUT,MouseEvent_MOUSE_OVER,MouseEvent_MOUSE_WHEEL,MouseEvent_MIDDLE_CLICK,MouseEvent_MIDDLE_MOUSE_DOWN,MouseEvent_MIDDLE_MOUSE_UP,MouseEvent_RIGHT_CLICK,MouseEvent_RIGHT_MOUSE_DOWN,MouseEvent_RIGHT_MOUSE_UP,MouseEvent_CONTEXT_MENU,MouseEvent_ROLL_OUT,MouseEvent_ROLL_OVER"}
   },
   TextEvent0: {
     "^": "Event;"
   },
   TouchEvent: {
-    "^": "Event;touchPointID<,isPrimaryTouchPoint,localX<,localY<,stageX<,stageY<,altKey>,ctrlKey>,shiftKey>,_type,_bubbles,_eventPhase,_events$_target,_currentTarget,_stopsPropagation,_stopsImmediatePropagation",
+    "^": "InputEvent;touchPointID<,isPrimaryTouchPoint,localX,localY,stageX,stageY,altKey,ctrlKey,shiftKey,_type,_bubbles,_eventPhase,_events$_target,_currentTarget,_stopsPropagation,_stopsImmediatePropagation",
     static: {"^": "TouchEvent_TOUCH_BEGIN,TouchEvent_TOUCH_END,TouchEvent_TOUCH_CANCEL,TouchEvent_TOUCH_MOVE,TouchEvent_TOUCH_OVER,TouchEvent_TOUCH_OUT,TouchEvent_TOUCH_ROLL_OUT,TouchEvent_TOUCH_ROLL_OVER,TouchEvent_TOUCH_TAP"}
   }
 }],
@@ -15151,7 +15293,7 @@ var $$ = Object.create(null);
   MultitouchInputMode: {
     "^": "Object;name>",
     $isMultitouchInputMode: true,
-    static: {"^": "MultitouchInputMode_GESTURE,MultitouchInputMode_NONE,MultitouchInputMode_TOUCH_POINT0"}
+    static: {"^": "MultitouchInputMode_GESTURE,MultitouchInputMode_NONE0,MultitouchInputMode_TOUCH_POINT0"}
   }
 }],
 ]);
@@ -15225,20 +15367,21 @@ $$ = null;
   _ = R.EventStream;
   _.$isStream = TRUE;
   _.$isObject = TRUE;
-  A._GraphicsCommand.$isObject = TRUE;
-  Y.TextLineMetrics.$isObject = TRUE;
-  Y._FontStyleMetrics.$isObject = TRUE;
   L.RenderContextEvent.$isObject = TRUE;
-  _ = P.Symbol;
-  _.$isSymbol = TRUE;
-  _.$isObject = TRUE;
   _ = W.TableCellElement;
   _.$isHtmlElement = TRUE;
   _.$isEventTarget = TRUE;
   _.$isEventTarget = TRUE;
   _.$isObject = TRUE;
+  U._GraphicsCommand.$isObject = TRUE;
+  Y.TextLineMetrics.$isObject = TRUE;
+  Y._FontStyleMetrics.$isObject = TRUE;
+  _ = P.Symbol;
+  _.$isSymbol = TRUE;
+  _.$isObject = TRUE;
   A.Stage.$isObject = TRUE;
-  A._Touch.$isObject = TRUE;
+  A._Drag.$isObject = TRUE;
+  A._TouchPoint.$isObject = TRUE;
   L.RenderFrameBuffer.$isObject = TRUE;
   P.UniformLocation.$isObject = TRUE;
   _ = W.KeyboardEvent;
@@ -15336,7 +15479,7 @@ $$ = null;
   _.$isTextEvent0 = TRUE;
   _.$isEvent = TRUE;
   _.$isObject = TRUE;
-  _ = A.GraphicsGradient;
+  _ = U.GraphicsGradient;
   _.$isGraphicsGradient = TRUE;
   _.$isObject = TRUE;
   _ = F.JenkinsHasher;
@@ -15509,6 +15652,9 @@ J.allMatches$1$s = function(receiver, a0) {
 J.append$1$x = function(receiver, a0) {
   return J.getInterceptor$x(receiver).append$1(receiver, a0);
 };
+J.beginPath$0$x = function(receiver) {
+  return J.getInterceptor$x(receiver).beginPath$0(receiver);
+};
 J.clear$0$ax = function(receiver) {
   return J.getInterceptor$ax(receiver).clear$0(receiver);
 };
@@ -15602,6 +15748,9 @@ J.get$tagName$x = function(receiver) {
 J.get$text$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$text(receiver);
 };
+J.get$type$x = function(receiver) {
+  return J.getInterceptor$x(receiver).get$type(receiver);
+};
 J.get$url$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$url(receiver);
 };
@@ -15613,6 +15762,9 @@ J.get$width$x = function(receiver) {
 };
 J.getPropertyValue$1$x = function(receiver, a0) {
   return J.getInterceptor$x(receiver).getPropertyValue$1(receiver, a0);
+};
+J.isPointInPath$2$x = function(receiver, a0, a1) {
+  return J.getInterceptor$x(receiver).isPointInPath$2(receiver, a0, a1);
 };
 J.isPointInStroke$2$x = function(receiver, a0, a1) {
   return J.getInterceptor$x(receiver).isPointInStroke$2(receiver, a0, a1);
@@ -15897,6 +16049,7 @@ C.JsonCodec_null_null = new P.JsonCodec(null, null);
 C.JsonDecoder_null = new P.JsonDecoder(null);
 C.JsonEncoder_null_null = new P.JsonEncoder(null, null);
 C.List_empty = Isolate.makeConstantList([]);
+C.MultitouchInputMode_NONE = new U.MultitouchInputMode("NONE");
 C.MultitouchInputMode_TOUCH_POINT = new U.MultitouchInputMode("TOUCH_POINT");
 C.RenderTextureFiltering_9729 = new L.RenderTextureFiltering(9729);
 C.StageAlign_0 = new A.StageAlign(0);
@@ -15955,12 +16108,13 @@ $.Board_maxZoom = 256;
 $.Board_minZoom = 80;
 $.Board_zoomIncrement = 10;
 $.DisplayObject__nextID = 0;
-$.Sprite__dragSprite = null;
-$._Touch__globalTouchPointID = 0;
+$._TouchPoint__globalTouchPointID = 1;
 $.RenderContextWebGL__globalContextIdentifier = 0;
 $._globalFrameTime = 179769313486231570814527423731704356798070567525844996598917476803157260780028538760589558632766878171540458953514382464234321326889464182768467546703537516986049910576551282076245490090389328944075868508455133942304583236903222948165808559332123348274797826204144723168738177180919299881250404026184124858368;
+$.InputEvent_current = null;
 $.Mouse__cursorHidden = false;
 $.Mouse__cursorName = "auto";
+$.Multitouch__inputMode = C.MultitouchInputMode_NONE;
 Isolate.$lazy($, "thisScript", "IsolateNatives_thisScript", "get$IsolateNatives_thisScript", function() {
   return H.IsolateNatives_computeThisScript();
 });
@@ -16051,17 +16205,17 @@ Isolate.$lazy($, "_dartProxyCtor", "_dartProxyCtor", "get$_dartProxyCtor", funct
     this.o = o;
   };
 });
-Isolate.$lazy($, "_dummyCanvas", "_dummyCanvas0", "get$_dummyCanvas0", function() {
-  return W.CanvasElement_CanvasElement(16, 16);
-});
-Isolate.$lazy($, "_dummyCanvasContext", "_dummyCanvasContext0", "get$_dummyCanvasContext0", function() {
-  return J.get$context2D$x($.get$_dummyCanvas0());
-});
 Isolate.$lazy($, "defaultLoadOptions", "BitmapData_defaultLoadOptions", "get$BitmapData_defaultLoadOptions", function() {
   return new A.BitmapDataLoadOptions(true, true, false, true, false);
 });
 Isolate.$lazy($, "autoHiDpi", "Stage_autoHiDpi", "get$Stage_autoHiDpi", function() {
   return $.get$autoHiDPI();
+});
+Isolate.$lazy($, "_dummyCanvas", "_dummyCanvas0", "get$_dummyCanvas0", function() {
+  return W.CanvasElement_CanvasElement(16, 16);
+});
+Isolate.$lazy($, "_dummyCanvasContext", "_dummyCanvasContext0", "get$_dummyCanvasContext0", function() {
+  return J.get$context2D$x($.get$_dummyCanvas0());
 });
 Isolate.$lazy($, "_globalFrameListeners", "_globalFrameListeners", "get$_globalFrameListeners", function() {
   return [];

@@ -1,8 +1,8 @@
 part of stagexl.engine;
 
 class RenderEngine {
-  static const String WebGL = "WebGL";
-  static const String Canvas2D = "Canvas2D";
+    static const String WebGL = "WebGL";
+    static const String Canvas2D = "Canvas2D";
 }
 
 class RenderContextEvent {
@@ -11,21 +11,34 @@ class RenderContextEvent {
 
 abstract class RenderContext {
 
-  final _contextLostEvent = new StreamController<RenderContextEvent>.broadcast();
-  final _contextRestoredEvent = new StreamController<RenderContextEvent>.broadcast();
+    final _contextLostEvent = new StreamController<RenderContextEvent>.broadcast();
+    final _contextRestoredEvent = new StreamController<RenderContextEvent>.broadcast();
 
-  Stream<RenderContextEvent> get onContextLost => _contextLostEvent.stream;
-  Stream<RenderContextEvent> get onContextRestored => _contextRestoredEvent.stream;
+    Stream<RenderContextEvent> get onContextLost => _contextLostEvent.stream;
 
-  String get renderEngine;
+    Stream<RenderContextEvent> get onContextRestored => _contextRestoredEvent.stream;
 
-  void reset();
-  void clear(int color);
-  void flush();
+    String get renderEngine;
 
-  void renderQuad(RenderState renderState, RenderTextureQuad renderTextureQuad);
-  void renderTriangle(RenderState renderState, num x1, num y1, num x2, num y2, num x3, num y3, int color);
+    void reset();
 
-  void beginRenderMask(RenderState renderState, RenderMask mask);
-  void endRenderMask(RenderState renderState, RenderMask mask);
+    void clear(int color);
+
+    void flush();
+
+    void renderQuad(
+        RenderState renderState, RenderTextureQuad renderTextureQuad);
+
+    void renderTriangle(
+        RenderState renderState,
+        num x1, num y1, num x2, num y2, num x3, num y3, int color);
+
+    void renderMesh(
+        RenderState renderState, RenderTexture renderTexture,
+        int indexCount, Int16List indexList,
+        int vertexCount, Float32List xyList, Float32List uvList);
+
+    void beginRenderMask(RenderState renderState, RenderMask mask);
+
+    void endRenderMask(RenderState renderState, RenderMask mask);
 }

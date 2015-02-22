@@ -2,11 +2,11 @@ part of bluebear;
 
 class Image {
 
-	String name;
-	String fileName;
+    String name;
+    String fileName;
 
-	Image.fromJsonData(var data) {
-		name = data['name'];
-		fileName = data['fileName'];
-	}
+    Image.fromJsonData(var data) {
+        name = data['name'];
+        fileName = data['fileName'];
+    }
 }

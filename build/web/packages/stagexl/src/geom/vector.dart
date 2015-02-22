@@ -4,174 +4,190 @@ import 'dart:math' hide Point, Rectangle;
 
 class Vector {
 
-  static const num Epsilon = 0.0000001;
-  static const num EpsilonSqr = Epsilon * Epsilon;
+    static const num Epsilon = 0.0000001;
+    static const num EpsilonSqr = Epsilon * Epsilon;
 
-  final num _x;
-  final num _y;
+    final num _x;
+    final num _y;
 
-  Vector(num x, num y) : _x = x.toDouble(), _y = y.toDouble();
-  Vector.zero() : _x = 0.0, _y = 0.0;
-  Vector.polar(num len, num angle) : _x = (len * cos(angle)).toDouble(), _y = (len * sin(angle)).toDouble();
+    Vector(num x, num y) : _x = x.toDouble(), _y = y.toDouble();
 
-  Vector clone() => new Vector(_x, _y);
+    Vector.zero() : _x = 0.0, _y = 0.0;
 
-  num get x => _x;
-  num get y => _y;
+    Vector.polar(num len, num angle) : _x = (len * cos(angle)).toDouble(), _y = (len * sin(angle)).toDouble();
 
-  String toString() => "Vector [x=${_x}, y=${_y}]";
+    Vector clone() => new Vector(_x, _y);
 
-  //-----------------------------------------------------------------------------------------------
-  // Operators
+    num get x => _x;
 
-  Vector operator +(Vector other) => new Vector(_x + other._x, _y + other._y);
-  Vector operator -(Vector other) => new Vector(_x - other._x, _y - other._y);
-  Vector operator *(Vector other) => new Vector(_x * other._x, _y * other._y);
-  Vector operator /(Vector other) => new Vector(_x / other._x, _y / other._y);
+    num get y => _y;
 
-  Vector operator -() => new Vector(-_x, -_y);
-  bool operator ==(Vector other) => _x == other._x && _y == other._y;
+    String toString() => "Vector [x=${_x}, y=${_y}]";
 
-  // ToDo: http://dartbug.com/11617
-  int get hashCode => _x.hashCode + _y.hashCode * 7;
+    //-----------------------------------------------------------------------------------------------
+    // Operators
 
-  bool equalsXY(num x, num y) => _x == x && _y == y;
+    Vector operator +(Vector other) => new Vector(_x + other._x, _y + other._y);
 
-  //-----------------------------------------------------------------------------------------------
-  // Queries
+    Vector operator -(Vector other) => new Vector(_x - other._x, _y - other._y);
 
-  bool get isNormalized => ((_x * _x + _y * _y) - 1).abs() < EpsilonSqr;
-  bool get isZero => (_x == 0 && _y == 0);
-  bool get isValid => (_x.isNaN || _y.isNaN || _x.isInfinite || _y.isInfinite) == false;
+    Vector operator *(Vector other) => new Vector(_x * other._x, _y * other._y);
 
-  bool isNear(Vector other) => distanceSqr(other) < EpsilonSqr;
-  bool isNearXY(num x, num y) => distanceXYSqr(x, y) < EpsilonSqr;
-  bool isWithin(Vector other, num epsilon) => distanceSqr(other) < epsilon * epsilon;
-  bool isWithinXY(num x, num y, num epsilon) => distanceXYSqr(x, y) < epsilon * epsilon;
+    Vector operator /(Vector other) => new Vector(_x / other._x, _y / other._y);
 
-  num get degrees => atan2(_y, _x) * 180 / PI;
-  num get rads => atan2(_y, _x);
+    Vector operator -() => new Vector(-_x, -_y);
 
-  //-----------------------------------------------------------------------------------------------
-  // Scale
+    bool operator ==(Vector other) => _x == other._x && _y == other._y;
 
-  Vector scale(num scale) {
-    return new Vector(_x * scale, _y * scale);
-  }
+    // ToDo: http://dartbug.com/11617
+    int get hashCode => _x.hashCode + _y.hashCode * 7;
 
-  Vector scaleLength(num value) {
-    var scale = value / length;
-    return new Vector(_x * scale, _y * scale);
-  }
+    bool equalsXY(num x, num y) => _x == x && _y == y;
 
-  Vector normalize() {
-    num nf = 1 / length;
-    return new Vector(_x * nf, _y * nf);
-  }
+    //-----------------------------------------------------------------------------------------------
+    // Queries
 
-  //-----------------------------------------------------------------------------------------------
-  // Distance
+    bool get isNormalized => ((_x * _x + _y * _y) - 1).abs() < EpsilonSqr;
 
-  num get length => sqrt(_x * _x + _y * _y);
-  num get lengthSqr => _x * _x + _y * _y;
+    bool get isZero => (_x == 0 && _y == 0);
 
-  num distance(Vector vec) {
-    num xd = _x - vec._x;
-    num yd = _y - vec._y;
-    return sqrt(xd * xd + yd * yd);
-  }
+    bool get isValid => (_x.isNaN || _y.isNaN || _x.isInfinite || _y.isInfinite) == false;
 
-  num distanceXY(num x, num y) {
-    num xd = _x - x;
-    num yd = _y - y;
-    return sqrt(xd * xd + yd * yd);
-  }
+    bool isNear(Vector other) => distanceSqr(other) < EpsilonSqr;
 
-  num distanceSqr(Vector vec) {
-    num xd = _x - vec._x;
-    num yd = _y - vec._y;
-    return xd * xd + yd * yd;
-  }
+    bool isNearXY(num x, num y) => distanceXYSqr(x, y) < EpsilonSqr;
 
-  num distanceXYSqr(num x, num y) {
-    num xd = _x - x;
-    num yd = _y - y;
-    return xd * xd + yd * yd;
-  }
+    bool isWithin(Vector other, num epsilon) => distanceSqr(other) < epsilon * epsilon;
 
-  //-----------------------------------------------------------------------------------------------
-  // Dot product
+    bool isWithinXY(num x, num y, num epsilon) => distanceXYSqr(x, y) < epsilon * epsilon;
 
-  num dot(Vector vec) => _x * vec._x + _y * vec._y;
-  num dotXY(num x, num y) => _x * x + _y * y;
+    num get degrees => atan2(_y, _x) * 180 / PI;
 
-  //-----------------------------------------------------------------------------------------------
-  // Cross determinant
+    num get rads => atan2(_y, _x);
 
-  num crossDet(Vector vec) => _x * vec._y - _y * vec._x;
-  num crossDetXY(num x, num y) => _x * y - _y * x;
+    //-----------------------------------------------------------------------------------------------
+    // Scale
 
-  //-----------------------------------------------------------------------------------------------
-  // Rotate
+    Vector scale(num scale) {
+        return new Vector(_x * scale, _y * scale);
+    }
 
-  Vector rotate(num rads) {
-    num s = sin(rads);
-    num c = cos(rads);
-    return new Vector(_x * c - _y * s, _x * s + _y * c);
-  }
+    Vector scaleLength(num value) {
+        var scale = value / length;
+        return new Vector(_x * scale, _y * scale);
+    }
 
-  Vector normalRight() {
-    return new Vector(-_y, _x);
-  }
+    Vector normalize() {
+        num nf = 1 / length;
+        return new Vector(_x * nf, _y * nf);
+    }
 
-  Vector normalLeft() {
-    return new Vector(_y, -_x);
-  }
+    //-----------------------------------------------------------------------------------------------
+    // Distance
 
-  Vector negate() {
-    return new Vector(-_x, -_y);
-  }
+    num get length => sqrt(_x * _x + _y * _y);
 
-  //-----------------------------------------------------------------------------------------------
-  // Spinor rotation
+    num get lengthSqr => _x * _x + _y * _y;
 
-  Vector rotateSpinor(Vector vec) {
-    return new Vector(_x * vec._x - _y * vec._y, _x * vec._y + _y * vec._x);
-  }
+    num distance(Vector vec) {
+        num xd = _x - vec._x;
+        num yd = _y - vec._y;
+        return sqrt(xd * xd + yd * yd);
+    }
 
-  Vector spinorBetween(Vector vec) {
-    num d = this.lengthSqr;
-    num r = (vec._x * _x + vec._y * _y) / d;
-    num i = (vec._y * _x - vec._x * _y) / d;
-    return new Vector(r, i);
-  }
+    num distanceXY(num x, num y) {
+        num xd = _x - x;
+        num yd = _y - y;
+        return sqrt(xd * xd + yd * yd);
+    }
 
-  //-----------------------------------------------------------------------------------------------
-  // Lerp / slerp
+    num distanceSqr(Vector vec) {
+        num xd = _x - vec._x;
+        num yd = _y - vec._y;
+        return xd * xd + yd * yd;
+    }
 
-  Vector lerp(Vector to, num t) {
-    return new Vector(_x + t * (to._x - _x), _y + t * (to._y - _y));
-  }
+    num distanceXYSqr(num x, num y) {
+        num xd = _x - x;
+        num yd = _y - y;
+        return xd * xd + yd * yd;
+    }
 
-  Vector slerp(Vector vec, num t) {
-    num cosTheta = this.dot(vec);
-    num theta = acos(cosTheta);
-    num sinTheta = sin(theta);
+    //-----------------------------------------------------------------------------------------------
+    // Dot product
 
-    if (sinTheta <= Epsilon)
-      return vec.clone();
+    num dot(Vector vec) => _x * vec._x + _y * vec._y;
 
-    num w1 = sin((1 - t) * theta) / sinTheta;
-    num w2 = sin(t * theta) / sinTheta;
-    return this.scale(w1) + vec.scale(w2);
-  }
+    num dotXY(num x, num y) => _x * x + _y * y;
 
-  //-----------------------------------------------------------------------------------------------
-  // Reflect
+    //-----------------------------------------------------------------------------------------------
+    // Cross determinant
 
-  Vector reflect(Vector normal) {
-    num d = 2 * (_x * normal._x + _y * normal._y);
-    return new Vector(_x - d * normal._x, _y - d * normal._y);
-  }
+    num crossDet(Vector vec) => _x * vec._y - _y * vec._x;
+
+    num crossDetXY(num x, num y) => _x * y - _y * x;
+
+    //-----------------------------------------------------------------------------------------------
+    // Rotate
+
+    Vector rotate(num rads) {
+        num s = sin(rads);
+        num c = cos(rads);
+        return new Vector(_x * c - _y * s, _x * s + _y * c);
+    }
+
+    Vector normalRight() {
+        return new Vector(-_y, _x);
+    }
+
+    Vector normalLeft() {
+        return new Vector(_y, -_x);
+    }
+
+    Vector negate() {
+        return new Vector(-_x, -_y);
+    }
+
+    //-----------------------------------------------------------------------------------------------
+    // Spinor rotation
+
+    Vector rotateSpinor(Vector vec) {
+        return new Vector(_x * vec._x - _y * vec._y, _x * vec._y + _y * vec._x);
+    }
+
+    Vector spinorBetween(Vector vec) {
+        num d = this.lengthSqr;
+        num r = (vec._x * _x + vec._y * _y) / d;
+        num i = (vec._y * _x - vec._x * _y) / d;
+        return new Vector(r, i);
+    }
+
+    //-----------------------------------------------------------------------------------------------
+    // Lerp / slerp
+
+    Vector lerp(Vector to, num t) {
+        return new Vector(_x + t * (to._x - _x), _y + t * (to._y - _y));
+    }
+
+    Vector slerp(Vector vec, num t) {
+        num cosTheta = this.dot(vec);
+        num theta = acos(cosTheta);
+        num sinTheta = sin(theta);
+
+        if (sinTheta <= Epsilon)
+            return vec.clone();
+
+        num w1 = sin((1 - t) * theta) / sinTheta;
+        num w2 = sin(t * theta) / sinTheta;
+        return this.scale(w1) + vec.scale(w2);
+    }
+
+    //-----------------------------------------------------------------------------------------------
+    // Reflect
+
+    Vector reflect(Vector normal) {
+        num d = 2 * (_x * normal._x + _y * normal._y);
+        return new Vector(_x - d * normal._x, _y - d * normal._y);
+    }
 
 }

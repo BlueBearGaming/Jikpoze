@@ -8,31 +8,30 @@ part of stagexl.display_ex;
 /// a rectangular hit area. It may also improve the performance if you
 /// cover many display objects with one GlassPlate, this way the engine
 /// does not need to check for hits on the covered display objects.
-///
+
 class GlassPlate extends InteractiveObject {
 
-  num width;
-  num height;
+    num width;
+    num height;
 
-  GlassPlate(this.width, this.height);
+    GlassPlate(this.width, this.height);
 
-  //---------------------------------------------------------------------------
+    //---------------------------------------------------------------------------
 
-  @override
-  Rectangle<num> get bounds {
-    return new Rectangle<num>(0.0, 0.0, width, height);
-  }
+    @override
+    Rectangle<num> get bounds {
+        return new Rectangle<num>(0.0, 0.0, width, height);
+    }
 
-  @override
-  DisplayObject hitTestInput(num localX, num localY) {
-    if (localX < 0.0 || localX >= width) return null;
-    if (localY < 0.0 || localY >= height) return null;
-    return this;
-  }
+    @override
+    DisplayObject hitTestInput(num localX, num localY) {
+        if (localX < 0.0 || localX >= width) return null;
+        if (localY < 0.0 || localY >= height) return null;
+        return this;
+    }
 
-  @override
-  void render(RenderState renderState) {
-    // A GlassPlate is inherently invisible.
-  }
-
+    @override
+    void render(RenderState renderState) {
+        // A GlassPlate is inherently invisible.
+    }
 }
