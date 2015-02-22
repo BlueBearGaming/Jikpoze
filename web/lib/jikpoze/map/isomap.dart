@@ -24,8 +24,8 @@ class IsoMap extends HexMap {
             int rankSize = bottomRight.x.floor() - topLeft.x.floor();
             for (int rank = -renderOffset; rank <= rankSize + renderOffset; rank++) {
                 for (int col = -renderOffset; col <= rankSize + renderOffset; col++) {
-                    int posX = topLeft.x.floor() + rank;
-                    int posY = topLeft.y.floor() + rank - col;
+                    int posX = topLeft.x.floor() + col;
+                    int posY = topLeft.y.floor() - col + rank;
                     renderCell(layer, new Point(posX, posY));
                 }
             }
