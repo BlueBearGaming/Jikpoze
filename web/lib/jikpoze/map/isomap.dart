@@ -2,26 +2,26 @@ part of jikpoze;
 
 class IsoMap extends HexMap {
 
-	IsoMap(Board board) : super(board) {
-		skewFactor = 0.3;
-	}
+    IsoMap(Board board) : super(board) {
+        skewFactor = 0.3;
+    }
 
-	Pencil getGridPencil() {
-		if (null == gridPencil) {
-			gridPencil = new IsoGridPencil(board);
-		}
-		return gridPencil;
-	}
+    Pencil getGridPencil() {
+        if (null == gridPencil) {
+            gridPencil = new IsoGridPencil(board);
+        }
+        return gridPencil;
+    }
 
-	Point gamePointToViewPoint(Point gamePoint){
-		num viewX = (gamePoint.x - gamePoint.y) * board.cellSize / 2;
-		num viewY = (gamePoint.x + gamePoint.y) * board.cellSize * skewFactor;
-		return new Point(viewX, viewY);
-	}
+    Point gamePointToViewPoint(Point gamePoint) {
+        num viewX = (gamePoint.x - gamePoint.y) * board.cellSize / 2;
+        num viewY = (gamePoint.x + gamePoint.y) * board.cellSize * skewFactor;
+        return new Point(viewX, viewY);
+    }
 
-	Point viewPointToGamePoint(Point viewPoint){
-		num gameX = (viewPoint.y / 2 / skewFactor + viewPoint.x) / board.cellSize;
-		num gameY = (viewPoint.y / 2 / skewFactor - viewPoint.x) / board.cellSize;
-		return new Point(gameX.floor(), gameY.floor());
-	}
+    Point viewPointToGamePoint(Point viewPoint) {
+        num gameX = (viewPoint.y / 2 / skewFactor + viewPoint.x) / board.cellSize;
+        num gameY = (viewPoint.y / 2 / skewFactor - viewPoint.x) / board.cellSize;
+        return new Point(gameX.floor(), gameY.floor());
+    }
 }
