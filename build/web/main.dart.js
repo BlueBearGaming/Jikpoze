@@ -10890,20 +10890,26 @@ var $$ = Object.create(null);
   Board_loadMap_closure: {
     "^": "Closure:30;this_0",
     call$1: [function(res) {
-      var t1, t2, t3, mapItem, layer, pencil, t4, t5;
+      var t1, t2, t3, mapItem, layer, pencil, line, t4, t5;
       for (t1 = this.this_0, t2 = t1.context.mapItems, t2 = new H.ListIterator(t2, t2.length, 0, null), t3 = t1.pencils; t2.moveNext$0();) {
         mapItem = t2.__internal$_current;
         layer = t1.map.layers.$index(0, mapItem.get$layerName());
         pencil = t3.$index(0, mapItem.get$pencilName());
-        if (null == layer)
-          throw H.wrapException("No layer found: " + H.S(mapItem.get$layerName()));
-        if (null == pencil)
-          throw H.wrapException("No pencil found: " + H.S(mapItem.get$pencilName()));
+        if (null == layer) {
+          line = "No layer found: " + H.S(mapItem.get$layerName());
+          H.printString(line);
+          continue;
+        }
+        if (null == pencil) {
+          line = "No pencil found: " + H.S(mapItem.get$pencilName());
+          H.printString(line);
+          continue;
+        }
         t4 = t1.map;
         t5 = J.getInterceptor$x(mapItem);
         t5 = new U.Point(t5.get$x(mapItem), t5.get$y(mapItem));
         t5.$builtinTypeInfo = [null];
-        t4.createCell$3(layer, t5, pencil);
+        t4.createCell$4(layer, t5, pencil, false);
       }
       t1.map.renderCells$0();
       t1.attachEvents$0();
@@ -11025,16 +11031,14 @@ var $$ = Object.create(null);
   },
   HexMap: {
     "^": "SquareMap;board,gridPencil,layers,skewFactor,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
-    createCell$3: function(layer, point, pencil) {
-      var t1, t2, t3;
-      t1 = J.get$cells$x(layer);
-      t2 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
-      t3 = $.DisplayObject__nextID;
-      $.DisplayObject__nextID = t3 + 1;
-      t3 = new S.HexCell(layer, point, pencil, t2, true, true, false, true, "auto", true, 0, t3, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
-      t3.Cell$3(layer, point, pencil);
-      t1.$indexSet(0, point, t3);
-      return t3;
+    doCreateCell$3: function(layer, point, pencil) {
+      var t1, t2;
+      t1 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
+      t2 = $.DisplayObject__nextID;
+      $.DisplayObject__nextID = t2 + 1;
+      t2 = new S.HexCell(layer, point, pencil, t1, true, true, false, true, "auto", true, 0, t2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
+      t2.Cell$3(layer, point, pencil);
+      return t2;
     },
     getGridPencil$0: function() {
       var t1, t2;
@@ -11093,17 +11097,25 @@ var $$ = Object.create(null);
   },
   SquareMap: {
     "^": "DisplayObjectContainer;board<,gridPencil,layers,skewFactor,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
-    createCell$3: function(layer, point, pencil) {
+    createCell$4: function(layer, point, pencil, callApi) {
       var t1, json, t2;
       if (null == layer)
         throw H.wrapException("layer cannot be null");
       t1 = J.getInterceptor$x(layer);
-      json = P.LinkedHashMap_LinkedHashMap$_literal(["contextId", this.board.contextId, "layerName", J.get$name$x(t1.get$layer(layer)), "pencilName", J.get$name$x(pencil.get$pencil()), "x", point.x, "y", point.y], null, null);
-      this.board.queryApi$3("bluebear.editor.putPencil", json, new S.SquareMap_createCell_closure());
+      if (null != t1.get$layer(layer) && null != pencil.get$pencil() && callApi) {
+        json = P.LinkedHashMap_LinkedHashMap$_literal(["contextId", this.board.contextId, "layerName", J.get$name$x(t1.get$layer(layer)), "pencilName", J.get$name$x(pencil.get$pencil()), "x", point.x, "y", point.y], null, null);
+        this.board.queryApi$3("bluebear.editor.putPencil", json, new S.SquareMap_createCell_closure());
+      }
       t1 = t1.get$cells(layer);
-      t2 = S.Cell$(layer, point, pencil);
+      t2 = this.doCreateCell$3(layer, point, pencil);
       t1.$indexSet(0, point, t2);
       return t2;
+    },
+    createCell$3: function(layer, point, pencil) {
+      return this.createCell$4(layer, point, pencil, true);
+    },
+    doCreateCell$3: function(layer, point, pencil) {
+      return S.Cell$(layer, point, pencil);
     },
     removeCell$2: function(layer, point) {
       var t1, cell;

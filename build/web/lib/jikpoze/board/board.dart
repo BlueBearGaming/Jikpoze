@@ -179,12 +179,14 @@ class Board extends DisplayObjectContainer {
 				Layer layer = map.layers[mapItem.layerName];
 				Pencil pencil = pencils[mapItem.pencilName];
 				if (null == layer) {
-					throw 'No layer found: ${mapItem.layerName}';
+					print('No layer found: ${mapItem.layerName}');
+					continue;
 				}
 				if (null == pencil) {
-					throw 'No pencil found: ${mapItem.pencilName}';
+					print('No pencil found: ${mapItem.pencilName}');
+					continue;
 				}
-				map.createCell(layer, new Point(mapItem.x, mapItem.y), pencil);
+				map.createCell(layer, new Point(mapItem.x, mapItem.y), pencil, false);
 			}
 			renderCells();
 			attachEvents();

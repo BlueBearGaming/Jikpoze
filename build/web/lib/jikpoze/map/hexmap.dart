@@ -6,8 +6,9 @@ class HexMap extends SquareMap {
 		skewFactor = Math.cos(Math.PI/6);
 	}
 
-	Cell createCell(Layer layer, Point point, Pencil pencil) =>
-			layer.cells[point] = new HexCell(layer, point, pencil);
+	Cell doCreateCell(layer, point, pencil) {
+		return new HexCell(layer, point, pencil);
+	}
 
 	Pencil getGridPencil() {
 		if (null == gridPencil) {
