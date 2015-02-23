@@ -10,7 +10,7 @@ class SquareMap extends DisplayObjectContainer {
     Pencil gridPencil;
     Col.LinkedHashMap<String, Layer> layers = new Col.LinkedHashMap<String, Layer>();
     num skewFactor = 1;
-    int renderOffset = 2;
+    int renderOffset = 10;
 
     SquareMap(Board board) {
         if (null == board) {
@@ -57,7 +57,16 @@ class SquareMap extends DisplayObjectContainer {
         return cell;
     }
 
-    void renderCells() {
+    void renderCells([bool forceUpdate = false]) {
+        if (!forceUpdate) {
+            //refreshCache();
+            return;
+        }
+        _doRenderCells();
+        applyCache(-width.floor(), -height.floor(), width.floor() * 2, height.floor() * 2, debugBorder: true);
+    }
+
+    void _doRenderCells() {
         for (Layer layer in layers.values) {
             for (Cell cell in layer.cells.values) {
                 cell.clear();

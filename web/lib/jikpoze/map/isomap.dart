@@ -1,6 +1,6 @@
 part of jikpoze;
 
-class IsoMap extends HexMap {
+class IsoMap extends SquareMap {
 
     IsoMap(Board board) : super(board) {
         skewFactor = 0.3;
@@ -13,19 +13,20 @@ class IsoMap extends HexMap {
         return gridPencil;
     }
 
-    void renderCells() {
+    void _doRenderCells() {
         for (Layer layer in layers.values) {
             for (Cell cell in layer.cells.values) {
                 cell.clear();
             }
             Point topLeft = board.getTopLeftViewPoint();
             Point bottomRight = board.getBottomRightViewPoint();
-            int rank = 0;
-            int rankSize = bottomRight.x.floor() - topLeft.x.floor();
+            int rankSize = ((bottomRight.x - topLeft.x) / 2).floor();
             for (int rank = -renderOffset; rank <= rankSize + renderOffset; rank++) {
                 for (int col = -renderOffset; col <= rankSize + renderOffset; col++) {
-                    int posX = topLeft.x.floor() + col;
+                    int posX = topLeft.x.floor() + col + rank;
                     int posY = topLeft.y.floor() - col + rank;
+                    print('[$posX, $posY] (rank: $rank, col: $col)');
+                    renderCell(layer, new Point(posX, posY - 1));
                     renderCell(layer, new Point(posX, posY));
                 }
             }

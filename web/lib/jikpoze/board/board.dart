@@ -31,7 +31,7 @@ class Board extends DisplayObjectContainer {
             throw "Canvas cannot be null";
         }
         parseOptions(options);
-        Stage stage = new Stage(canvas, webGL: false);
+        Stage stage = new Stage(canvas, webGL: true);
         stage.scaleMode = StageScaleMode.NO_SCALE;
         stage.align = StageAlign.TOP_LEFT;
         renderLoop = new RenderLoop();
@@ -41,7 +41,7 @@ class Board extends DisplayObjectContainer {
 
     void attachEvents() {
         onResizeEvent(Event e) {
-            renderCells();
+            map.renderCells();
         }
         stage.onResize.listen(onResizeEvent);
 
@@ -49,14 +49,14 @@ class Board extends DisplayObjectContainer {
             if (e.deltaY.isNegative) {
                 if (cellSize < maxZoom) {
                     cellSize += zoomIncrement;
-                    renderCells();
+                    map.renderCells(true);
                 }
             } else if (cellSize > minZoom) {
                 cellSize -= zoomIncrement;
                 if (cellSize < minZoom) {
                     cellSize = minZoom;
                 }
-                renderCells();
+                map.renderCells(true);
             }
         }
         stage.onMouseWheel.listen(onScaleEvent);
@@ -77,13 +77,11 @@ class Board extends DisplayObjectContainer {
                 x += e.stageX - dragging.x;
                 y += e.stageY - dragging.y;
                 dragging = new Point(e.stageX, e.stageY);
-                renderCells();
+                map.renderCells();
             }
         }
         stage.onMouseMove.listen(onMouseMoveEvent);
     }
-
-    void renderCells() => map.renderCells();
 
     void parseOptions(Col.LinkedHashMap options) {
 
@@ -192,7 +190,7 @@ class Board extends DisplayObjectContainer {
                 }
                 map.createCell(layer, new Point(mapItem.x, mapItem.y), pencil, false);
             }
-            renderCells();
+            map.renderCells(true);
             attachEvents();
         });
     }
