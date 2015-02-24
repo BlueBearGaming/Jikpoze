@@ -13,22 +13,18 @@ class IsoMap extends SquareMap {
         return gridPencil;
     }
 
-    void _doRenderCells() {
-        for (Layer layer in layers.values) {
-            for (Cell cell in layer.cells.values) {
-                cell.clear();
-            }
-            Point topLeft = board.getTopLeftViewPoint();
-            Point bottomRight = board.getBottomRightViewPoint();
-            int rankSize = ((bottomRight.x - topLeft.x) / 2).floor();
-            for (int rank = -renderOffset; rank <= rankSize + renderOffset; rank++) {
-                for (int col = -renderOffset; col <= rankSize + renderOffset; col++) {
-                    int posX = topLeft.x.floor() + col + rank;
-                    int posY = topLeft.y.floor() - col + rank;
-                    print('[$posX, $posY] (rank: $rank, col: $col)');
-                    renderCell(layer, new Point(posX, posY - 1));
-                    renderCell(layer, new Point(posX, posY));
-                }
+    void renderLayer(Layer layer) {
+        Point topLeft = board.getTopLeftViewPoint();
+        Point bottomRight = board.getBottomRightViewPoint();
+        int dist = (bottomRight.distanceTo(topLeft) / 2).ceil();
+        int x = topLeft.x.floor();
+        int y = topLeft.y.floor();
+        for (int line = 0; line < dist * 2; line++) {
+            renderLayerLine(layer, x, y, x + dist, y - dist);
+            if (0 == line % 2) {
+                x++;
+            } else {
+                y++;
             }
         }
     }

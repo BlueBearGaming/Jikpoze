@@ -62,22 +62,78 @@ class SquareMap extends DisplayObjectContainer {
             //refreshCache();
             return;
         }
-        _doRenderCells();
-        applyCache(-width.floor(), -height.floor(), width.floor() * 2, height.floor() * 2, debugBorder: true);
-    }
-
-    void _doRenderCells() {
+        removeCache();
         for (Layer layer in layers.values) {
             for (Cell cell in layer.cells.values) {
                 cell.clear();
             }
-            Point topLeft = board.getTopLeftViewPoint();
-            Point bottomRight = board.getBottomRightViewPoint();
-            for (int cy = topLeft.y.floor() - renderOffset; cy <= bottomRight.y.floor() + renderOffset; cy++) {
-                for (int cx = topLeft.x.floor() - renderOffset; cx <= bottomRight.x.floor() + renderOffset; cx++) {
-                    renderCell(layer, new Point(cx, cy));
+            renderLayer(layer);
+        }
+        applyViewCache();
+    }
+
+    void applyViewCache() {
+        applyCache(-board.x.floor(), -board.y.floor(), stage.stageWidth, stage.stageHeight, debugBorder: true);
+    }
+
+    void renderLayer(Layer layer) {
+        Point topLeft = board.getTopLeftViewPoint();
+        Point bottomRight = board.getBottomRightViewPoint();
+        int dist = (bottomRight.x - topLeft.x).floor();
+        int x = topLeft.x.floor();
+        int y = topLeft.y.floor();
+        for (int line = 0; line < (bottomRight.y - topLeft.y).floor(); line++) {
+            renderLayerLine(layer, x, y, x + dist, y - dist);
+            y++;
+        }
+    }
+
+    void renderLayerLine(Layer layer, int x, int y, int x2, int y2) {
+        bool yLonger = false;
+        int shortLen = y2 - y;
+        int longLen = x2 - x;
+        if (shortLen.abs() > longLen.abs()) {
+            int swap = shortLen;
+            shortLen = longLen;
+            longLen = swap;
+            yLonger = true;
+        }
+        int decInc;
+        if (longLen == 0) {
+            decInc = 0;
+        } else {
+            decInc = ((shortLen << 16) / longLen).floor();
+        }
+
+        if (yLonger) {
+            if (longLen > 0) {
+                longLen += y;
+                for (int j = 0x8000 + (x << 16); y <= longLen; ++y) {
+                    renderCell(layer, new Point(j >> 16, y));
+                    j += decInc;
                 }
+                return;
             }
+            longLen += y;
+            for (int j = 0x8000 + (x << 16); y >= longLen; --y) {
+                renderCell(layer, new Point(j >> 16, y));
+                j -= decInc;
+            }
+            return;
+        }
+
+        if (longLen > 0) {
+            longLen += x;
+            for (int j = 0x8000 + (y << 16); x <= longLen; ++x) {
+                renderCell(layer, new Point(x, j >> 16));
+                j += decInc;
+            }
+            return;
+        }
+        longLen += x;
+        for (int j = 0x8000 + (y << 16); x >= longLen; --x) {
+            renderCell(layer, new Point(x, j >> 16));
+            j -= decInc;
         }
     }
 

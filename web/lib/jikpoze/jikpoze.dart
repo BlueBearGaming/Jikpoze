@@ -21,7 +21,6 @@ part 'layer/gridlayer.dart';
 
 // Cells
 part 'cell/cell.dart';
-part 'cell/hexcell.dart';
 
 // Pencils
 part 'pencil/pencil.dart';
