@@ -4,11 +4,6 @@ class Cell extends DisplayObjectContainer {
     Layer layer;
     Point position;
     Pencil pencil;
-    int cacheX;
-    int cacheY;
-    int cacheWidth;
-    int cacheHeight;
-    bool hasCache = false;
 
     Cell(this.layer, this.position, this.pencil) {
         if (null == layer) {
@@ -25,28 +20,14 @@ class Cell extends DisplayObjectContainer {
         draw();
     }
 
-    void draw([bool forceUpdate = false]) {
-//        if (!forceUpdate && hasCache) {
-//            refreshCache();
-//            visible = true;
-//            return;
-//        }
-//        removeCache();
+    void draw() {
         clear();
         Point viewPoint = layer.map.gamePointToViewPoint(position);
         x = viewPoint.x;
         y = viewPoint.y;
         DisplayObject child = pencil.getDisplayObject(position);
         addChild(child);
-        cacheX = child.x.floor();
-        cacheY = child.y.floor();
-        cacheWidth = child.width.ceil();
-        cacheHeight = child.height.ceil();
-    }
-
-    void applyCache() {
-        applyCache(cacheX, cacheY, cacheWidth, cacheHeight);
-        hasCache = true;
+        //applyCache(child.x.floor(), child.y.floor(), child.width.ceil(), child.height.ceil(), debugBorder: false);
     }
 
     void clear() {

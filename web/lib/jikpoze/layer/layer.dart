@@ -16,4 +16,10 @@ class Layer extends DisplayObjectContainer {
             map.addChildAt(this, index);
         }
     }
+
+    void clearCells() {
+    	for (Cell cell in cells.values) {
+            cell.clear();
+        }
+    }
 }

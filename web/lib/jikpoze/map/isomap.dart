@@ -14,8 +14,8 @@ class IsoMap extends SquareMap {
     }
 
     void renderLayer(Layer layer) {
-        Point topLeft = board.getTopLeftViewPoint();
-        Point bottomRight = board.getBottomRightViewPoint();
+    	Point topLeft = viewPointToGamePoint(getTopLeftViewPointForCache());
+        Point bottomRight = viewPointToGamePoint(getBottomRightViewPointForCache());
         int dist = (bottomRight.distanceTo(topLeft) / 2).ceil();
         int x = topLeft.x.floor();
         int y = topLeft.y.floor();

@@ -10,7 +10,7 @@ class SquareMap extends DisplayObjectContainer {
     Pencil gridPencil;
     Col.LinkedHashMap<String, Layer> layers = new Col.LinkedHashMap<String, Layer>();
     num skewFactor = 1;
-    int renderOffset = 10;
+    int renderOffset = 1;
 
     SquareMap(Board board) {
         if (null == board) {
@@ -59,31 +59,54 @@ class SquareMap extends DisplayObjectContainer {
 
     void renderCells([bool forceUpdate = false]) {
         if (!forceUpdate) {
-            //refreshCache();
+           	//refreshCache();
             return;
         }
         removeCache();
+        Col.LinkedHashMap<String, Layer> layerToRender = layers;
         for (Layer layer in layers.values) {
-            for (Cell cell in layer.cells.values) {
-                cell.clear();
-            }
-            renderLayer(layer);
+        	if (['background', 'land', 'grid'].contains(layer.layer.type)) {
+            	renderLayer(layer);
+            	layerToRender.remove(layer);
+        	}
         }
+        renderLayers(layerToRender.values);
         applyViewCache();
     }
 
     void applyViewCache() {
-        applyCache(-board.x.floor(), -board.y.floor(), stage.stageWidth, stage.stageHeight, debugBorder: true);
+    	Point topLeft = getTopLeftViewPointForCache();
+    	Point bottomRight = getBottomRightViewPointForCache();
+        applyCache(topLeft.x.floor(), topLeft.y.floor(),
+        		(bottomRight.x - topLeft.x).abs().floor(), (bottomRight.y - topLeft.y).abs().floor(),
+        		debugBorder: true);
+    }
+
+    Point getTopLeftViewPointForCache() {
+		return new Point(-board.x - stage.stageWidth / 3, -board.y - stage.stageHeight / 3);
+    }
+
+    Point getBottomRightViewPointForCache() {
+		return new Point(-board.x + stage.stageWidth * (1 + 1/3), -board.y + stage.stageHeight * (1 + 1/3));
     }
 
     void renderLayer(Layer layer) {
-        Point topLeft = board.getTopLeftViewPoint();
-        Point bottomRight = board.getBottomRightViewPoint();
+    	renderLayers([layer]);
+    }
+
+    void renderLayers(Iterable<Layer> layers) {
+    	for (Layer layer in layers) {
+	    	layer.clearCells();
+    	}
+        Point topLeft = viewPointToGamePoint(getTopLeftViewPointForCache());
+        Point bottomRight = viewPointToGamePoint(getBottomRightViewPointForCache());
         int dist = (bottomRight.x - topLeft.x).floor();
         int x = topLeft.x.floor();
         int y = topLeft.y.floor();
         for (int line = 0; line < (bottomRight.y - topLeft.y).floor(); line++) {
-            renderLayerLine(layer, x, y, x + dist, y - dist);
+        	for (Layer layer in layers) {
+            	renderLayerLine(layer, x, y, x + dist, y - dist);
+        	}
             y++;
         }
     }
