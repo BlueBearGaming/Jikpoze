@@ -35,12 +35,12 @@ class SquareMap extends DisplayObjectContainer {
                 "x": point.x,
                 "y": point.y
             };
-            board.queryApi('bluebear.editor.putPencil', json, (response) {
+            board.queryApi('bluebear.editor.mapUpdate', json, (response) {
                 print(response);
             });
         }
         removeCell(layer, point);
-        return layer.cells[point] = doCreateCell(layer, point, pencil);
+        return doCreateCell(layer, point, pencil);
     }
 
     Cell doCreateCell(layer, point, pencil) {
@@ -53,62 +53,90 @@ class SquareMap extends DisplayObjectContainer {
         }
         Cell cell = layer.cells[point];
         layer.cells.remove(point);
-        cell.clear();
+        removeChild(cell);
         return cell;
     }
 
-    void renderCells([bool forceUpdate = false]) {
-        if (!forceUpdate) {
-           	//refreshCache();
-            return;
+    void updateGrid() {
+        for (Layer layer in layers) {
+            if (layer.type == 'grid') {
+                Point topLeft = viewPointToGamePoint(getTopLeftViewPointForCache());
+                Point bottomRight = viewPointToGamePoint(getBottomRightViewPointForCache());
+                int dist = (bottomRight.x - topLeft.x).floor();
+                int x = topLeft.x.floor();
+                int y = topLeft.y.floor();
+                for (int line = 0; line < (bottomRight.y - topLeft.y).floor(); line++) {
+                    renderLayerLine(layer, x, y, x + dist, y - dist);
+                    y++;
+                }
+            }
         }
-        removeCache();
-        Col.LinkedHashMap<String, Layer> layerToRender = layers;
-        for (Layer layer in layers.values) {
-        	if (['background', 'land', 'grid'].contains(layer.layer.type)) {
-            	renderLayer(layer);
-            	layerToRender.remove(layer);
-        	}
-        }
-        renderLayers(layerToRender.values);
-        applyViewCache();
     }
 
-    void applyViewCache() {
-    	Point topLeft = getTopLeftViewPointForCache();
-    	Point bottomRight = getBottomRightViewPointForCache();
-        applyCache(topLeft.x.floor(), topLeft.y.floor(),
-        		(bottomRight.x - topLeft.x).abs().floor(), (bottomRight.y - topLeft.y).abs().floor(),
-        		debugBorder: true);
+    void renderCell(Layer layer, Point point) {
+        if (layer.cells.containsKey(point)) {
+            //layer.cells[point].draw();
+        } else if (layer.layer.type == 'grid') {
+            createCell(layer, point, getGridPencil());
+        }
+    }
+
+    Pencil getGridPencil() {
+        if (null == gridPencil) {
+            gridPencil = new GridPencil(board);
+        }
+        return gridPencil;
     }
 
     Point getTopLeftViewPointForCache() {
-		return new Point(-board.x - stage.stageWidth / 3, -board.y - stage.stageHeight / 3);
+        return new Point(-board.x - stage.stageWidth / 3, -board.y - stage.stageHeight / 3);
     }
 
     Point getBottomRightViewPointForCache() {
-		return new Point(-board.x + stage.stageWidth * (1 + 1/3), -board.y + stage.stageHeight * (1 + 1/3));
+        return new Point(-board.x + stage.stageWidth * (1 + 1/3), -board.y + stage.stageHeight * (1 + 1/3));
     }
 
-    void renderLayer(Layer layer) {
-    	renderLayers([layer]);
+    Point gamePointToViewPoint(Point gamePoint) {
+        return new Point(
+            gamePoint.x * board.cellSize,
+            gamePoint.y * board.cellSize
+        );
     }
 
-    void renderLayers(Iterable<Layer> layers) {
-    	for (Layer layer in layers) {
-	    	layer.clearCells();
-    	}
-        Point topLeft = viewPointToGamePoint(getTopLeftViewPointForCache());
-        Point bottomRight = viewPointToGamePoint(getBottomRightViewPointForCache());
-        int dist = (bottomRight.x - topLeft.x).floor();
-        int x = topLeft.x.floor();
-        int y = topLeft.y.floor();
-        for (int line = 0; line < (bottomRight.y - topLeft.y).floor(); line++) {
-        	for (Layer layer in layers) {
-            	renderLayerLine(layer, x, y, x + dist, y - dist);
-        	}
-            y++;
+    Point viewPointToGamePoint(Point viewPoint) {
+        return new Point(
+            (viewPoint.x / board.cellSize).floor(),
+            (viewPoint.y / board.cellSize).floor()
+        );
+    }
+
+    void addChildAt(DisplayObject child, int index) {
+        super.addChildAt(child, index);
+        if (child is Cell) {
+            sortChildren(sortCells);
         }
+    }
+
+    int sortCells(DisplayObject a, DisplayObject b) {
+        if (a is! Cell || b is! Cell) {
+            return 0;
+        }
+        Cell ac = a as Cell;
+        Cell bc = b as Cell;
+        List specificLayerTypes = ['background', 'land', 'grid', 'events'];
+        if (ac.layer.index != bc.layer.index) {
+            // For certain layer types, there is no need to check the position, they are always above or below others
+            if (specificLayerTypes.contains(ac.layer.type) || specificLayerTypes.contains(bc.layer.type)) {
+                return ac.layer.index - bc.layer.index;
+            }
+        }
+        if (ac.position.y == bc.position.y) { // if on same column
+            if (ac.position.x == bc.position.x) { // if exactly same position
+                return ac.layer.index - bc.layer.index; // then the layer's index will sort them
+            }
+            return ac.position.x - bc.position.x; // left to right order
+        }
+        return ac.position.y - bc.position.y; // back to front order
     }
 
     void renderLayerLine(Layer layer, int x, int y, int x2, int y2) {
@@ -158,34 +186,5 @@ class SquareMap extends DisplayObjectContainer {
             renderCell(layer, new Point(x, j >> 16));
             j -= decInc;
         }
-    }
-
-    void renderCell(Layer layer, Point point) {
-        if (layer.cells.containsKey(point)) {
-            layer.cells[point].draw();
-        } else if (layer.layer.type == 'grid') {
-            createCell(layer, point, getGridPencil());
-        }
-    }
-
-    Pencil getGridPencil() {
-        if (null == gridPencil) {
-            gridPencil = new GridPencil(board);
-        }
-        return gridPencil;
-    }
-
-    Point gamePointToViewPoint(Point gamePoint) {
-        return new Point(
-            gamePoint.x * board.cellSize,
-            gamePoint.y * board.cellSize
-        );
-    }
-
-    Point viewPointToGamePoint(Point viewPoint) {
-        return new Point(
-            (viewPoint.x / board.cellSize).floor(),
-            (viewPoint.y / board.cellSize).floor()
-        );
     }
 }

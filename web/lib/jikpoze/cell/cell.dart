@@ -2,6 +2,7 @@ part of jikpoze;
 
 class Cell extends DisplayObjectContainer {
     Layer layer;
+    SquareMap map;
     Point position;
     Pencil pencil;
 
@@ -15,34 +16,32 @@ class Cell extends DisplayObjectContainer {
         if (null == pencil) {
             throw "pencil cannot be null";
         }
-        layer.addChild(this);
+        layer.cells[position] = this;
+        map = layer.map;
+        map.addChild(this);
         attachEvents();
         draw();
     }
 
     void draw() {
-        clear();
         Point viewPoint = layer.map.gamePointToViewPoint(position);
         x = viewPoint.x;
         y = viewPoint.y;
         DisplayObject child = pencil.getDisplayObject(position);
         addChild(child);
-        //applyCache(child.x.floor(), child.y.floor(), child.width.ceil(), child.height.ceil(), debugBorder: false);
-    }
-
-    void clear() {
-        removeChildren();
-        if (layer.contains(this)) {
-            layer.removeChild(this);
-        }
-        removeCache();
-        layer.addChild(this);
     }
 
     void attachEvents() {
         onMouseClick.listen((MouseEvent e) {
             Board board = layer.map.board;
             if (board.dragging != null) {
+                return;
+            }
+            // remove large mouse offset
+            if (e.stageX - 2 > board.dragMouseEvent.stageX || board.dragMouseEvent.stageX > e.stageX + 2) {
+                return;
+            }
+            if (e.stageY - 2 > board.dragMouseEvent.stageY || board.dragMouseEvent.stageY > e.stageY + 2) {
                 return;
             }
             try {
@@ -55,7 +54,6 @@ class Cell extends DisplayObjectContainer {
                     }
                 }
                 layer.map.createCell(targetLayer, position, selectedPencil);
-                layer.map.renderCells();
             } catch (exception) {
                 print(exception);
             }

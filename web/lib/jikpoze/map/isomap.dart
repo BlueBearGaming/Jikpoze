@@ -6,27 +6,31 @@ class IsoMap extends SquareMap {
         skewFactor = 0.3;
     }
 
+    void updateGrid() {
+        for (Layer layer in layers.values) {
+            if (layer.type == 'grid') {
+                Point topLeft = viewPointToGamePoint(getTopLeftViewPointForCache());
+                Point bottomRight = viewPointToGamePoint(getBottomRightViewPointForCache());
+                int dist = (bottomRight.distanceTo(topLeft) / 2).ceil();
+                int x = topLeft.x.floor();
+                int y = topLeft.y.floor();
+                for (int line = 0; line < dist * 2; line++) {
+                    renderLayerLine(layer, x, y, x + dist, y - dist);
+                    if (0 == line % 2) {
+                        x++;
+                    } else {
+                        y++;
+                    }
+                }
+            }
+        }
+    }
+
     Pencil getGridPencil() {
         if (null == gridPencil) {
             gridPencil = new IsoGridPencil(board);
         }
         return gridPencil;
-    }
-
-    void renderLayer(Layer layer) {
-    	Point topLeft = viewPointToGamePoint(getTopLeftViewPointForCache());
-        Point bottomRight = viewPointToGamePoint(getBottomRightViewPointForCache());
-        int dist = (bottomRight.distanceTo(topLeft) / 2).ceil();
-        int x = topLeft.x.floor();
-        int y = topLeft.y.floor();
-        for (int line = 0; line < dist * 2; line++) {
-            renderLayerLine(layer, x, y, x + dist, y - dist);
-            if (0 == line % 2) {
-                x++;
-            } else {
-                y++;
-            }
-        }
     }
 
     Point gamePointToViewPoint(Point gamePoint) {
