@@ -6,10 +6,6 @@ class HexMap extends SquareMap {
         skewFactor = Math.cos(Math.PI / 6);
     }
 
-    Cell doCreateCell(layer, point, pencil) {
-        return new HexCell(layer, point, pencil);
-    }
-
     Pencil getGridPencil() {
         if (null == gridPencil) {
             gridPencil = new HexGridPencil(board);

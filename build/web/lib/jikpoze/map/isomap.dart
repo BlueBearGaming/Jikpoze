@@ -1,9 +1,29 @@
 part of jikpoze;
 
-class IsoMap extends HexMap {
+class IsoMap extends SquareMap {
 
     IsoMap(Board board) : super(board) {
         skewFactor = 0.3;
+    }
+
+    void updateGrid() {
+        for (Layer layer in layers.values) {
+            if (layer.type == 'grid') {
+                Point topLeft = viewPointToGamePoint(getTopLeftViewPointForCache());
+                Point bottomRight = viewPointToGamePoint(getBottomRightViewPointForCache());
+                int dist = (bottomRight.distanceTo(topLeft) / 2).ceil();
+                int x = topLeft.x.floor();
+                int y = topLeft.y.floor();
+                for (int line = 0; line < dist * 2; line++) {
+                    renderLayerLine(layer, x, y, x + dist, y - dist);
+                    if (0 == line % 2) {
+                        x++;
+                    } else {
+                        y++;
+                    }
+                }
+            }
+        }
     }
 
     Pencil getGridPencil() {
@@ -11,25 +31,6 @@ class IsoMap extends HexMap {
             gridPencil = new IsoGridPencil(board);
         }
         return gridPencil;
-    }
-
-    void renderCells() {
-        for (Layer layer in layers.values) {
-            for (Cell cell in layer.cells.values) {
-                cell.clear();
-            }
-            Point topLeft = board.getTopLeftViewPoint();
-            Point bottomRight = board.getBottomRightViewPoint();
-            int rank = 0;
-            int rankSize = bottomRight.x.floor() - topLeft.x.floor();
-            for (int rank = -renderOffset; rank <= rankSize + renderOffset; rank++) {
-                for (int col = -renderOffset; col <= rankSize + renderOffset; col++) {
-                    int posX = topLeft.x.floor() + col;
-                    int posY = topLeft.y.floor() - col + rank;
-                    renderCell(layer, new Point(posX, posY));
-                }
-            }
-        }
     }
 
     Point gamePointToViewPoint(Point gamePoint) {

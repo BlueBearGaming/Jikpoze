@@ -375,8 +375,6 @@ var $$ = Object.create(null);
       return receiver.splice(index, 1)[0];
     },
     insert$2: function(receiver, index, value) {
-      if (typeof index !== "number" || Math.floor(index) !== index)
-        throw H.wrapException(P.ArgumentError$(index));
       if (index < 0 || index > receiver.length)
         throw H.wrapException(P.RangeError$value(index, null, null));
       this.checkGrowable$1(receiver, "insert");
@@ -396,9 +394,6 @@ var $$ = Object.create(null);
       var t1;
       for (t1 = J.get$iterator$ax(collection); t1.moveNext$0();)
         this.add$1(receiver, t1.get$current());
-    },
-    clear$0: function(receiver) {
-      this.set$length(receiver, 0);
     },
     forEach$1: function(receiver, f) {
       var $length, i;
@@ -675,16 +670,6 @@ var $$ = Object.create(null);
       if (index >= receiver.length)
         throw H.wrapException(P.RangeError$value(index, null, null));
       return receiver.charCodeAt(index);
-    },
-    allMatches$2: function(receiver, string, start) {
-      H.checkString(string);
-      H.checkInt(start);
-      if (start > string.length)
-        throw H.wrapException(P.RangeError$range(start, 0, string.length, null, null));
-      return H.allMatchesInStringUnchecked(receiver, string, start);
-    },
-    allMatches$1: function($receiver, string) {
-      return this.allMatches$2($receiver, string, 0);
     },
     matchAsPrefix$2: function(receiver, string, start) {
       var t1, i;
@@ -2048,11 +2033,6 @@ var $$ = Object.create(null);
       throw H.wrapException(P.ArgumentError$(value));
     return value;
   },
-  checkInt: function(value) {
-    if (typeof value !== "number" || Math.floor(value) !== value)
-      throw H.wrapException(P.ArgumentError$(value));
-    return value;
-  },
   checkString: function(value) {
     if (typeof value !== "string")
       throw H.wrapException(P.ArgumentError$(value));
@@ -2850,29 +2830,8 @@ var $$ = Object.create(null);
   applyHooksTransformer: function(transformer, hooks) {
     return transformer(hooks) || hooks;
   },
-  allMatchesInStringUnchecked: function(needle, haystack, startIndex) {
-    var result, $length, patternLength, position, endIndex;
-    result = H.setRuntimeTypeInfo([], [P.Match]);
-    $length = haystack.length;
-    patternLength = needle.length;
-    for (; true;) {
-      position = C.JSString_methods.indexOf$2(haystack, needle, startIndex);
-      if (position === -1)
-        break;
-      result.push(new H.StringMatch(position, haystack, needle));
-      endIndex = position + patternLength;
-      if (endIndex === $length)
-        break;
-      else
-        startIndex = position === endIndex ? startIndex + 1 : endIndex;
-    }
-    return result;
-  },
   stringContainsUnchecked: function(receiver, other, startIndex) {
-    if (typeof other === "string")
-      return C.JSString_methods.indexOf$2(receiver, other, startIndex) !== -1;
-    else
-      return J.allMatches$1$s(other, C.JSString_methods.substring$1(receiver, startIndex)).length !== 0;
+    return C.JSString_methods.indexOf$2(receiver, other, startIndex) !== -1;
   },
   stringReplaceAllUnchecked: function(receiver, from, to) {
     var result, $length, i, t1;
@@ -2973,7 +2932,7 @@ var $$ = Object.create(null);
       return this.parameterName$1(this.sortedIndex$1(parameter - t1));
     },
     sortedIndex$1: function(unsortedIndex) {
-      var t1, t2, positions, t3, i, index, compare;
+      var t1, t2, positions, t3, i, index;
       t1 = {};
       if (this.cachedSortedIndices == null) {
         t2 = this.optionalParameterCount;
@@ -2986,8 +2945,7 @@ var $$ = Object.create(null);
         t1.index_0 = 0;
         t2 = positions.get$keys().toList$0(0);
         C.JSArray_methods.checkMutable$1(t2, "sort");
-        compare = P.Comparable_compare$closure();
-        H.Sort__doSort(t2, 0, t2.length - 1, compare);
+        H.IterableMixinWorkaround_sortList(t2, null);
         C.JSArray_methods.forEach$1(t2, new H.ReflectionInfo_sortedIndex_closure(t1, this, positions));
       }
       t1 = this.cachedSortedIndices;
@@ -3496,7 +3454,6 @@ var $$ = Object.create(null);
     },
     _MatchImplementation$2: function(pattern, _match) {
     },
-    $isMatch: true,
     static: {_MatchImplementation$: function(pattern, _match) {
         var t1 = new H._MatchImplementation(pattern, _match);
         t1._MatchImplementation$2(pattern, _match);
@@ -3509,8 +3466,7 @@ var $$ = Object.create(null);
       if (g !== 0)
         H.throwExpression(P.RangeError$value(g, null, null));
       return this.pattern;
-    },
-    $isMatch: true
+    }
   }
 }],
 ["bluebear", "lib/bluebear/bluebear.dart", , D, {
@@ -3656,7 +3612,7 @@ var $$ = Object.create(null);
       switch (t2) {
         case "bluebear.engine.mapLoad":
           t2 = new D.LoadContextResponse(null);
-          t2.context = D.Context$fromJsonData(J.$index$asx(t1.$index(decoded, "data"), "context"));
+          t2.context = D.Context$fromJsonData(t1.$index(decoded, "data"));
           this.data = t2;
           break;
         default:
@@ -3935,17 +3891,6 @@ var $$ = Object.create(null);
         throw H.wrapException(H.IterableElementError_noElement());
       return this.elementAt$1(0, 0);
     },
-    contains$1: function(_, element) {
-      var $length, i;
-      $length = this.get$length(this);
-      for (i = 0; i < $length; ++i) {
-        if (J.$eq(this.elementAt$1(0, i), element))
-          return true;
-        if ($length !== this.get$length(this))
-          throw H.wrapException(P.ConcurrentModificationError$(this));
-      }
-      return false;
-    },
     map$1: [function(_, f) {
       return H.setRuntimeTypeInfo(new H.MappedListIterable(this, f), [null, null]);
     }, "call$1", "get$map", 2, 0, function() {
@@ -4202,6 +4147,10 @@ var $$ = Object.create(null);
           if (f.call$1(t1.__internal$_current) === true)
             return true;
         return false;
+      }, IterableMixinWorkaround_sortList: function(list, compare) {
+        if (compare == null)
+          compare = P.Comparable_compare$closure();
+        H.Sort__doSort(list, 0, list.length - 1, compare);
       }, IterableMixinWorkaround_setRangeList: function(list, start, end, from, skipCount) {
         var $length;
         if (start < 0 || start > list.length)
@@ -4219,13 +4168,7 @@ var $$ = Object.create(null);
       }}
   },
   FixedLengthListMixin: {
-    "^": "Object;",
-    set$length: function(receiver, newLength) {
-      throw H.wrapException(P.UnsupportedError$("Cannot change the length of a fixed-length list"));
-    },
-    clear$0: function(receiver) {
-      throw H.wrapException(P.UnsupportedError$("Cannot clear a fixed-length list"));
-    }
+    "^": "Object;"
   },
   Symbol0: {
     "^": "Object;_name<",
@@ -4441,13 +4384,6 @@ var $$ = Object.create(null);
   },
   _cancelAndErrorClosure: function(subscription, future) {
     return new P._cancelAndErrorClosure_closure(subscription, future);
-  },
-  _cancelAndValue: function(subscription, future, value) {
-    var cancelFuture = subscription.cancel$0();
-    if (!!J.getInterceptor(cancelFuture).$isFuture)
-      cancelFuture.whenComplete$1(new P._cancelAndValue_closure(future, value));
-    else
-      future._complete$1(value);
   },
   _addErrorWithReplacement: function(sink, error, stackTrace) {
     $.Zone__current.toString;
@@ -5309,14 +5245,6 @@ var $$ = Object.create(null);
         return {func: "Stream__dynamic__T", ret: P.Stream, args: [{func: "dynamic__T", args: [T]}]};
       }, this.$receiver, "Stream");
     }],
-    contains$1: function(_, needle) {
-      var t1, future;
-      t1 = {};
-      future = H.setRuntimeTypeInfo(new P._Future(0, $.Zone__current, null), [P.bool]);
-      t1.subscription_0 = null;
-      t1.subscription_0 = this.listen$4$cancelOnError$onDone$onError(new P.Stream_contains_closure(t1, this, needle, future), true, new P.Stream_contains_closure0(future), future.get$_completeError());
-      return future;
-    },
     forEach$1: function(_, action) {
       var t1, future;
       t1 = {};
@@ -5333,39 +5261,6 @@ var $$ = Object.create(null);
       this.listen$4$cancelOnError$onDone$onError(new P.Stream_length_closure(t1), true, new P.Stream_length_closure0(t1, future), future.get$_completeError());
       return future;
     }
-  },
-  Stream_contains_closure: {
-    "^": "Closure;box_0,this_1,needle_2,future_3",
-    call$1: [function(element) {
-      var t1, t2;
-      t1 = this.box_0;
-      t2 = this.future_3;
-      P._runUserCode(new P.Stream_contains__closure(this.needle_2, element), new P.Stream_contains__closure0(t1, t2), P._cancelAndErrorClosure(t1.subscription_0, t2));
-    }, "call$1", null, 2, 0, null, 54, "call"],
-    $signature: function() {
-      return H.computeSignature(function(T) {
-        return {func: "dynamic__T", args: [T]};
-      }, this.this_1, "Stream");
-    }
-  },
-  Stream_contains__closure: {
-    "^": "Closure:40;needle_4,element_5",
-    call$0: function() {
-      return J.$eq(this.element_5, this.needle_4);
-    }
-  },
-  Stream_contains__closure0: {
-    "^": "Closure:55;box_0,future_6",
-    call$1: function(isMatch) {
-      if (isMatch === true)
-        P._cancelAndValue(this.box_0.subscription_0, this.future_6, true);
-    }
-  },
-  Stream_contains_closure0: {
-    "^": "Closure:40;future_7",
-    call$0: [function() {
-      this.future_7._complete$1(false);
-    }, "call$0", null, 0, 0, null, "call"]
   },
   Stream_forEach_closure: {
     "^": "Closure;box_0,this_1,action_2,future_3",
@@ -5784,12 +5679,6 @@ var $$ = Object.create(null);
       if (t1 == null)
         this.lastPendingEvent = null;
       $event.perform$1(dispatch);
-    },
-    clear$0: function(_) {
-      if (this._state === 1)
-        this._state = 3;
-      this.lastPendingEvent = null;
-      this.firstPendingEvent = null;
     }
   },
   _DoneStreamSubscription: {
@@ -5842,15 +5731,9 @@ var $$ = Object.create(null);
     }
   },
   _cancelAndErrorClosure_closure: {
-    "^": "Closure:56;subscription_0,future_1",
+    "^": "Closure:55;subscription_0,future_1",
     call$2: function(error, stackTrace) {
       return P._cancelAndError(this.subscription_0, this.future_1, error, stackTrace);
-    }
-  },
-  _cancelAndValue_closure: {
-    "^": "Closure:40;future_0,value_1",
-    call$0: function() {
-      return this.future_0._complete$1(this.value_1);
     }
   },
   _ForwardingStream: {
@@ -5918,10 +5801,10 @@ var $$ = Object.create(null);
       return H.computeSignature(function(S, T) {
         return {func: "void__S", void: true, args: [S]};
       }, this.$receiver, "_ForwardingStreamSubscription");
-    }, 57],
+    }, 56],
     _handleError$2: [function(error, stackTrace) {
       this._addError$2(error, stackTrace);
-    }, "call$2", "get$_handleError", 4, 0, 58, 16, 17],
+    }, "call$2", "get$_handleError", 4, 0, 57, 16, 17],
     _handleDone$0: [function() {
       this._close$0();
     }, "call$0", "get$_handleDone", 0, 0, 11],
@@ -6079,13 +5962,13 @@ var $$ = Object.create(null);
     "^": "Closure:30;this_0,f_1",
     call$1: [function(arg) {
       return this.this_0.runUnaryGuarded$2(this.f_1, arg);
-    }, "call$1", null, 2, 0, null, 59, "call"]
+    }, "call$1", null, 2, 0, null, 58, "call"]
   },
   _RootZone_bindUnaryCallback_closure0: {
     "^": "Closure:30;this_2,f_3",
     call$1: [function(arg) {
       return this.this_2.runUnary$2(this.f_3, arg);
-    }, "call$1", null, 2, 0, null, 59, "call"]
+    }, "call$1", null, 2, 0, null, 58, "call"]
   }
 }],
 ["dart.collection", "dart:collection", , P, {
@@ -6287,7 +6170,7 @@ var $$ = Object.create(null);
     },
     containsKey$1: function(key) {
       var strings;
-      if (typeof key === "string" && key !== "__proto__") {
+      if (key !== "__proto__") {
         strings = this._strings;
         return strings == null ? false : strings[key] != null;
       } else
@@ -6372,15 +6255,6 @@ var $$ = Object.create(null);
           ++this._collection$_length;
           this._keys = null;
         }
-      }
-    },
-    clear$0: function(_) {
-      if (this._collection$_length > 0) {
-        this._keys = null;
-        this._rest = null;
-        this._nums = null;
-        this._strings = null;
-        this._collection$_length = 0;
       }
     },
     forEach$1: function(_, action) {
@@ -6472,7 +6346,7 @@ var $$ = Object.create(null);
     "^": "Closure:30;this_0",
     call$1: [function(each) {
       return this.this_0.$index(0, each);
-    }, "call$1", null, 2, 0, null, 60, "call"]
+    }, "call$1", null, 2, 0, null, 59, "call"]
   },
   HashMapKeyIterable: {
     "^": "IterableBase;_map",
@@ -6482,9 +6356,6 @@ var $$ = Object.create(null);
     get$iterator: function(_) {
       var t1 = this._map;
       return new P.HashMapKeyIterator(t1, t1._collection$_computeKeys$0(), 0, null);
-    },
-    contains$1: function(_, element) {
-      return this._map.containsKey$1(element);
     },
     forEach$1: function(_, f) {
       var t1, keys, $length, i;
@@ -6749,7 +6620,7 @@ var $$ = Object.create(null);
     "^": "Closure:30;this_0",
     call$1: [function(each) {
       return this.this_0.$index(0, each);
-    }, "call$1", null, 2, 0, null, 60, "call"]
+    }, "call$1", null, 2, 0, null, 59, "call"]
   },
   _LinkedIdentityHashMap: {
     "^": "_LinkedHashMap;_collection$_length,_strings,_nums,_rest,_first,_last,_modifications",
@@ -6837,9 +6708,6 @@ var $$ = Object.create(null);
       t2 = new P.LinkedHashMapKeyIterator(t1, t1._modifications, null, null);
       t2._cell = t1._first;
       return t2;
-    },
-    contains$1: function(_, element) {
-      return this._map.containsKey$1(element);
     },
     forEach$1: function(_, f) {
       var t1, cell, modifications;
@@ -7121,13 +6989,6 @@ var $$ = Object.create(null);
         return {func: "Iterable__dynamic__E1", ret: P.Iterable, args: [{func: "dynamic__E1", args: [E]}]};
       }, this.$receiver, "IterableBase");
     }],
-    contains$1: function(_, element) {
-      var t1;
-      for (t1 = this.get$iterator(this); t1.moveNext$0();)
-        if (J.$eq(t1.get$current(), element))
-          return true;
-      return false;
-    },
     forEach$1: function(_, f) {
       var t1;
       for (t1 = this.get$iterator(this); t1.moveNext$0();)
@@ -7188,17 +7049,6 @@ var $$ = Object.create(null);
           throw H.wrapException(P.ConcurrentModificationError$(receiver));
       }
     },
-    contains$1: function(receiver, element) {
-      var $length, i;
-      $length = this.get$length(receiver);
-      for (i = 0; i < this.get$length(receiver); ++i) {
-        if (J.$eq(this.$index(receiver, i), element))
-          return true;
-        if ($length !== this.get$length(receiver))
-          throw H.wrapException(P.ConcurrentModificationError$(receiver));
-      }
-      return false;
-    },
     where$1: function(receiver, test) {
       return H.setRuntimeTypeInfo(new H.WhereIterable(receiver, test), [H.getRuntimeTypeArgument(receiver, "ListMixin", 0)]);
     },
@@ -7226,9 +7076,6 @@ var $$ = Object.create(null);
     },
     toList$0: function($receiver) {
       return this.toList$1$growable($receiver, true);
-    },
-    clear$0: function(receiver) {
-      this.set$length(receiver, 0);
     },
     toString$0: function(receiver) {
       return P.IterableBase_iterableToFullString(receiver, "[", "]");
@@ -7413,14 +7260,6 @@ var $$ = Object.create(null);
   },
   SetMixin: {
     "^": "Object;",
-    clear$0: function(_) {
-      this.removeAll$1(this.toList$0(0));
-    },
-    removeAll$1: function(elements) {
-      var t1;
-      for (t1 = new H.ListIterator(elements, elements.length, 0, null); t1.moveNext$0();)
-        this.remove$1(0, t1.__internal$_current);
-    },
     toList$1$growable: function(_, growable) {
       var result, t1, i, element, i0;
       if (growable) {
@@ -7560,19 +7399,6 @@ var $$ = Object.create(null);
         return false;
       return Object.prototype.hasOwnProperty.call(this._original, key);
     },
-    clear$0: function(_) {
-      var t1;
-      if (this._processed == null)
-        this._convert$_data.clear$0(0);
-      else {
-        t1 = this._convert$_data;
-        if (t1 != null)
-          J.clear$0$ax(t1);
-        this._processed = null;
-        this._original = null;
-        this._convert$_data = P.LinkedHashMap_LinkedHashMap$_empty(null, null);
-      }
-    },
     forEach$1: function(_, f) {
       var keys, i, key, value;
       if (this._processed == null)
@@ -7636,7 +7462,7 @@ var $$ = Object.create(null);
     "^": "Closure:30;this_0",
     call$1: [function(each) {
       return this.this_0.$index(0, each);
-    }, "call$1", null, 2, 0, null, 60, "call"]
+    }, "call$1", null, 2, 0, null, 59, "call"]
   },
   Codec: {
     "^": "Object;"
@@ -7928,7 +7754,7 @@ var $$ = Object.create(null);
     }
   },
   NoSuchMethodError_toString_closure: {
-    "^": "Closure:61;box_0",
+    "^": "Closure:60;box_0",
     call$2: function(key, value) {
       var t1 = this.box_0;
       if (t1.i_1 > 0)
@@ -8074,7 +7900,7 @@ var $$ = Object.create(null);
       }}
   },
   Duration_toString_sixDigits: {
-    "^": "Closure:62;",
+    "^": "Closure:61;",
     call$1: function(n) {
       if (n >= 100000)
         return "" + n;
@@ -8090,7 +7916,7 @@ var $$ = Object.create(null);
     }
   },
   Duration_toString_twoDigits: {
-    "^": "Closure:62;",
+    "^": "Closure:61;",
     call$1: function(n) {
       if (n >= 10)
         return "" + n;
@@ -8384,10 +8210,6 @@ var $$ = Object.create(null);
     },
     $isObject: true
   },
-  Match: {
-    "^": "Object;",
-    $isMatch: true
-  },
   StackTrace: {
     "^": "Object;"
   },
@@ -8422,9 +8244,6 @@ var $$ = Object.create(null);
           this._contents += typeof str === "string" ? str : H.S(str);
         }
       }
-    },
-    clear$0: function(_) {
-      this._contents = "";
     },
     toString$0: function(_) {
       var t1 = this._contents;
@@ -8654,7 +8473,7 @@ var $$ = Object.create(null);
       t2 = J.get$hashCode$(receiver.top);
       t3 = J.get$hashCode$(this.get$width(receiver));
       t4 = J.get$hashCode$(this.get$height(receiver));
-      return W._JenkinsSmiHash_finish(W._JenkinsSmiHash_combine(W._JenkinsSmiHash_combine(W._JenkinsSmiHash_combine(W._JenkinsSmiHash_combine(0, t1), t2), t3), t4));
+      return W._JenkinsSmiHash_finish0(W._JenkinsSmiHash_combine0(W._JenkinsSmiHash_combine0(W._JenkinsSmiHash_combine0(W._JenkinsSmiHash_combine0(0, t1), t2), t3), t4));
     },
     $isRectangle: true,
     $asRectangle: function() {
@@ -8751,9 +8570,6 @@ var $$ = Object.create(null);
     },
     $indexSet: function(receiver, index, value) {
       throw H.wrapException(P.UnsupportedError$("Cannot assign element of immutable List."));
-    },
-    set$length: function(receiver, value) {
-      throw H.wrapException(P.UnsupportedError$("Cannot resize immutable List."));
     },
     elementAt$1: function(receiver, index) {
       if (index < 0 || index >= receiver.length)
@@ -8877,9 +8693,6 @@ var $$ = Object.create(null);
     append$1: function(receiver, newChild) {
       return receiver.appendChild(newChild);
     },
-    contains$1: function(receiver, other) {
-      return receiver.contains(other);
-    },
     $isNode: true,
     "%": "Document|DocumentFragment|DocumentType|HTMLDocument|Notation|ShadowRoot|XMLDocument;Node"
   },
@@ -8895,9 +8708,6 @@ var $$ = Object.create(null);
     },
     $indexSet: function(receiver, index, value) {
       throw H.wrapException(P.UnsupportedError$("Cannot assign element of immutable List."));
-    },
-    set$length: function(receiver, value) {
-      throw H.wrapException(P.UnsupportedError$("Cannot resize immutable List."));
     },
     elementAt$1: function(receiver, index) {
       if (index < 0 || index >= receiver.length)
@@ -9029,9 +8839,6 @@ var $$ = Object.create(null);
     },
     $indexSet: function(receiver, index, value) {
       throw H.wrapException(P.UnsupportedError$("Cannot assign element of immutable List."));
-    },
-    set$length: function(receiver, value) {
-      throw H.wrapException(P.UnsupportedError$("Cannot resize immutable List."));
     },
     elementAt$1: function(receiver, index) {
       if (index < 0 || index >= receiver.length)
@@ -9181,7 +8988,7 @@ var $$ = Object.create(null);
       t2 = J.get$hashCode$(receiver.top);
       t3 = J.get$hashCode$(receiver.width);
       t4 = J.get$hashCode$(receiver.height);
-      return W._JenkinsSmiHash_finish(W._JenkinsSmiHash_combine(W._JenkinsSmiHash_combine(W._JenkinsSmiHash_combine(W._JenkinsSmiHash_combine(0, t1), t2), t3), t4));
+      return W._JenkinsSmiHash_finish0(W._JenkinsSmiHash_combine0(W._JenkinsSmiHash_combine0(W._JenkinsSmiHash_combine0(W._JenkinsSmiHash_combine0(0, t1), t2), t3), t4));
     },
     $isRectangle: true,
     $asRectangle: function() {
@@ -9223,9 +9030,6 @@ var $$ = Object.create(null);
     $indexSet: function(receiver, index, value) {
       throw H.wrapException(P.UnsupportedError$("Cannot assign element of immutable List."));
     },
-    set$length: function(receiver, value) {
-      throw H.wrapException(P.UnsupportedError$("Cannot resize immutable List."));
-    },
     elementAt$1: function(receiver, index) {
       if (index < 0 || index >= receiver.length)
         return H.ioore(receiver, index);
@@ -9263,12 +9067,12 @@ var $$ = Object.create(null);
     var e = document.createElement("img", null);
     return e;
   },
-  _JenkinsSmiHash_combine: function(hash, value) {
+  _JenkinsSmiHash_combine0: function(hash, value) {
     hash = 536870911 & hash + value;
     hash = 536870911 & hash + ((524287 & hash) << 10 >>> 0);
     return hash ^ hash >>> 6;
   },
-  _JenkinsSmiHash_finish: function(hash) {
+  _JenkinsSmiHash_finish0: function(hash) {
     hash = 536870911 & hash + ((67108863 & hash) << 3 >>> 0);
     hash ^= hash >>> 11;
     return 536870911 & hash + ((16383 & hash) << 15 >>> 0);
@@ -9334,12 +9138,6 @@ var $$ = Object.create(null);
   },
   CssStyleDeclarationBase: {
     "^": "Object;",
-    get$clear: function(receiver) {
-      return this.getPropertyValue$1(receiver, "clear");
-    },
-    clear$0: function($receiver) {
-      return this.get$clear($receiver).call$0();
-    },
     set$cursor: function(receiver, value) {
       this.setProperty$3(receiver, "cursor", value, "");
     },
@@ -9386,9 +9184,6 @@ var $$ = Object.create(null);
       return t1[index];
     },
     $indexSet: function(_, index, value) {
-      throw H.wrapException(P.UnsupportedError$("Cannot modify list"));
-    },
-    set$length: function(_, newLength) {
       throw H.wrapException(P.UnsupportedError$("Cannot modify list"));
     },
     get$style: function(_) {
@@ -9584,9 +9379,6 @@ var $$ = Object.create(null);
     remove$1: function(_, element) {
       return J.remove$1$ax(this._list, element);
     },
-    clear$0: function(_) {
-      J.clear$0$ax(this._list);
-    },
     $index: function(_, index) {
       var t1 = this._list;
       if (index >>> 0 !== index || index >= t1.length)
@@ -9598,9 +9390,6 @@ var $$ = Object.create(null);
       if (index >>> 0 !== index || index >= t1.length)
         return H.ioore(t1, index);
       t1[index] = value;
-    },
-    set$length: function(_, newLength) {
-      J.set$length$asx(this._list, newLength);
     }
   },
   _WrappedIterator: {
@@ -10018,9 +9807,6 @@ var $$ = Object.create(null);
       if (typeof len === "number" && len >>> 0 === len)
         return len;
       throw H.wrapException(P.StateError$("Bad JsArray length"));
-    },
-    set$length: function(_, $length) {
-      P.JsObject.prototype.$indexSet.call(this, this, "length", $length);
     }
   },
   JsObject_ListMixin: {
@@ -10068,12 +9854,12 @@ var $$ = Object.create(null);
 }],
 ["dart.math", "dart:math", , P, {
   "^": "",
-  _JenkinsSmiHash_combine0: function(hash, value) {
+  _JenkinsSmiHash_combine: function(hash, value) {
     hash = 536870911 & hash + value;
     hash = 536870911 & hash + ((524287 & hash) << 10 >>> 0);
     return hash ^ hash >>> 6;
   },
-  _JenkinsSmiHash_finish0: function(hash) {
+  _JenkinsSmiHash_finish: function(hash) {
     hash = 536870911 & hash + ((67108863 & hash) << 3 >>> 0);
     hash ^= hash >>> 11;
     return 536870911 & hash + ((16383 & hash) << 15 >>> 0);
@@ -10145,7 +9931,7 @@ var $$ = Object.create(null);
       var t1, t2;
       t1 = J.get$hashCode$(this.x);
       t2 = J.get$hashCode$(this.y);
-      return P._JenkinsSmiHash_finish0(P._JenkinsSmiHash_combine0(P._JenkinsSmiHash_combine0(0, t1), t2));
+      return P._JenkinsSmiHash_finish(P._JenkinsSmiHash_combine(P._JenkinsSmiHash_combine(0, t1), t2));
     },
     $add: function(_, other) {
       var t1, t2, t3, t4;
@@ -10235,7 +10021,7 @@ var $$ = Object.create(null);
       t4 = this.get$width(this);
       t5 = this.get$top(this);
       t6 = this.get$height(this);
-      return P._JenkinsSmiHash_finish0(P._JenkinsSmiHash_combine0(P._JenkinsSmiHash_combine0(P._JenkinsSmiHash_combine0(P._JenkinsSmiHash_combine0(0, t1), t2), t3 + t4 & 0x1FFFFFFF), t5 + t6 & 0x1FFFFFFF));
+      return P._JenkinsSmiHash_finish(P._JenkinsSmiHash_combine(P._JenkinsSmiHash_combine(P._JenkinsSmiHash_combine(P._JenkinsSmiHash_combine(0, t1), t2), t3 + t4 & 0x1FFFFFFF), t5 + t6 & 0x1FFFFFFF));
     }
   },
   Rectangle: {
@@ -10619,16 +10405,16 @@ var $$ = Object.create(null);
     }
   },
   Board: {
-    "^": "DisplayObjectContainer;canvas,renderLoop,map>,context,pencils<,selected,cellSize,dragMouseEvent,dragging<,resourceManager,endPoint,resourceBasePath,layerSelectorName,pencilSelectorName,contextId,editionMode,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    "^": "DisplayObjectContainer;canvas,renderLoop,map>,context,pencils<,selected,cellSize,dragMouseEvent<,dragging<,resourceManager,endPoint,resourceBasePath,layerSelectorName,pencilSelectorName,contextId,editionMode,debug,debugContainer,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     map$1: function($receiver, arg0) {
       return this.map.call$1(arg0);
     },
     attachEvents$0: function() {
-      this.get$stage().on$1(0, "resize").listen$1(new S.Board_attachEvents_onResizeEvent(this));
-      this.get$stage().on$1(0, "mouseWheel").listen$1(new S.Board_attachEvents_onScaleEvent(this));
-      this.get$stage().on$1(0, "mouseDown").listen$1(new S.Board_attachEvents_onMouseDownEvent(this));
-      this.get$stage().on$1(0, "mouseUp").listen$1(new S.Board_attachEvents_onMouseUpEvent(this));
-      this.get$stage().on$1(0, "mouseMove").listen$1(new S.Board_attachEvents_onMouseMoveEvent(this));
+      this.get$stage().on$1(0, "resize").listen$1(new S.Board_attachEvents_closure());
+      this.get$stage().on$1(0, "mouseWheel").listen$1(new S.Board_attachEvents_closure0(this));
+      this.get$stage().on$1(0, "mouseDown").listen$1(new S.Board_attachEvents_closure1(this));
+      this.get$stage().on$1(0, "mouseUp").listen$1(new S.Board_attachEvents_closure2(this));
+      this.get$stage().on$1(0, "mouseMove").listen$1(new S.Board_attachEvents_closure3(this));
     },
     queryApi$3: function(eventName, json, handler) {
       var request, t1;
@@ -10640,7 +10426,7 @@ var $$ = Object.create(null);
       return request;
     },
     loadMap$1: [function(responseText) {
-      var response, t1, contextMap, t2, t3, contextLayer, t4, t5, t6, t7, layer, pencil;
+      var response, t1, contextMap, t2, t3, contextLayer, t4, layer, pencil, t5;
       if (responseText.length === 0)
         throw H.wrapException("Server endpoint returned an empty string");
       response = new D.EngineEvent(null, null, null, null);
@@ -10651,8 +10437,15 @@ var $$ = Object.create(null);
       switch (contextMap.type) {
         case "hexagonal":
         case "hex":
-          t1 = S.HexMap$(this);
-          this.map = t1;
+          t1 = P.LinkedHashMap_LinkedHashMap(null, null, null, P.String, S.Layer);
+          t2 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
+          t3 = $.DisplayObject__nextID;
+          $.DisplayObject__nextID = t3 + 1;
+          t3 = new S.HexMap(null, null, t1, 1, 1, t2, true, true, false, true, "auto", true, 0, t3, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
+          t3.SquareMap$1(this);
+          t3.HexMap$1(this);
+          this.map = t3;
+          t1 = t3;
           break;
         case "isometric":
         case "iso":
@@ -10660,9 +10453,8 @@ var $$ = Object.create(null);
           t2 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
           t3 = $.DisplayObject__nextID;
           $.DisplayObject__nextID = t3 + 1;
-          t3 = new S.IsoMap(null, null, t1, 1, 2, t2, true, true, false, true, "auto", true, 0, t3, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
+          t3 = new S.IsoMap(null, null, t1, 1, 1, t2, true, true, false, true, "auto", true, 0, t3, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
           t3.SquareMap$1(this);
-          t3.HexMap$1(this);
           t3.skewFactor = 0.3;
           this.map = t3;
           t1 = t3;
@@ -10675,41 +10467,18 @@ var $$ = Object.create(null);
       this.cellSize = contextMap.cellSize;
       for (t1 = contextMap.layers, t1 = new H.ListIterator(t1, t1.length, 0, null); t1.moveNext$0();) {
         contextLayer = t1.__internal$_current;
-        t2 = J.getInterceptor$x(contextLayer);
-        t3 = t2.get$type(contextLayer);
-        t4 = this.map;
-        if ("grid" === t3) {
-          t3 = t2.get$index(contextLayer);
-          t5 = P.LinkedHashMap_LinkedHashMap(S.Cell_pointEquals$closure(), S.Cell_getPointHashCode$closure(), null, null, null);
-          t6 = [];
-          t6.$builtinTypeInfo = [A.DisplayObject];
-          t7 = $.DisplayObject__nextID;
-          $.DisplayObject__nextID = t7 + 1;
-          layer = new S.GridLayer(null, t4, t3, null, t5, t6, true, true, false, true, "auto", true, 0, t7, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
-          if (null == t4)
-            H.throwExpression("map cannot be null");
-          if (null == t3)
-            t4.addChildAt$2(layer, t4._children.length);
-          else
-            t4.addChildAt$2(layer, t3);
-        } else {
-          t3 = t2.get$index(contextLayer);
-          t5 = P.LinkedHashMap_LinkedHashMap(S.Cell_pointEquals$closure(), S.Cell_getPointHashCode$closure(), null, null, null);
-          t6 = [];
-          t6.$builtinTypeInfo = [A.DisplayObject];
-          t7 = $.DisplayObject__nextID;
-          $.DisplayObject__nextID = t7 + 1;
-          layer = new S.Layer(t4, t3, null, t5, t6, true, true, false, true, "auto", true, 0, t7, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
-          if (null == t4)
-            H.throwExpression("map cannot be null");
-          if (null == t3)
-            t4.addChildAt$2(layer, t4._children.length);
-          else
-            t4.addChildAt$2(layer, t3);
-        }
-        layer._display$_name = C.JSString_methods.$add("layer.", t2.get$name(contextLayer));
+        t2 = this.map;
+        t3 = J.getInterceptor$x(contextLayer);
+        t4 = t3.get$type(contextLayer);
+        layer = new S.Layer(t2, t4, t3.get$index(contextLayer), null, P.LinkedHashMap_LinkedHashMap(S.Cell_pointEquals$closure(), S.Cell_getPointHashCode$closure(), null, null, null));
+        if (null == t2)
+          H.throwExpression("map cannot be null");
+        if (null == t4)
+          H.throwExpression("type cannot be null");
         layer.layer = contextLayer;
-        this.map.layers.$indexSet(0, t2.get$name(contextLayer), layer);
+        this.map.layers.$indexSet(0, t3.get$name(contextLayer), layer);
+        if (J.$eq(layer.type, "grid"))
+          this.map.updateGrid$0();
       }
       for (t1 = contextMap.pencilSets, t1 = new H.ListIterator(t1, t1.length, 0, null), t2 = this.pencils; t1.moveNext$0();)
         for (t3 = J.get$iterator$ax(t1.__internal$_current.get$pencils()); t3.moveNext$0();) {
@@ -10720,7 +10489,7 @@ var $$ = Object.create(null);
           t2.$indexSet(0, t4, t5);
         }
       this.resourceManager.load$0(0).then$1(new S.Board_loadMap_closure(this));
-    }, "call$1", "get$loadMap", 2, 0, 63],
+    }, "call$1", "get$loadMap", 2, 0, 62],
     getSelectedLayer$0: function() {
       var t1, els, el;
       t1 = "[name=\"" + H.S(this.layerSelectorName) + "\"]";
@@ -10799,53 +10568,51 @@ var $$ = Object.create(null);
     },
     static: {"^": "Board_maxZoom,Board_minZoom,Board_zoomIncrement"}
   },
-  Board_attachEvents_onResizeEvent: {
-    "^": "Closure:64;this_0",
+  Board_attachEvents_closure: {
+    "^": "Closure:63;",
     call$1: [function(e) {
-      this.this_0.map.renderCells$0();
     }, "call$1", null, 2, 0, null, 2, "call"]
   },
-  Board_attachEvents_onScaleEvent: {
-    "^": "Closure:65;this_1",
+  Board_attachEvents_closure0: {
+    "^": "Closure:64;this_0",
     call$1: [function(e) {
       var t1, t2;
       if (J.get$isNegative$n(J.get$deltaY$x(e))) {
-        t1 = this.this_1;
-        if (J.$lt$n(t1.cellSize, $.Board_maxZoom)) {
+        t1 = this.this_0;
+        if (J.$lt$n(t1.cellSize, $.Board_maxZoom))
           t1.cellSize = J.$add$ns(t1.cellSize, $.Board_zoomIncrement);
-          t1.map.renderCells$0();
-        }
       } else {
-        t1 = this.this_1;
+        t1 = this.this_0;
         if (J.$gt$n(t1.cellSize, $.Board_minZoom)) {
           t2 = J.$sub$n(t1.cellSize, $.Board_zoomIncrement);
           t1.cellSize = t2;
           if (J.$lt$n(t2, $.Board_minZoom))
             t1.cellSize = $.Board_minZoom;
-          t1.map.renderCells$0();
         }
       }
     }, "call$1", null, 2, 0, null, 2, "call"]
   },
-  Board_attachEvents_onMouseDownEvent: {
-    "^": "Closure:65;this_2",
+  Board_attachEvents_closure1: {
+    "^": "Closure:64;this_1",
     call$1: [function(e) {
-      var t1 = this.this_2;
+      var t1 = this.this_1;
       t1.dragMouseEvent = e;
       t1.dragging = H.setRuntimeTypeInfo(new U.Point(e.get$stageX(), e.get$stageY()), [null]);
     }, "call$1", null, 2, 0, null, 2, "call"]
   },
-  Board_attachEvents_onMouseUpEvent: {
-    "^": "Closure:65;this_3",
+  Board_attachEvents_closure2: {
+    "^": "Closure:64;this_2",
     call$1: [function(e) {
-      this.this_3.dragging = null;
+      var t1 = this.this_2;
+      t1.dragging = null;
+      t1.map.updateGrid$0();
     }, "call$1", null, 2, 0, null, 2, "call"]
   },
-  Board_attachEvents_onMouseMoveEvent: {
-    "^": "Closure:65;this_4",
+  Board_attachEvents_closure3: {
+    "^": "Closure:64;this_3",
     call$1: [function(e) {
-      var t1, t2, t3;
-      t1 = this.this_4;
+      var t1, t2, t3, point;
+      t1 = this.this_3;
       if (t1.dragging != null) {
         t2 = t1._x;
         t3 = J.$sub$n(e.get$stageX(), t1.dragging.x);
@@ -10858,7 +10625,15 @@ var $$ = Object.create(null);
           return H.iae(t2);
         t1.set$y(0, t3 + t2);
         t1.dragging = H.setRuntimeTypeInfo(new U.Point(e.get$stageX(), e.get$stageY()), [null]);
-        t1.map.renderCells$0();
+      }
+      if (t1.debug) {
+        point = t1.map.viewPointToGamePoint$1(H.setRuntimeTypeInfo(new U.Point(J.$sub$n(e.get$stageX(), t1._x), J.$sub$n(e.get$stageY(), t1._y)), [null]));
+        if (null == t1.debugContainer) {
+          t1.debugContainer = Y.TextField$("", new Y.TextFormat("Monospace", 10, 4292072403, 0, 4278190080, null, false, false, false, "left", 0, 0, 0, 0, 0, 0));
+          t2 = t1.get$stage();
+          t2.addChildAt$2(t1.debugContainer, t2._children.length);
+        }
+        t1.debugContainer.set$text(0, "Game coordinates: " + H.S(point.x) + ", " + H.S(point.y));
       }
     }, "call$1", null, 2, 0, null, 2, "call"]
   },
@@ -10900,49 +10675,38 @@ var $$ = Object.create(null);
         t5.$builtinTypeInfo = [null];
         t4.createCell$4(layer, t5, pencil, false);
       }
-      t1.map.renderCells$0();
       t1.attachEvents$0();
-    }, "call$1", null, 2, 0, null, 66, "call"]
+    }, "call$1", null, 2, 0, null, 65, "call"]
   },
   Cell: {
-    "^": "DisplayObjectContainer;layer>,position,pencil<,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
-    draw$0: function() {
-      var t1, viewPoint;
-      this.clear$0(0);
-      t1 = this.position;
-      viewPoint = J.get$map$ax(this.layer).gamePointToViewPoint$1(t1);
-      this.set$x(0, viewPoint.x);
-      this.set$y(0, viewPoint.y);
-      this.addChildAt$2(this.pencil.getDisplayObject$1(t1), this._children.length);
-    },
-    clear$0: function(_) {
-      this.removeChildren$0();
-      if (J.contains$1$asx(this.layer, this) === true)
-        this.layer.removeChild$1(this);
-      this.layer.addChild$1(this);
+    "^": "DisplayObjectContainer;layer>,map>,position,pencil<,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    map$1: function($receiver, arg0) {
+      return this.map.call$1(arg0);
     },
     attachEvents$0: function() {
       this.on$1(0, "click").listen$1(new S.Cell_attachEvents_closure(this));
     },
     Cell$3: function(layer, position, pencil) {
-      var t1 = this.layer;
+      var t1, t2, t3, viewPoint;
+      t1 = this.layer;
       if (null == t1)
         throw H.wrapException("layer cannot be null");
-      if (null == this.pencil)
+      t2 = this.pencil;
+      if (null == t2)
         throw H.wrapException("pencil cannot be null");
+      t3 = this.position;
+      J.get$cells$x(t1).$indexSet(0, t3, this);
+      t1 = J.get$map$ax(this.layer);
+      this.map = t1;
       t1.addChild$1(this);
       this.attachEvents$0();
-      this.draw$0();
+      viewPoint = J.get$map$ax(this.layer).gamePointToViewPoint$1(t3);
+      this.set$x(0, viewPoint.x);
+      this.set$y(0, viewPoint.y);
+      this.addChildAt$2(t2.getDisplayObject$1(t3), this._children.length);
     },
-    static: {Cell$: function(layer, position, pencil) {
-        var t1, t2;
-        t1 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
-        t2 = $.DisplayObject__nextID;
-        $.DisplayObject__nextID = t2 + 1;
-        t2 = new S.Cell(layer, position, pencil, t1, true, true, false, true, "auto", true, 0, t2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
-        t2.Cell$3(layer, position, pencil);
-        return t2;
-      }, Cell_getPointHashCode: [function(point) {
+    $isCell: true,
+    static: {Cell_getPointHashCode: [function(point) {
         var t1, hash;
         t1 = J.getInterceptor$x(point);
         hash = new F.JenkinsHasher(0).add$1(0, t1.get$x(point)).add$1(0, J.get$sign$n(t1.get$x(point))).add$1(0, t1.get$y(point)).add$1(0, J.get$sign$n(t1.get$y(point)))._hash;
@@ -10954,12 +10718,16 @@ var $$ = Object.create(null);
       }, "call$2", "Cell_pointEquals$closure", 4, 0, 34, 35, 36]}
   },
   Cell_attachEvents_closure: {
-    "^": "Closure:65;this_0",
+    "^": "Closure:64;this_0",
     call$1: [function(e) {
       var board, selectedPencil, targetLayer, cell, exception, t1, t2, exception0;
       t1 = this.this_0;
       board = J.get$map$ax(t1.layer).get$board();
       if (board.get$dragging() != null)
+        return;
+      if (J.$gt$n(J.$sub$n(e.get$stageX(), 2), board.get$dragMouseEvent().get$stageX()) || J.$gt$n(board.get$dragMouseEvent().get$stageX(), J.$add$ns(e.get$stageX(), 2)))
+        return;
+      if (J.$gt$n(J.$sub$n(e.get$stageY(), 2), board.get$dragMouseEvent().get$stageY()) || J.$gt$n(board.get$dragMouseEvent().get$stageY(), J.$add$ns(e.get$stageY(), 2)))
         return;
       try {
         selectedPencil = board.getSelectedPencil$0();
@@ -10971,7 +10739,6 @@ var $$ = Object.create(null);
             return;
         }
         J.get$map$ax(t1.layer).createCell$3(targetLayer, t2, selectedPencil);
-        J.get$map$ax(t1.layer).renderCells$0();
       } catch (exception0) {
         t1 = H.unwrapException(exception0);
         exception = t1;
@@ -10980,14 +10747,8 @@ var $$ = Object.create(null);
 
     }, "call$1", null, 2, 0, null, 2, "call"]
   },
-  HexCell: {
-    "^": "Cell;layer,position,pencil,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams"
-  },
-  GridLayer: {
-    "^": "Layer;pencil<,map,index,layer,cells,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams"
-  },
   Layer: {
-    "^": "DisplayObjectContainer;map>,index>,layer>,cells>,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    "^": "Object;map>,type>,index>,layer>,cells>",
     map$1: function($receiver, arg0) {
       return this.map.call$1(arg0);
     },
@@ -10995,15 +10756,6 @@ var $$ = Object.create(null);
   },
   HexMap: {
     "^": "SquareMap;board,gridPencil,layers,skewFactor,renderOffset,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
-    doCreateCell$3: function(layer, point, pencil) {
-      var t1, t2;
-      t1 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
-      t2 = $.DisplayObject__nextID;
-      $.DisplayObject__nextID = t2 + 1;
-      t2 = new S.HexCell(layer, point, pencil, t1, true, true, false, true, "auto", true, 0, t2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
-      t2.Cell$3(layer, point, pencil);
-      return t2;
-    },
     getGridPencil$0: function() {
       var t1, t2;
       t1 = this.gridPencil;
@@ -11026,25 +10778,48 @@ var $$ = Object.create(null);
       return H.setRuntimeTypeInfo(new U.Point(viewX, viewY), [null]);
     },
     viewPointToGamePoint$1: function(viewPoint) {
-      return H.setRuntimeTypeInfo(new U.Point(C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(viewPoint.x, this.board.cellSize))), C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(viewPoint.y, this.board.cellSize) / this.skewFactor))), [null]);
+      var t1 = new U.Point(C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(viewPoint.x, this.board.cellSize))), C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(viewPoint.y, this.board.cellSize) / this.skewFactor)));
+      t1.$builtinTypeInfo = [null];
+      return t1;
     },
     HexMap$1: function(board) {
       this.skewFactor = Math.cos(H.checkNum(0.5235987755982988));
-    },
-    static: {HexMap$: function(board) {
-        var t1, t2, t3;
-        t1 = P.LinkedHashMap_LinkedHashMap(null, null, null, P.String, S.Layer);
-        t2 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
-        t3 = $.DisplayObject__nextID;
-        $.DisplayObject__nextID = t3 + 1;
-        t3 = new S.HexMap(null, null, t1, 1, 2, t2, true, true, false, true, "auto", true, 0, t3, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
-        t3.SquareMap$1(board);
-        t3.HexMap$1(board);
-        return t3;
-      }}
+    }
   },
   IsoMap: {
-    "^": "HexMap;board,gridPencil,layers,skewFactor,renderOffset,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    "^": "SquareMap;board,gridPencil,layers,skewFactor,renderOffset,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    updateGrid$0: function() {
+      var t1, layer, t2, root, t3, t4, topLeft, bottomRight, dx, dy, dist, x, y, line;
+      for (t1 = this.layers, t1 = t1.get$values(t1), t1 = H.setRuntimeTypeInfo(new H.MappedIterator(null, J.get$iterator$ax(t1._iterable), t1._f), [H.getTypeArgumentByIndex(t1, 0), H.getTypeArgumentByIndex(t1, 1)]); t1.moveNext$0();) {
+        layer = t1.__internal$_current;
+        if (J.$eq(J.get$type$x(layer), "grid")) {
+          t2 = this.board._x;
+          root = this.get$root();
+          t3 = (!!J.getInterceptor(root).$isStage ? root : null).get$_stageWidth();
+          t4 = this.board._y;
+          root = this.get$root();
+          t2 = new U.Point(-t2 - t3 / 3, -t4 - (!!J.getInterceptor(root).$isStage ? root : null).get$_stageHeight() / 3);
+          t2.$builtinTypeInfo = [null];
+          topLeft = this.viewPointToGamePoint$1(t2);
+          bottomRight = this.viewPointToGamePoint$1(this.getBottomRightViewPointForCache$0());
+          dx = J.$sub$n(bottomRight.x, topLeft.x);
+          dy = J.$sub$n(bottomRight.y, topLeft.y);
+          t2 = J.$add$ns(J.$mul$ns(dx, dx), J.$mul$ns(dy, dy));
+          if (typeof t2 !== "number")
+            H.throwExpression(P.ArgumentError$(t2));
+          dist = C.JSNumber_methods.toInt$0(Math.ceil(Math.sqrt(t2) / 2));
+          x = J.floor$0$n(topLeft.x);
+          y = J.floor$0$n(topLeft.y);
+          for (t2 = dist * 2, line = 0; line < t2; ++line) {
+            this.renderLayerLine$5(layer, x, y, x + dist, y - dist);
+            if (0 === C.JSInt_methods.$mod(line, 2))
+              ++x;
+            else
+              ++y;
+          }
+        }
+      }
+    },
     getGridPencil$0: function() {
       var t1, t2;
       t1 = this.gridPencil;
@@ -11057,49 +10832,6 @@ var $$ = Object.create(null);
         t1 = t2;
       }
       return t1;
-    },
-    renderCells$0: function() {
-      var t1, t2, rank, layer, t3, t4, root, t5, t6, topLeft, rank0, col;
-      for (t1 = this.layers, t1 = t1.get$values(t1), t1 = H.setRuntimeTypeInfo(new H.MappedIterator(null, J.get$iterator$ax(t1._iterable), t1._f), [H.getTypeArgumentByIndex(t1, 0), H.getTypeArgumentByIndex(t1, 1)]), t2 = this.renderOffset, rank = -t2; t1.moveNext$0();) {
-        layer = t1.__internal$_current;
-        t3 = J.get$cells$x(layer);
-        t3 = t3.get$values(t3);
-        t4 = new H.MappedIterator(null, J.get$iterator$ax(t3._iterable), t3._f);
-        t4.$builtinTypeInfo = [H.getTypeArgumentByIndex(t3, 0), H.getTypeArgumentByIndex(t3, 1)];
-        for (; t4.moveNext$0();)
-          J.clear$0$ax(t4.__internal$_current);
-        t3 = this.board;
-        t4 = t3.map;
-        root = t3.get$root();
-        t5 = (!!J.getInterceptor(root).$isStage ? root : null).get$_contentRectangle();
-        t6 = new U.Rectangle0(t5.left, t5.top, t5.width, t5.height);
-        t6.$builtinTypeInfo = [H.getTypeArgumentByIndex(t5, 0)];
-        t5 = new U.Point(t6.left, t6.top);
-        t5.$builtinTypeInfo = [H.getTypeArgumentByIndex(t6, 0)];
-        t3 = new U.Point(t3._x, t3._y);
-        t3.$builtinTypeInfo = [null];
-        t3 = new U.Point(J.$sub$n(t5.x, t3.x), J.$sub$n(t5.y, t3.y));
-        t3.$builtinTypeInfo = [H.getTypeArgumentByIndex(t5, 0)];
-        topLeft = t4.viewPointToGamePoint$1(t3);
-        t3 = this.board;
-        t4 = t3.map;
-        root = t3.get$root();
-        t5 = (!!J.getInterceptor(root).$isStage ? root : null).get$_contentRectangle();
-        t6 = new U.Rectangle0(t5.left, t5.top, t5.width, t5.height);
-        t6.$builtinTypeInfo = [H.getTypeArgumentByIndex(t5, 0)];
-        t5 = new U.Point(t6.left + t6.width, t6.top + t6.height);
-        t5.$builtinTypeInfo = [H.getTypeArgumentByIndex(t6, 0)];
-        t3 = new U.Point(t3._x, t3._y);
-        t3.$builtinTypeInfo = [null];
-        t3 = new U.Point(J.$sub$n(t5.x, t3.x), J.$sub$n(t5.y, t3.y));
-        t3.$builtinTypeInfo = [H.getTypeArgumentByIndex(t5, 0)];
-        for (t3 = J.floor$0$n(t4.viewPointToGamePoint$1(t3).x) - J.floor$0$n(topLeft.x) + t2, rank0 = rank; rank0 <= t3; ++rank0)
-          for (col = rank; col <= t3; ++col) {
-            t4 = new U.Point(J.floor$0$n(topLeft.x) + col, J.floor$0$n(topLeft.y) - col + rank0);
-            t4.$builtinTypeInfo = [null];
-            this.renderCell$2(layer, t4);
-          }
-      }
     },
     gamePointToViewPoint$1: function(gamePoint) {
       return H.setRuntimeTypeInfo(new U.Point(J.$div$n(J.$mul$ns(J.$sub$n(gamePoint.x, gamePoint.y), this.board.cellSize), 2), J.$mul$ns(J.$mul$ns(J.$add$ns(gamePoint.x, gamePoint.y), this.board.cellSize), this.skewFactor)), [null]);
@@ -11122,7 +10854,9 @@ var $$ = Object.create(null);
       t8 = this.board.cellSize;
       if (typeof t8 !== "number")
         return H.iae(t8);
-      return H.setRuntimeTypeInfo(new U.Point(C.JSNumber_methods.toInt$0(Math.floor((t1 / t2 + t3) / t4)), C.JSNumber_methods.toInt$0(Math.floor((t5 / t6 - t7) / t8))), [null]);
+      t8 = new U.Point(C.JSNumber_methods.toInt$0(Math.floor((t1 / t2 + t3) / t4)), C.JSNumber_methods.toInt$0(Math.floor((t5 / t6 - t7) / t8)));
+      t8.$builtinTypeInfo = [null];
+      return t8;
     }
   },
   SquareMap: {
@@ -11133,20 +10867,19 @@ var $$ = Object.create(null);
         throw H.wrapException("layer cannot be null");
       t1 = J.getInterceptor$x(layer);
       if (null != t1.get$layer(layer) && null != pencil.get$pencil() && callApi) {
-        json = P.LinkedHashMap_LinkedHashMap$_literal(["contextId", this.board.contextId, "layerName", J.get$name$x(t1.get$layer(layer)), "pencilName", J.get$name$x(pencil.get$pencil()), "x", point.x, "y", point.y], null, null);
-        this.board.queryApi$3("bluebear.editor.putPencil", json, new S.SquareMap_createCell_closure());
+        json = P.LinkedHashMap_LinkedHashMap$_literal(["contextId", this.board.contextId, "mapItems", [P.LinkedHashMap_LinkedHashMap$_literal(["layerName", J.get$name$x(t1.get$layer(layer)), "pencilName", J.get$name$x(pencil.get$pencil()), "x", point.x, "y", point.y], null, null)]], null, null);
+        this.board.queryApi$3("bluebear.editor.mapUpdate", json, new S.SquareMap_createCell_closure());
       }
       this.removeCell$2(layer, point);
-      t1 = t1.get$cells(layer);
-      t2 = this.doCreateCell$3(layer, point, pencil);
-      t1.$indexSet(0, point, t2);
+      t1 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
+      t2 = $.DisplayObject__nextID;
+      $.DisplayObject__nextID = t2 + 1;
+      t2 = new S.Cell(layer, null, point, pencil, t1, true, true, false, true, "auto", true, 0, t2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
+      t2.Cell$3(layer, point, pencil);
       return t2;
     },
     createCell$3: function(layer, point, pencil) {
       return this.createCell$4(layer, point, pencil, true);
-    },
-    doCreateCell$3: function(layer, point, pencil) {
-      return S.Cell$(layer, point, pencil);
     },
     removeCell$2: function(layer, point) {
       var t1, cell;
@@ -11155,59 +10888,15 @@ var $$ = Object.create(null);
         return;
       cell = t1.get$cells(layer).$index(0, point);
       t1.get$cells(layer).remove$1(0, point);
-      J.clear$0$ax(cell);
+      this.removeChild$1(cell);
       return cell;
     },
-    renderCells$0: function() {
-      var t1, t2, layer, t3, t4, root, t5, t6, topLeft, bottomRight, cy, cx;
-      for (t1 = this.layers, t1 = t1.get$values(t1), t1 = H.setRuntimeTypeInfo(new H.MappedIterator(null, J.get$iterator$ax(t1._iterable), t1._f), [H.getTypeArgumentByIndex(t1, 0), H.getTypeArgumentByIndex(t1, 1)]), t2 = this.renderOffset; t1.moveNext$0();) {
-        layer = t1.__internal$_current;
-        t3 = J.get$cells$x(layer);
-        t3 = t3.get$values(t3);
-        t4 = new H.MappedIterator(null, J.get$iterator$ax(t3._iterable), t3._f);
-        t4.$builtinTypeInfo = [H.getTypeArgumentByIndex(t3, 0), H.getTypeArgumentByIndex(t3, 1)];
-        for (; t4.moveNext$0();)
-          J.clear$0$ax(t4.__internal$_current);
-        t3 = this.board;
-        t4 = t3.map;
-        root = t3.get$root();
-        t5 = (!!J.getInterceptor(root).$isStage ? root : null).get$_contentRectangle();
-        t6 = new U.Rectangle0(t5.left, t5.top, t5.width, t5.height);
-        t6.$builtinTypeInfo = [H.getTypeArgumentByIndex(t5, 0)];
-        t5 = new U.Point(t6.left, t6.top);
-        t5.$builtinTypeInfo = [H.getTypeArgumentByIndex(t6, 0)];
-        t3 = new U.Point(t3._x, t3._y);
-        t3.$builtinTypeInfo = [null];
-        t3 = new U.Point(J.$sub$n(t5.x, t3.x), J.$sub$n(t5.y, t3.y));
-        t3.$builtinTypeInfo = [H.getTypeArgumentByIndex(t5, 0)];
-        topLeft = t4.viewPointToGamePoint$1(t3);
-        t3 = this.board;
-        t4 = t3.map;
-        root = t3.get$root();
-        t5 = (!!J.getInterceptor(root).$isStage ? root : null).get$_contentRectangle();
-        t6 = new U.Rectangle0(t5.left, t5.top, t5.width, t5.height);
-        t6.$builtinTypeInfo = [H.getTypeArgumentByIndex(t5, 0)];
-        t5 = new U.Point(t6.left + t6.width, t6.top + t6.height);
-        t5.$builtinTypeInfo = [H.getTypeArgumentByIndex(t6, 0)];
-        t3 = new U.Point(t3._x, t3._y);
-        t3.$builtinTypeInfo = [null];
-        t3 = new U.Point(J.$sub$n(t5.x, t3.x), J.$sub$n(t5.y, t3.y));
-        t3.$builtinTypeInfo = [H.getTypeArgumentByIndex(t5, 0)];
-        bottomRight = t4.viewPointToGamePoint$1(t3);
-        for (cy = J.floor$0$n(topLeft.y) - t2; cy <= J.floor$0$n(bottomRight.y) + t2; ++cy)
-          for (cx = J.floor$0$n(topLeft.x) - t2; cx <= J.floor$0$n(bottomRight.x) + t2; ++cx) {
-            t3 = new U.Point(cx, cy);
-            t3.$builtinTypeInfo = [null];
-            this.renderCell$2(layer, t3);
-          }
+    updateGrid$0: function() {
+      var t1, layer;
+      for (t1 = this.layers, t1 = t1.get$iterator(t1); t1.moveNext$0(), false;) {
+        layer = t1.get$current();
+        layer.get$type(layer);
       }
-    },
-    renderCell$2: function(layer, point) {
-      var t1 = J.getInterceptor$x(layer);
-      if (t1.get$cells(layer).containsKey$1(point))
-        t1.get$cells(layer).$index(0, point).draw$0();
-      else if (J.$eq(J.get$type$x(t1.get$layer(layer)), "grid"))
-        this.createCell$3(layer, point, this.getGridPencil$0());
     },
     getGridPencil$0: function() {
       var t1, t2;
@@ -11222,11 +10911,116 @@ var $$ = Object.create(null);
       }
       return t1;
     },
+    getBottomRightViewPointForCache$0: function() {
+      var t1, root, t2, t3;
+      t1 = this.board._x;
+      root = this.get$root();
+      t2 = (!!J.getInterceptor(root).$isStage ? root : null).get$_stageWidth();
+      t3 = this.board._y;
+      root = this.get$root();
+      t1 = new U.Point(-t1 + t2 * 1.3333333333333333, -t3 + (!!J.getInterceptor(root).$isStage ? root : null).get$_stageHeight() * 1.3333333333333333);
+      t1.$builtinTypeInfo = [null];
+      return t1;
+    },
     gamePointToViewPoint$1: function(gamePoint) {
       return H.setRuntimeTypeInfo(new U.Point(J.$mul$ns(gamePoint.x, this.board.cellSize), J.$mul$ns(gamePoint.y, this.board.cellSize)), [null]);
     },
     viewPointToGamePoint$1: function(viewPoint) {
-      return H.setRuntimeTypeInfo(new U.Point(C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(viewPoint.x, this.board.cellSize))), C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(viewPoint.y, this.board.cellSize)))), [null]);
+      var t1 = new U.Point(C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(viewPoint.x, this.board.cellSize))), C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(viewPoint.y, this.board.cellSize))));
+      t1.$builtinTypeInfo = [null];
+      return t1;
+    },
+    addChildAt$2: function(child, index) {
+      var t1, t2;
+      A.DisplayObjectContainer.prototype.addChildAt$2.call(this, child, index);
+      if (!!J.getInterceptor(child).$isCell) {
+        t1 = this.get$sortCells();
+        t2 = this._children;
+        C.JSArray_methods.checkMutable$1(t2, "sort");
+        H.IterableMixinWorkaround_sortList(t2, t1);
+      }
+    },
+    sortCells$2: [function(a, b) {
+      var specificLayerTypes, t1, t2, t3;
+      if (!J.getInterceptor(a).$isCell || !J.getInterceptor(b).$isCell)
+        return 0;
+      H.interceptedTypeCast(a, "$isCell");
+      H.interceptedTypeCast(b, "$isCell");
+      specificLayerTypes = ["background", "land", "grid", "events"];
+      if (!J.$eq(J.get$index$x(a.layer), J.get$index$x(b.layer)))
+        if (C.JSArray_methods.contains$1(specificLayerTypes, J.get$type$x(a.layer)) || C.JSArray_methods.contains$1(specificLayerTypes, J.get$type$x(b.layer)))
+          return J.$sub$n(J.get$index$x(a.layer), J.get$index$x(b.layer));
+      t1 = a.position;
+      t2 = t1.y;
+      t3 = b.position;
+      if (J.$eq(t2, t3.y)) {
+        if (J.$eq(t1.x, t3.x))
+          return J.$sub$n(J.get$index$x(a.layer), J.get$index$x(b.layer));
+        return J.$sub$n(t1.x, t3.x);
+      }
+      return J.$sub$n(t1.y, t3.y);
+    }, "call$2", "get$sortCells", 4, 0, 66],
+    renderLayerLine$5: function(layer, x, y, x2, y2) {
+      var shortLen, longLen, t0, yLonger, decInc, j, t1, t2;
+      shortLen = y2 - y;
+      longLen = x2 - x;
+      if (Math.abs(shortLen) > Math.abs(longLen)) {
+        t0 = longLen;
+        longLen = shortLen;
+        shortLen = t0;
+        yLonger = true;
+      } else
+        yLonger = false;
+      decInc = longLen === 0 ? 0 : C.JSNumber_methods.toInt$0(Math.floor((shortLen << 16 >>> 0) / longLen));
+      if (yLonger) {
+        if (longLen > 0) {
+          longLen += y;
+          for (j = 32768 + (x << 16 >>> 0), t1 = J.getInterceptor$x(layer); y <= longLen; ++y) {
+            t2 = new U.Point(C.JSInt_methods._shrOtherPositive$1(j, 16), y);
+            t2.$builtinTypeInfo = [null];
+            if (t1.get$cells(layer).containsKey$1(t2))
+              ;
+            else if (J.$eq(J.get$type$x(t1.get$layer(layer)), "grid"))
+              this.createCell$3(layer, t2, this.getGridPencil$0());
+            j += decInc;
+          }
+          return;
+        }
+        longLen += y;
+        for (j = 32768 + (x << 16 >>> 0), t1 = J.getInterceptor$x(layer); y >= longLen; --y) {
+          t2 = new U.Point(C.JSInt_methods._shrOtherPositive$1(j, 16), y);
+          t2.$builtinTypeInfo = [null];
+          if (t1.get$cells(layer).containsKey$1(t2))
+            ;
+          else if (J.$eq(J.get$type$x(t1.get$layer(layer)), "grid"))
+            this.createCell$3(layer, t2, this.getGridPencil$0());
+          j -= decInc;
+        }
+        return;
+      }
+      if (longLen > 0) {
+        longLen += x;
+        for (j = 32768 + (y << 16 >>> 0), t1 = J.getInterceptor$x(layer); x <= longLen; ++x) {
+          t2 = new U.Point(x, C.JSInt_methods._shrOtherPositive$1(j, 16));
+          t2.$builtinTypeInfo = [null];
+          if (t1.get$cells(layer).containsKey$1(t2))
+            ;
+          else if (J.$eq(J.get$type$x(t1.get$layer(layer)), "grid"))
+            this.createCell$3(layer, t2, this.getGridPencil$0());
+          j += decInc;
+        }
+        return;
+      }
+      longLen += x;
+      for (j = 32768 + (y << 16 >>> 0), t1 = J.getInterceptor$x(layer); x >= longLen; --x) {
+        t2 = new U.Point(x, C.JSInt_methods._shrOtherPositive$1(j, 16));
+        t2.$builtinTypeInfo = [null];
+        if (t1.get$cells(layer).containsKey$1(t2))
+          ;
+        else if (J.$eq(J.get$type$x(t1.get$layer(layer)), "grid"))
+          this.createCell$3(layer, t2, this.getGridPencil$0());
+        j -= decInc;
+      }
     },
     SquareMap$1: function(board) {
       board.addChildAt$2(this, board._children.length);
@@ -11238,7 +11032,7 @@ var $$ = Object.create(null);
         t2 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
         t3 = $.DisplayObject__nextID;
         $.DisplayObject__nextID = t3 + 1;
-        t3 = new S.SquareMap(null, null, t1, 1, 2, t2, true, true, false, true, "auto", true, 0, t3, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
+        t3 = new S.SquareMap(null, null, t1, 1, 1, t2, true, true, false, true, "auto", true, 0, t3, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
         t3.SquareMap$1(board);
         return t3;
       }}
@@ -11246,21 +11040,23 @@ var $$ = Object.create(null);
   SquareMap_createCell_closure: {
     "^": "Closure:30;",
     call$1: function(response) {
-      P.print(response);
+      var exception;
+      try {
+        P.print(C.JsonCodec_null_null.decode$1(response));
+      } catch (exception) {
+        H.unwrapException(exception);
+        P.print(response);
+      }
+
     }
   },
   CoordinatedGridPencil: {
     "^": "DisplayObjectContainer;_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     CoordinatedGridPencil$2: function(shape, point) {
-      var t1, t2, t3, t4, coordinates;
+      var t1, coordinates;
       t1 = this._children;
       this.addChildAt$2(shape, t1.length);
-      t2 = H.S(point.x) + "," + H.S(point.y);
-      t3 = H.setRuntimeTypeInfo([], [Y.TextLineMetrics]);
-      t4 = $.DisplayObject__nextID;
-      $.DisplayObject__nextID = t4 + 1;
-      coordinates = new Y.TextField("", null, "none", "dynamic", 0, 0, 0, 0, 0, 0, 0, false, false, false, false, false, "\u2022", 16777215, 0, 0, 100, 100, 0, 0, t3, 3, true, null, false, true, "auto", true, 0, t4, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
-      coordinates.TextField$2(t2, new Y.TextFormat("Monospace", 10, 4292072403, 0, 4278190080, null, false, false, false, "left", 0, 0, 0, 0, 0, 0));
+      coordinates = Y.TextField$(H.S(point.x) + "," + H.S(point.y), new Y.TextFormat("Monospace", 10, 4292072403, 0, 4278190080, null, false, false, false, "left", 0, 0, 0, 0, 0, 0));
       coordinates.set$x(0, -10);
       coordinates.set$y(0, -5);
       this.addChildAt$2(coordinates, t1.length);
@@ -11397,7 +11193,7 @@ var $$ = Object.create(null);
     t5 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
     t6 = $.DisplayObject__nextID;
     $.DisplayObject__nextID = t6 + 1;
-    board = new S.Board(canvas, null, null, null, t2, null, null, null, null, new O.ResourceManager(t3, t4), null, null, null, null, null, true, t5, true, true, false, true, "auto", true, 0, t6, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
+    board = new S.Board(canvas, null, null, null, t2, null, null, null, null, new O.ResourceManager(t3, t4), null, null, null, null, null, true, true, null, t5, true, true, false, true, "auto", true, 0, t6, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
     board.Board$2(canvas, t1);
     board.queryApi$3("bluebear.engine.mapLoad", P.LinkedHashMap_LinkedHashMap$_literal(["contextId", board.contextId], null, null), board.get$loadMap());
   }, "call$0", "main$closure", 0, 0, 11]
@@ -11413,24 +11209,6 @@ var $$ = Object.create(null);
   },
   Juggler: {
     "^": "Object;_firstAnimatableLink,_lastAnimatableLink,_elapsedTime",
-    contains$1: function(_, animatable) {
-      var link, t1;
-      link = this._firstAnimatableLink;
-      for (t1 = this._lastAnimatableLink; link == null ? t1 != null : link !== t1;) {
-        link.animatable;
-        link = link.nextAnimatableLink;
-      }
-      return false;
-    },
-    clear$0: function(_) {
-      var link, t1;
-      link = this._firstAnimatableLink;
-      for (; t1 = this._lastAnimatableLink, link == null ? t1 != null : link !== t1;) {
-        link.animatable = null;
-        link = link.nextAnimatableLink;
-      }
-      this._lastAnimatableLink = this._firstAnimatableLink;
-    },
     advanceTime$1: function(time) {
       var link, lastLink, nextLink, t1;
       this._elapsedTime += time;
@@ -11478,11 +11256,6 @@ var $$ = Object.create(null);
     get$height: function(_) {
       return this._display$_height;
     },
-    clear$0: function(_) {
-      var updateBatch = A.BitmapDataUpdateBatch$(this);
-      updateBatch.clear$0(0);
-      updateBatch.bitmapData._renderTextureQuad._renderTexture.update$0();
-    },
     render$1: function(renderState) {
       renderState._engine$_renderContext.renderQuad$2(renderState, this._renderTextureQuad);
     },
@@ -11513,13 +11286,6 @@ var $$ = Object.create(null);
   },
   BitmapDataUpdateBatch: {
     "^": "Object;bitmapData,_renderContext,_drawMatrix",
-    clear$0: function(_) {
-      var t1, t2;
-      t1 = this._renderContext;
-      t1.setTransform$1(0, this._drawMatrix);
-      t2 = this.bitmapData;
-      t1._renderingContext.clearRect(0, 0, t2._display$_width, t2._display$_height);
-    },
     getPixel32$2: function(x, y) {
       var rectangle, renderTextureQuad, t1, t2, isLittleEndianSystem, storePixelRatio, t3, left, $top, right, bottom, rect, imageData, pixels, data, r, g, b, a, i;
       rectangle = H.setRuntimeTypeInfo(new U.Rectangle0(x, y, 1, 1), [P.$int]);
@@ -11764,22 +11530,21 @@ var $$ = Object.create(null);
       this.addChildAt$2(child, this._children.length);
     },
     addChildAt$2: function(child, index) {
-      var t1, t2, ancestor;
-      t1 = J.getInterceptor$n(index);
-      if (t1.$lt(index, 0) || t1.$gt(index, this._children.length))
+      var t1, ancestor;
+      if (index > this._children.length)
         throw H.wrapException(P.ArgumentError$("The supplied index is out of bounds."));
       if (child === this)
         throw H.wrapException(P.ArgumentError$("An object cannot be added as a child of itself."));
-      t2 = child._parent;
-      if (t2 === this) {
-        t2 = this._children;
-        C.JSArray_methods.remove$1(t2, child);
-        C.JSArray_methods.insert$2(t2, t1.$gt(index, t2.length) ? t1.$sub(index, 1) : index, child);
+      t1 = child._parent;
+      if (t1 === this) {
+        t1 = this._children;
+        C.JSArray_methods.remove$1(t1, child);
+        C.JSArray_methods.insert$2(t1, index > t1.length ? index - 1 : index, child);
       } else {
-        if (t2 != null)
-          t2.removeChild$1(child);
+        if (t1 != null)
+          t1.removeChild$1(child);
         for (ancestor = this; ancestor != null; ancestor = ancestor._parent)
-          if (ancestor === child)
+          if (ancestor == null ? child == null : ancestor === child)
             throw H.wrapException(P.ArgumentError$("An object cannot be added as a child to one of it's children (or children's children, etc.)."));
         C.JSArray_methods.insert$2(this._children, index, child);
         child._parent = this;
@@ -11794,50 +11559,16 @@ var $$ = Object.create(null);
       childIndex = H.Lists_indexOf(t1, child, 0, t1.length);
       if (childIndex === -1)
         throw H.wrapException(P.ArgumentError$("The supplied DisplayObject must be a child of the caller."));
-      this.removeChildAt$1(childIndex);
-    },
-    removeChildAt$1: function(index) {
-      var t1, child, root;
-      if (index < 0 || index >= this._children.length)
-        throw H.wrapException(P.ArgumentError$("The supplied index is out of bounds."));
-      t1 = this._children;
-      if (index < 0 || index >= t1.length)
-        return H.ioore(t1, index);
-      child = t1[index];
+      if (childIndex < 0 || childIndex >= t1.length)
+        H.throwExpression(P.ArgumentError$("The supplied index is out of bounds."));
+      if (childIndex < 0 || childIndex >= t1.length)
+        return H.ioore(t1, childIndex);
+      child = t1[childIndex];
       J.dispatchEvent$1$x(child, new R.Event("removed", true, C.EventPhase_1, null, null, false, false));
-      root = this.get$root();
-      if ((!!J.getInterceptor(root).$isStage ? root : null) != null)
+      if (this.get$stage() != null)
         this._dispatchEventDescendants$2(child, new R.Event("removedFromStage", false, C.EventPhase_1, null, null, false, false));
       child.set$_parent(null);
-      C.JSArray_methods.removeAt$1(t1, index);
-    },
-    removeChildren$2: function(beginIndex, endIndex) {
-      var t1, $length, t2, i;
-      t1 = this._children;
-      $length = t1.length;
-      if ($length === 0)
-        return;
-      if (endIndex === 2147483647)
-        endIndex = $length - 1;
-      t2 = endIndex < 0 || beginIndex >= $length || endIndex >= $length;
-      if (t2)
-        throw H.wrapException(P.ArgumentError$("The supplied index is out of bounds."));
-      for (i = beginIndex; i <= endIndex; ++i) {
-        if (beginIndex >= t1.length)
-          break;
-        this.removeChildAt$1(beginIndex);
-      }
-    },
-    removeChildren$0: function() {
-      return this.removeChildren$2(0, 2147483647);
-    },
-    contains$1: function(_, child) {
-      for (; child != null;) {
-        if (child === this)
-          return true;
-        child = child._parent;
-      }
-      return false;
+      C.JSArray_methods.removeAt$1(t1, childIndex);
     },
     get$bounds: function() {
       var t1, left, $top, right, bottom, i, rectangle, left0, top0, right0, bottom0;
@@ -11977,7 +11708,7 @@ var $$ = Object.create(null);
     }
   },
   Stage: {
-    "^": "DisplayObjectContainer;_display$_canvas,_renderContext,_juggler,_renderLoop,_color,_sourceWidth,_sourceHeight,_frameRate,_stageWidth,_stageHeight,_contentRectangle<,_clientTransformation,_stageTransformation,_focus,_renderState,_stageRenderMode,_stageScaleMode,_stageAlign,_mouseCursor,_mousePosition,_mouseTarget,_drags,_touchPoints,_mouseButtons,_touchEventSubscriptions,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    "^": "DisplayObjectContainer;_display$_canvas,_renderContext,_juggler,_renderLoop,_color,_sourceWidth,_sourceHeight,_frameRate,_stageWidth<,_stageHeight<,_contentRectangle,_clientTransformation,_stageTransformation,_focus,_renderState,_stageRenderMode,_stageScaleMode,_stageAlign,_mouseCursor,_mousePosition,_mouseTarget,_drags,_touchPoints,_mouseButtons,_touchEventSubscriptions,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     hitTestInput$2: function(localX, localY) {
       var target = A.DisplayObjectContainer.prototype.hitTestInput$2.call(this, localX, localY);
       return target != null ? target : this;
@@ -12651,10 +12382,6 @@ var $$ = Object.create(null);
   },
   Graphics: {
     "^": "Object;_commands,_boundsRectangle,_boundsRefresh",
-    clear$0: function(_) {
-      C.JSArray_methods.set$length(this._commands, 0);
-      this._boundsRefresh = true;
-    },
     get$bounds: function() {
       var graphicsBounds, commands, i, t1, t2, t3, t4, t5;
       if (this._boundsRefresh) {
@@ -14346,16 +14073,13 @@ var $$ = Object.create(null);
       return t1;
     },
     $sub: function(_, point) {
-      return this.subtract$1(point);
-    },
-    $mul: function(_, factor) {
-      var t1 = new U.Point(J.$mul$ns(this.x, factor), J.$mul$ns(this.y, factor));
+      var t1 = J.getInterceptor$x(point);
+      t1 = new U.Point(J.$sub$n(this.x, t1.get$x(point)), J.$sub$n(this.y, t1.get$y(point)));
       t1.$builtinTypeInfo = this.$builtinTypeInfo;
       return t1;
     },
-    subtract$1: function(point) {
-      var t1 = J.getInterceptor$x(point);
-      t1 = new U.Point(J.$sub$n(this.x, t1.get$x(point)), J.$sub$n(this.y, t1.get$y(point)));
+    $mul: function(_, factor) {
+      var t1 = new U.Point(J.$mul$ns(this.x, factor), J.$mul$ns(this.y, factor));
       t1.$builtinTypeInfo = this.$builtinTypeInfo;
       return t1;
     },
@@ -15239,7 +14963,7 @@ var $$ = Object.create(null);
           this._refreshPending |= 3;
         }
       }
-    }, "call$1", "get$_onMouseDown", 2, 0, 65, 89],
+    }, "call$1", "get$_onMouseDown", 2, 0, 64, 89],
     TextField$2: function(text, textFormat) {
       this.set$text(0, text);
       this._defaultTextFormat = new Y.TextFormat(textFormat.font, textFormat.size, textFormat.color, textFormat.strokeWidth, textFormat.strokeColor, textFormat.fillGradient, textFormat.bold, textFormat.italic, textFormat.underline, textFormat.align, textFormat.topMargin, textFormat.bottomMargin, textFormat.leftMargin, textFormat.rightMargin, textFormat.indent, textFormat.leading);
@@ -15247,7 +14971,16 @@ var $$ = Object.create(null);
       this.on$1(0, "keyDown").listen$1(this.get$_onKeyDown());
       this.on$1(0, "textInput").listen$1(this.get$_onTextInput());
       this.on$1(0, "mouseDown").listen$1(this.get$_onMouseDown());
-    }
+    },
+    static: {TextField$: function(text, textFormat) {
+        var t1, t2;
+        t1 = H.setRuntimeTypeInfo([], [Y.TextLineMetrics]);
+        t2 = $.DisplayObject__nextID;
+        $.DisplayObject__nextID = t2 + 1;
+        t2 = new Y.TextField("", null, "none", "dynamic", 0, 0, 0, 0, 0, 0, 0, false, false, false, false, false, "\u2022", 16777215, 0, 0, 100, 100, 0, 0, t1, 3, true, null, false, true, "auto", true, 0, t2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
+        t2.TextField$2(text, textFormat);
+        return t2;
+      }}
   },
   TextFormat: {
     "^": "Object;font,size,color,strokeWidth,strokeColor,fillGradient,bold,italic,underline,align,topMargin,bottomMargin,leftMargin,rightMargin,indent,leading",
@@ -15334,7 +15067,9 @@ $$ = null;
   _.$isComparable = TRUE;
   _.$asComparable = [P.Duration];
   _.$isObject = TRUE;
-  A.DisplayObject.$isObject = TRUE;
+  _ = A.DisplayObject;
+  _.$isDisplayObject = TRUE;
+  _.$isObject = TRUE;
   S.Pencil.$isObject = TRUE;
   O.ResourceManagerResource.$isObject = TRUE;
   _ = W.ProgressEvent;
@@ -15355,7 +15090,20 @@ $$ = null;
   _ = W.Event0;
   _.$isEvent0 = TRUE;
   _.$isObject = TRUE;
-  P.Match.$isObject = TRUE;
+  _ = R.EventStream;
+  _.$isStream = TRUE;
+  _.$isObject = TRUE;
+  U._GraphicsCommand.$isObject = TRUE;
+  Y._FontStyleMetrics.$isObject = TRUE;
+  _ = P.Symbol;
+  _.$isSymbol = TRUE;
+  _.$isObject = TRUE;
+  Y.TextLineMetrics.$isObject = TRUE;
+  _ = W.TableCellElement;
+  _.$isHtmlElement = TRUE;
+  _.$isEventTarget = TRUE;
+  _.$isEventTarget = TRUE;
+  _.$isObject = TRUE;
   D.MapItem.$isObject = TRUE;
   D.Layer0.$isObject = TRUE;
   D.PencilSet.$isObject = TRUE;
@@ -15364,26 +15112,14 @@ $$ = null;
   _.$isPoint = TRUE;
   _.$isPoint0 = TRUE;
   _.$isObject = TRUE;
-  _ = R.EventStream;
-  _.$isStream = TRUE;
+  _ = A.Stage;
+  _.$isDisplayObject = TRUE;
   _.$isObject = TRUE;
-  L.RenderContextEvent.$isObject = TRUE;
-  _ = W.TableCellElement;
-  _.$isHtmlElement = TRUE;
-  _.$isEventTarget = TRUE;
-  _.$isEventTarget = TRUE;
-  _.$isObject = TRUE;
-  U._GraphicsCommand.$isObject = TRUE;
-  Y.TextLineMetrics.$isObject = TRUE;
-  Y._FontStyleMetrics.$isObject = TRUE;
-  _ = P.Symbol;
-  _.$isSymbol = TRUE;
-  _.$isObject = TRUE;
-  A.Stage.$isObject = TRUE;
   A._Drag.$isObject = TRUE;
   A._TouchPoint.$isObject = TRUE;
   L.RenderFrameBuffer.$isObject = TRUE;
   P.UniformLocation.$isObject = TRUE;
+  L.RenderContextEvent.$isObject = TRUE;
   _ = W.KeyboardEvent;
   _.$isKeyboardEvent = TRUE;
   _.$isEvent0 = TRUE;
@@ -15412,14 +15148,14 @@ $$ = null;
   H.RawReceivePortImpl.$isObject = TRUE;
   H._IsolateEvent.$isObject = TRUE;
   H._IsolateContext.$isObject = TRUE;
+  _ = R.MouseEvent;
+  _.$isMouseEvent = TRUE;
+  _.$isEvent = TRUE;
+  _.$isObject = TRUE;
   _ = P.StackTrace;
   _.$isStackTrace = TRUE;
   _.$isObject = TRUE;
   _ = R.Event;
-  _.$isEvent = TRUE;
-  _.$isObject = TRUE;
-  _ = R.MouseEvent;
-  _.$isMouseEvent = TRUE;
   _.$isEvent = TRUE;
   _.$isObject = TRUE;
   _ = P._BufferingStreamSubscription;
@@ -15646,17 +15382,11 @@ J.abs$0$n = function(receiver) {
 J.addEventListener$3$x = function(receiver, a0, a1, a2) {
   return J.getInterceptor$x(receiver).addEventListener$3(receiver, a0, a1, a2);
 };
-J.allMatches$1$s = function(receiver, a0) {
-  return J.getInterceptor$s(receiver).allMatches$1(receiver, a0);
-};
 J.append$1$x = function(receiver, a0) {
   return J.getInterceptor$x(receiver).append$1(receiver, a0);
 };
 J.beginPath$0$x = function(receiver) {
   return J.getInterceptor$x(receiver).beginPath$0(receiver);
-};
-J.clear$0$ax = function(receiver) {
-  return J.getInterceptor$ax(receiver).clear$0(receiver);
 };
 J.compareTo$1$ns = function(receiver, a0) {
   return J.getInterceptor$ns(receiver).compareTo$1(receiver, a0);
@@ -15699,6 +15429,9 @@ J.get$hashCode$ = function(receiver) {
 };
 J.get$height$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$height(receiver);
+};
+J.get$index$x = function(receiver) {
+  return J.getInterceptor$x(receiver).get$index(receiver);
 };
 J.get$isNegative$n = function(receiver) {
   return J.getInterceptor$n(receiver).get$isNegative(receiver);
@@ -15813,9 +15546,6 @@ J.set$font$x = function(receiver, value) {
 };
 J.set$height$x = function(receiver, value) {
   return J.getInterceptor$x(receiver).set$height(receiver, value);
-};
-J.set$length$asx = function(receiver, value) {
-  return J.getInterceptor$asx(receiver).set$length(receiver, value);
 };
 J.set$lineCap$x = function(receiver, value) {
   return J.getInterceptor$x(receiver).set$lineCap(receiver, value);
@@ -16373,7 +16103,6 @@ init.metadata = ["object",
 {func: "bool_", ret: P.bool},
 "ignored",
 "element",
-{func: "dynamic__bool", args: [P.bool]},
 {func: "dynamic__dynamic_StackTrace", args: [null, P.StackTrace]},
 "data",
 {func: "void__dynamic_StackTrace", void: true, args: [null, P.StackTrace]},
@@ -16385,6 +16114,7 @@ init.metadata = ["object",
 {func: "dynamic__Event", args: [R.Event]},
 {func: "dynamic__MouseEvent", args: [R.MouseEvent]},
 "res",
+{func: "int__DisplayObject_DisplayObject", ret: P.$int, args: [A.DisplayObject, A.DisplayObject]},
 "renderTexture",
 {func: "dynamic__MouseEvent0", args: [W.MouseEvent0]},
 "event",

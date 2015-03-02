@@ -2,6 +2,7 @@ part of jikpoze;
 
 class Cell extends DisplayObjectContainer {
     Layer layer;
+    SquareMap map;
     Point position;
     Pencil pencil;
 
@@ -15,32 +16,32 @@ class Cell extends DisplayObjectContainer {
         if (null == pencil) {
             throw "pencil cannot be null";
         }
-        layer.addChild(this);
+        layer.cells[position] = this;
+        map = layer.map;
+        map.addChild(this);
         attachEvents();
         draw();
     }
 
     void draw() {
-        clear();
         Point viewPoint = layer.map.gamePointToViewPoint(position);
         x = viewPoint.x;
         y = viewPoint.y;
-        addChild(pencil.getDisplayObject(position));
-    }
-
-    void clear() {
-        removeChildren();
-        if (layer.contains(this)) {
-            layer.removeChild(this);
-        }
-        removeCache();
-        layer.addChild(this);
+        DisplayObject child = pencil.getDisplayObject(position);
+        addChild(child);
     }
 
     void attachEvents() {
         onMouseClick.listen((MouseEvent e) {
             Board board = layer.map.board;
             if (board.dragging != null) {
+                return;
+            }
+            // remove large mouse offset
+            if (e.stageX - 2 > board.dragMouseEvent.stageX || board.dragMouseEvent.stageX > e.stageX + 2) {
+                return;
+            }
+            if (e.stageY - 2 > board.dragMouseEvent.stageY || board.dragMouseEvent.stageY > e.stageY + 2) {
                 return;
             }
             try {
@@ -53,22 +54,10 @@ class Cell extends DisplayObjectContainer {
                     }
                 }
                 layer.map.createCell(targetLayer, position, selectedPencil);
-                layer.map.renderCells();
             } catch (exception) {
                 print(exception);
             }
         });
-    }
-
-    List<Point> getAdjacentPoints() {
-        num x = position.x;
-        num y = position.y;
-        return [
-            new Point(x + 1, y),
-            new Point(x, y + 1),
-            new Point(x - 1, y),
-            new Point(x, y - 1),
-        ];
     }
 
     static int getPointHashCode(Point point) {

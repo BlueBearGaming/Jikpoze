@@ -30,13 +30,19 @@ class SquareMap extends DisplayObjectContainer {
         if (null != layer.layer && null != pencil.pencil && callApi) {
             Object json = {
                 "contextId": board.contextId,
-                "layerName": layer.layer.name,
-                "pencilName": pencil.pencil.name,
-                "x": point.x,
-                "y": point.y
+                "mapItems": [{
+                    "layerName": layer.layer.name,
+                    "pencilName": pencil.pencil.name,
+                    "x": point.x,
+                    "y": point.y
+                }]
             };
             board.queryApi('bluebear.editor.mapUpdate', json, (response) {
-                print(response);
+                try{
+                    print(Convert.JSON.decode(response));
+                } catch (e) {
+                    print(response);
+                }
             });
         }
         removeCell(layer, point);

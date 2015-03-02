@@ -25,6 +25,8 @@ class Board extends DisplayObjectContainer {
     static int minZoom = 80;
     static int zoomIncrement = 10;
     bool editionMode = true;
+    bool debug = true;
+    TextField debugContainer;
 
     Board(this.canvas, Col.LinkedHashMap options) {
         if (null == canvas) {
@@ -40,50 +42,54 @@ class Board extends DisplayObjectContainer {
     }
 
     void attachEvents() {
-        onResizeEvent(Event e) {
-            renderCells();
-        }
-        stage.onResize.listen(onResizeEvent);
+        stage.onResize.listen((Event e) {
+            //map.updateCells();
+        });
 
-        onScaleEvent(MouseEvent e) {
+        stage.onMouseWheel.listen((MouseEvent e) {
             if (e.deltaY.isNegative) {
                 if (cellSize < maxZoom) {
                     cellSize += zoomIncrement;
-                    renderCells();
+                    //map.updateCells(true);
                 }
             } else if (cellSize > minZoom) {
                 cellSize -= zoomIncrement;
                 if (cellSize < minZoom) {
                     cellSize = minZoom;
                 }
-                renderCells();
+                //map.updateCells(true);
             }
-        }
-        stage.onMouseWheel.listen(onScaleEvent);
+        });
 
-        onMouseDownEvent(MouseEvent e) {
+        stage.onMouseDown.listen((MouseEvent e) {
             dragMouseEvent = e;
             dragging = new Point(e.stageX, e.stageY);
-        }
-        stage.onMouseDown.listen(onMouseDownEvent);
+        });
 
-        onMouseUpEvent(MouseEvent e) {
+
+        stage.onMouseUp.listen((MouseEvent e) {
             dragging = null;
-        }
-        stage.onMouseUp.listen(onMouseUpEvent);
+            map.updateGrid();
+            //map.updateCells(); //@todo: query missing cells
+        });
 
-        onMouseMoveEvent(MouseEvent e) {
+        stage.onMouseMove.listen((MouseEvent e) {
             if (dragging != null) {
                 x += e.stageX - dragging.x;
                 y += e.stageY - dragging.y;
                 dragging = new Point(e.stageX, e.stageY);
-                renderCells();
             }
-        }
-        stage.onMouseMove.listen(onMouseMoveEvent);
+            if (debug) {
+                Point point = map.viewPointToGamePoint(new Point(e.stageX - x, e.stageY - y));
+                if (null == debugContainer) {
+                    TextFormat format = new TextFormat('Monospace', 10, Color.LightGray);
+                    debugContainer = new TextField('', format);
+                    stage.addChild(debugContainer);
+                }
+                debugContainer.text = 'Game coordinates: ${point.x}, ${point.y}';
+            }
+        });
     }
-
-    void renderCells() => map.renderCells();
 
     void parseOptions(Col.LinkedHashMap options) {
 
@@ -162,14 +168,12 @@ class Board extends DisplayObjectContainer {
         // Create layers
         for (BlueBear.Layer contextLayer in contextMap.layers) {
             Layer layer;
-            if ('grid' == contextLayer.type) {
-                layer = new GridLayer(map, contextLayer.index);
-            } else {
-                layer = new Layer(map, contextLayer.index);
-            }
-            layer.name = 'layer.' + contextLayer.name;
+            layer = new Layer(map, contextLayer.type, contextLayer.index);
             layer.layer = contextLayer;
             map.layers[contextLayer.name] = layer;
+            if (layer.type == 'grid') {
+                map.updateGrid();
+            }
         }
 
         for (BlueBear.PencilSet pencilSet in contextMap.pencilSets) {
@@ -192,7 +196,6 @@ class Board extends DisplayObjectContainer {
                 }
                 map.createCell(layer, new Point(mapItem.x, mapItem.y), pencil, false);
             }
-            renderCells();
             attachEvents();
         });
     }
