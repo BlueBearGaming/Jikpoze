@@ -10960,66 +10960,17 @@ var $$ = Object.create(null);
       }
       return J.$sub$n(t1.y, t3.y);
     }, "call$2", "get$sortCells", 4, 0, 66],
-    renderLayerLine$5: function(layer, x, y, x2, y2) {
-      var shortLen, longLen, t0, yLonger, decInc, j, t1, t2;
-      shortLen = y2 - y;
-      longLen = x2 - x;
-      if (Math.abs(shortLen) > Math.abs(longLen)) {
-        t0 = longLen;
-        longLen = shortLen;
-        shortLen = t0;
-        yLonger = true;
-      } else
-        yLonger = false;
-      decInc = longLen === 0 ? 0 : C.JSNumber_methods.toInt$0(Math.floor((shortLen << 16 >>> 0) / longLen));
-      if (yLonger) {
-        if (longLen > 0) {
-          longLen += y;
-          for (j = 32768 + (x << 16 >>> 0), t1 = J.getInterceptor$x(layer); y <= longLen; ++y) {
-            t2 = new U.Point(C.JSInt_methods._shrOtherPositive$1(j, 16), y);
-            t2.$builtinTypeInfo = [null];
-            if (t1.get$cells(layer).containsKey$1(t2))
-              ;
-            else if (J.$eq(J.get$type$x(t1.get$layer(layer)), "grid"))
-              this.createCell$3(layer, t2, this.getGridPencil$0());
-            j += decInc;
-          }
-          return;
-        }
-        longLen += y;
-        for (j = 32768 + (x << 16 >>> 0), t1 = J.getInterceptor$x(layer); y >= longLen; --y) {
-          t2 = new U.Point(C.JSInt_methods._shrOtherPositive$1(j, 16), y);
-          t2.$builtinTypeInfo = [null];
-          if (t1.get$cells(layer).containsKey$1(t2))
-            ;
-          else if (J.$eq(J.get$type$x(t1.get$layer(layer)), "grid"))
-            this.createCell$3(layer, t2, this.getGridPencil$0());
-          j -= decInc;
-        }
-        return;
-      }
-      if (longLen > 0) {
-        longLen += x;
-        for (j = 32768 + (y << 16 >>> 0), t1 = J.getInterceptor$x(layer); x <= longLen; ++x) {
-          t2 = new U.Point(x, C.JSInt_methods._shrOtherPositive$1(j, 16));
-          t2.$builtinTypeInfo = [null];
-          if (t1.get$cells(layer).containsKey$1(t2))
-            ;
-          else if (J.$eq(J.get$type$x(t1.get$layer(layer)), "grid"))
-            this.createCell$3(layer, t2, this.getGridPencil$0());
-          j += decInc;
-        }
-        return;
-      }
-      longLen += x;
-      for (j = 32768 + (y << 16 >>> 0), t1 = J.getInterceptor$x(layer); x >= longLen; --x) {
-        t2 = new U.Point(x, C.JSInt_methods._shrOtherPositive$1(j, 16));
+    renderLayerLine$5: function(layer, x1, y1, x2, y2) {
+      var dx, dy, t1, x, t2;
+      dx = x2 - x1;
+      dy = y2 - y1;
+      for (t1 = J.getInterceptor$x(layer), x = x1; x <= x2; ++x) {
+        t2 = new U.Point(x, C.JSNumber_methods.toInt$0(Math.floor(y1 + dy * (x - x1) / dx)));
         t2.$builtinTypeInfo = [null];
         if (t1.get$cells(layer).containsKey$1(t2))
           ;
         else if (J.$eq(J.get$type$x(t1.get$layer(layer)), "grid"))
           this.createCell$3(layer, t2, this.getGridPencil$0());
-        j -= decInc;
       }
     },
     SquareMap$1: function(board) {

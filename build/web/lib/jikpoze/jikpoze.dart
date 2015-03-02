@@ -17,7 +17,6 @@ part 'map/isomap.dart';
 
 // Layers
 part 'layer/layer.dart';
-part 'layer/gridlayer.dart';
 
 // Cells
 part 'cell/cell.dart';

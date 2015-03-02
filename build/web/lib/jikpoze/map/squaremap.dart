@@ -145,52 +145,13 @@ class SquareMap extends DisplayObjectContainer {
         return ac.position.y - bc.position.y; // back to front order
     }
 
-    void renderLayerLine(Layer layer, int x, int y, int x2, int y2) {
-        bool yLonger = false;
-        int shortLen = y2 - y;
-        int longLen = x2 - x;
-        if (shortLen.abs() > longLen.abs()) {
-            int swap = shortLen;
-            shortLen = longLen;
-            longLen = swap;
-            yLonger = true;
-        }
-        int decInc;
-        if (longLen == 0) {
-            decInc = 0;
-        } else {
-            decInc = ((shortLen << 16) / longLen).floor();
-        }
-
-        if (yLonger) {
-            if (longLen > 0) {
-                longLen += y;
-                for (int j = 0x8000 + (x << 16); y <= longLen; ++y) {
-                    renderCell(layer, new Point(j >> 16, y));
-                    j += decInc;
-                }
-                return;
-            }
-            longLen += y;
-            for (int j = 0x8000 + (x << 16); y >= longLen; --y) {
-                renderCell(layer, new Point(j >> 16, y));
-                j -= decInc;
-            }
-            return;
-        }
-
-        if (longLen > 0) {
-            longLen += x;
-            for (int j = 0x8000 + (y << 16); x <= longLen; ++x) {
-                renderCell(layer, new Point(x, j >> 16));
-                j += decInc;
-            }
-            return;
-        }
-        longLen += x;
-        for (int j = 0x8000 + (y << 16); x >= longLen; --x) {
-            renderCell(layer, new Point(x, j >> 16));
-            j -= decInc;
+    void renderLayerLine(Layer layer, int x1, int y1, int x2, int y2) {
+        int dx = x2 - x1;
+        int dy = y2 - y1;
+        int y;
+        for (int x = x1; x <= x2; x++) {
+            y = (y1 + dy * (x - x1) / dx).floor();
+            renderCell(layer, new Point(x, y));
         }
     }
 }
