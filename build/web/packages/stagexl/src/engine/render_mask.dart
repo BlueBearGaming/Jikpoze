@@ -5,13 +5,11 @@ part of stagexl.engine;
 
 abstract class RenderMask {
 
-    bool get relativeToParent;
+  bool get relativeToParent;
 
-    bool get border;
+  bool get border;
+  int get borderColor;
+  int get borderWidth;
 
-    int get borderColor;
-
-    int get borderWidth;
-
-    void renderMask(RenderState renderState);
+  void renderMask(RenderState renderState);
 }

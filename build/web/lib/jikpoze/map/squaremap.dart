@@ -49,8 +49,12 @@ class SquareMap extends DisplayObjectContainer {
         return doCreateCell(layer, point, pencil);
     }
 
-    Cell doCreateCell(layer, point, pencil) {
-        return new Cell(layer, point, pencil);
+    Cell doCreateCell(Layer layer, Point point, Pencil pencil) {
+        Cell cell = new Cell(layer, point, pencil);
+        if (layer.type == 'grid' && !board.showGrid) {
+            cell.visible = false;
+        }
+        return cell;
     }
 
     Cell removeCell(Layer layer, Point point) {

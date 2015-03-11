@@ -213,7 +213,7 @@ class Board extends DisplayObjectContainer {
         grad.addColorStop(0.2, Color.White);
         grad.addColorStop(1, Color.GhostWhite);
         shape.graphics.fillGradient(grad);
-        SimpleButton button = new SimpleButton(shape, shape);
+        SimpleButton button = new SimpleButton(shape, shape, shape);
         button.hitTestState = shape;
         button.onMouseClick.listen((MouseEvent e){
             showGrid = !showGrid;

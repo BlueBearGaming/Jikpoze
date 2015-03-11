@@ -12,81 +12,78 @@ typedef void EventListener<T extends Event>(T event);
 
 class EventStreamSubscription<T extends Event> extends StreamSubscription<T> {
 
-    int _priority = 0;
-    int _pauseCount = 0;
-    bool _canceled = false;
-    bool _captures = false;
+  int _priority = 0;
+  int _pauseCount = 0;
+  bool _canceled = false;
+  bool _captures = false;
 
-    EventStream<T> _eventStream;
-    EventListener<T> _eventListener;
+  EventStream<T> _eventStream;
+  EventListener<T> _eventListener;
 
-    EventStreamSubscription._(
-        this._eventStream, this._eventListener, this._captures, this._priority);
+  EventStreamSubscription._(
+      this._eventStream, this._eventListener, this._captures, this._priority);
 
-    //-----------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------
 
-    int get priority => _priority;
+  int get priority => _priority;
 
-    bool get isPaused => _pauseCount > 0;
+  bool get isPaused => _pauseCount > 0;
+  bool get isCanceled => _canceled;
+  bool get isCapturing => _captures;
 
-    bool get isCanceled => _canceled;
+  EventStream<T> get eventStream => _eventStream;
+  EventListener<T> get eventListener => _eventListener;
 
-    bool get isCapturing => _captures;
+  //-----------------------------------------------------------------------------------------------
 
-    EventStream<T> get eventStream => _eventStream;
+  @override
+  void onData(void handleData(T event)) {
+    _eventListener = handleData;
+  }
 
-    EventListener<T> get eventListener => _eventListener;
+  @override
+  void onError(void handleError(error)) {
+    // This stream has no errors.
+  }
 
-    //-----------------------------------------------------------------------------------------------
+  @override
+  void onDone(void handleDone()) {
+    // This stream is never done.
+  }
 
-    @override
-    void onData(void handleData(T event)) {
-        _eventListener = handleData;
+  //-----------------------------------------------------------------------------------------------
+
+  @override
+  Future asFuture([var futureValue]) {
+    // This stream is never done and has no errors.
+    return new Completer().future;
+  }
+
+  //-----------------------------------------------------------------------------------------------
+
+  @override
+  Future cancel() {
+    if (_canceled == false) {
+      _eventStream._cancelSubscription(this);
     }
+    return null;
+  }
 
-    @override
-    void onError(void handleError(error)) {
-        // This stream has no errors.
+  @override
+  void pause([Future resumeSignal]) {
+    _pauseCount++;
+    if (resumeSignal != null) {
+      resumeSignal.whenComplete(resume);
     }
+  }
 
-    @override
-    void onDone(void handleDone()) {
-        // This stream is never done.
+  @override
+  void resume() {
+    if (_pauseCount == 0) {
+      throw new StateError("Subscription is not paused.");
     }
-
-    //-----------------------------------------------------------------------------------------------
-
-    @override
-    Future asFuture([var futureValue]) {
-        // This stream is never done and has no errors.
-        return new Completer().future;
-    }
-
-    //-----------------------------------------------------------------------------------------------
-
-    @override
-    Future cancel() {
-        if (_canceled == false) {
-            _eventStream._cancelSubscription(this);
-        }
-        return null;
-    }
-
-    @override
-    void pause([Future resumeSignal]) {
-        _pauseCount++;
-        if (resumeSignal != null) {
-            resumeSignal.whenComplete(resume);
-        }
-    }
-
-    @override
-    void resume() {
-        if (_pauseCount == 0) {
-            throw new StateError("Subscription is not paused.");
-        }
-        _pauseCount--;
-    }
+    _pauseCount--;
+  }
 
 }
 

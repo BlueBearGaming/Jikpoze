@@ -21,12 +21,8 @@ class Board extends DisplayObjectContainer {
     String layerSelectorName;
     String pencilSelectorName;
     int contextId;
-    static int maxZoom = 256;
-    static int minZoom = 80;
-    static int zoomIncrement = 10;
     bool editionMode = true;
-    bool debug = true;
-    TextField debugContainer;
+    bool showGrid = true;
 
     Board(this.canvas, Col.LinkedHashMap options) {
         if (null == canvas) {
@@ -42,22 +38,13 @@ class Board extends DisplayObjectContainer {
     }
 
     void attachEvents() {
-        stage.onResize.listen((Event e) {
-            //map.updateCells();
-        });
-
         stage.onMouseWheel.listen((MouseEvent e) {
             if (e.deltaY.isNegative) {
-                if (cellSize < maxZoom) {
-                    cellSize += zoomIncrement;
-                    //map.updateCells(true);
-                }
-            } else if (cellSize > minZoom) {
-                cellSize -= zoomIncrement;
-                if (cellSize < minZoom) {
-                    cellSize = minZoom;
-                }
-                //map.updateCells(true);
+				scaleX*=1.1;
+				scaleY*=1.1;
+            } else {
+				scaleX*=0.9;
+			    scaleY*=0.9;
             }
         });
 
@@ -79,20 +66,11 @@ class Board extends DisplayObjectContainer {
                 y += e.stageY - dragging.y;
                 dragging = new Point(e.stageX, e.stageY);
             }
-            if (debug) {
-                Point point = map.viewPointToGamePoint(new Point(e.stageX - x, e.stageY - y));
-                if (null == debugContainer) {
-                    TextFormat format = new TextFormat('Monospace', 10, Color.LightGray);
-                    debugContainer = new TextField('', format);
-                    stage.addChild(debugContainer);
-                }
-                debugContainer.text = 'Game coordinates: ${point.x}, ${point.y}';
-            }
         });
+        addButton();
     }
 
     void parseOptions(Col.LinkedHashMap options) {
-
         if (options.containsKey('endPoint')) {
             endPoint = options['endPoint'];
         } else {
@@ -224,6 +202,32 @@ class Board extends DisplayObjectContainer {
             }
         }
         throw "No pencil selected or missing pencil";
+    }
+
+    SimpleButton addButton() {
+        var shape = new Shape();
+        shape.graphics.rectRound(2, 2, 100, 25, 5, 5);
+        shape.graphics.strokeColor(Color.LightGray, 2);
+        GraphicsGradient grad = new GraphicsGradient.linear(0, 0, 0, 40);
+        grad.addColorStop(0, Color.WhiteSmoke);
+        grad.addColorStop(0.2, Color.White);
+        grad.addColorStop(1, Color.GhostWhite);
+        shape.graphics.fillGradient(grad);
+        SimpleButton button = new SimpleButton(shape, shape, shape);
+        button.hitTestState = shape;
+        button.onMouseClick.listen((MouseEvent e){
+            showGrid = !showGrid;
+            for (Layer layer in map.layers.values) {
+                if (layer.type != 'grid') {
+                    continue;
+                }
+                for (Cell cell in layer.cells.values) {
+                    cell.visible = showGrid;
+                }
+            }
+        });
+        stage.addChild(button);
+        return button;
     }
 
     Point getTopLeftViewPoint() =>

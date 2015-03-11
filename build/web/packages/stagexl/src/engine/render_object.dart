@@ -7,19 +7,15 @@ part of stagexl.engine;
 ///
 abstract class RenderObject {
 
-    Matrix get transformationMatrix;
+  Matrix get transformationMatrix;
+  BlendMode get blendMode;
+  num get alpha;
 
-    BlendMode get blendMode;
+  List<RenderFilter> get filters;
+  RenderTextureQuad get cache;
+  RenderMask get mask;
 
-    num get alpha;
+  Rectangle<num> get bounds;
 
-    List<RenderFilter> get filters;
-
-    RenderTextureQuad get cache;
-
-    RenderMask get mask;
-
-    Rectangle<num> get bounds;
-
-    void render(RenderState renderState);
+  void render(RenderState renderState);
 }

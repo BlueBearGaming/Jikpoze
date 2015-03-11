@@ -9,16 +9,16 @@ part of stagexl.events;
 /// * [TextEvent.TEXT_INPUT]
 class TextEvent extends Event {
 
-    static const String LINK = "link";
-    static const String TEXT_INPUT = "textInput";
+  static const String LINK = "link";
+  static const String TEXT_INPUT = "textInput";
 
-    //-----------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------
 
-    /// For a [TEXT_INPUT] event, the character or sequence of characters entered
-    /// by the user. For a [LINK] event, the text of the event attribute of the
-    /// href attribute of the <a> tag.
-    final String text;
+  /// For a [TEXT_INPUT] event, the character or sequence of characters entered 
+  /// by the user. For a [LINK] event, the text of the event attribute of the 
+  /// href attribute of the <a> tag.
+  final String text;
 
-    /// Creates a new [TextEvent].
-    TextEvent(String type, bool bubbles, this.text) : super(type, bubbles);
+  /// Creates a new [TextEvent].
+  TextEvent(String type, bool bubbles, this.text) : super(type, bubbles);
 }

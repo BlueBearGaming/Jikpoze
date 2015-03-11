@@ -15,7 +15,7 @@ part of stagexl.display;
 ///
 class Sprite3D extends DisplayObjectContainer3D {
 
-    // Currently the Sprite3D class does not add features
-    // to the DisplayObjectContainer3D implementation.
+  // Currently the Sprite3D class does not add features
+  // to the DisplayObjectContainer3D implementation.
 
 }

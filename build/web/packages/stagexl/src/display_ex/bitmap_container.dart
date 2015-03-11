@@ -17,70 +17,70 @@ part of stagexl.display_ex;
 
 class BitmapContainer extends DisplayObjectContainer {
 
-    void addChildAt(DisplayObject child, int index) {
-        if (child is! Bitmap) {
-            throw new ArgumentError("BitmapBatch only supports Bitmap children.");
-        } else {
-            super.addChildAt(child, index);
-        }
+  void addChildAt(DisplayObject child, int index) {
+    if (child is! Bitmap) {
+      throw new ArgumentError("BitmapBatch only supports Bitmap children.");
+    } else {
+      super.addChildAt(child, index);
     }
+  }
 
-    DisplayObject hitTestInput(num localX, num localY) {
-        return null;
+  DisplayObject hitTestInput(num localX, num localY) {
+    return null;
+  }
+
+  void render(RenderState renderState) {
+    var renderContext = renderState.renderContext;
+    if (renderContext is RenderContextWebGL) {
+      _renderWebGL(renderState);
+    } else if (renderContext is RenderContextCanvas) {
+      _renderCanvas(renderState);
+    } else {
+      super.render(renderState);
     }
+  }
 
-    void render(RenderState renderState) {
-        var renderContext = renderState.renderContext;
-        if (renderContext is RenderContextWebGL) {
-            _renderWebGL(renderState);
-        } else if (renderContext is RenderContextCanvas) {
-            _renderCanvas(renderState);
-        } else {
-            super.render(renderState);
-        }
+  //-----------------------------------------------------------------------------------------------
+
+  void _renderWebGL(RenderState renderState) {
+
+    var globalMatrix = renderState.globalMatrix;
+    var globalAlpha = renderState.globalAlpha;
+    var renderContext = renderState.renderContext;
+    var renderContextWebGL = renderContext as RenderContextWebGL;
+    var renderProgram = _BitmapContainerProgram.instance;
+
+    renderContextWebGL.activateRenderProgram(renderProgram);
+    renderProgram.flush();
+    renderProgram.reset(globalMatrix, globalAlpha);
+
+    for (int i = 0; i < numChildren; i++) {
+      Bitmap bitmap = getChildAt(i);
+      BitmapData bitmapData = bitmap.bitmapData;
+      if (bitmap.visible && bitmap.off == false && bitmapData != null) {
+        renderContextWebGL.activateRenderTexture(bitmapData.renderTexture);
+        renderProgram.renderBitmap(bitmap);
+      }
     }
+  }
 
-    //-----------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------
 
-    void _renderWebGL(RenderState renderState) {
+  void _renderCanvas(RenderState renderState) {
 
-        var globalMatrix = renderState.globalMatrix;
-        var globalAlpha = renderState.globalAlpha;
-        var renderContext = renderState.renderContext;
-        var renderContextWebGL = renderContext as RenderContextWebGL;
-        var renderProgram = _BitmapContainerProgram.instance;
+    var renderContext = renderState.renderContext;
+    var renderContextCanvas = renderContext as RenderContextCanvas;
 
-        renderContextWebGL.activateRenderProgram(renderProgram);
-        renderProgram.flush();
-        renderProgram.reset(globalMatrix, globalAlpha);
+    renderContextCanvas.setTransform(renderState.globalMatrix);
+    renderContextCanvas.setAlpha(renderState.globalAlpha);
 
-        for (int i = 0; i < numChildren; i++) {
-            Bitmap bitmap = getChildAt(i);
-            BitmapData bitmapData = bitmap.bitmapData;
-            if (bitmap.visible && bitmap.off == false && bitmapData != null) {
-                renderContextWebGL.activateRenderTexture(bitmapData.renderTexture);
-                renderProgram.renderBitmap(bitmap);
-            }
-        }
+    // TODO: implement optimized BitmapBatch render code for canvas.
+
+    for (int i = 0; i < numChildren; i++) {
+      Bitmap bitmap = getChildAt(i);
+      if (bitmap.visible && bitmap.off == false) {
+        renderState.renderObject(bitmap);
+      }
     }
-
-    //-----------------------------------------------------------------------------------------------
-
-    void _renderCanvas(RenderState renderState) {
-
-        var renderContext = renderState.renderContext;
-        var renderContextCanvas = renderContext as RenderContextCanvas;
-
-        renderContextCanvas.setTransform(renderState.globalMatrix);
-        renderContextCanvas.setAlpha(renderState.globalAlpha);
-
-        // TODO: implement optimized BitmapBatch render code for canvas.
-
-        for (int i = 0; i < numChildren; i++) {
-            Bitmap bitmap = getChildAt(i);
-            if (bitmap.visible && bitmap.off == false) {
-                renderState.renderObject(bitmap);
-            }
-        }
-    }
+  }
 }

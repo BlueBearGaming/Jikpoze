@@ -5,11 +5,10 @@ part of stagexl.display;
 
 class StageRenderMode {
 
-    final int index;
+  final int index;
+  const StageRenderMode._(this.index);
 
-    const StageRenderMode._(this.index);
-
-    static const StageRenderMode AUTO = const StageRenderMode._(0);
-    static const StageRenderMode STOP = const StageRenderMode._(1);
-    static const StageRenderMode ONCE = const StageRenderMode._(2);
+  static const StageRenderMode AUTO = const StageRenderMode._(0);
+  static const StageRenderMode STOP = const StageRenderMode._(1);
+  static const StageRenderMode ONCE = const StageRenderMode._(2);
 }

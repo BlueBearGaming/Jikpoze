@@ -17,76 +17,70 @@ part of stagexl.display_ex;
 
 class VideoObject extends InteractiveObject {
 
-    final Video video;
-    final RenderTexture renderTexture;
+  final Video video;
+  final RenderTexture renderTexture;
 
-    static const EventStreamProvider<Event> endedEvent = const EventStreamProvider<Event>("videoEnded");
-    static const EventStreamProvider<Event> pauseEvent = const EventStreamProvider<Event>("videoPause");
-    static const EventStreamProvider<Event> errorEvent = const EventStreamProvider<Event>("videoError");
-    static const EventStreamProvider<Event> playEvent = const EventStreamProvider<Event>("videoPlay");
+  static const EventStreamProvider<Event> endedEvent = const EventStreamProvider<Event>("videoEnded");
+  static const EventStreamProvider<Event> pauseEvent = const EventStreamProvider<Event>("videoPause");
+  static const EventStreamProvider<Event> errorEvent = const EventStreamProvider<Event>("videoError");
+  static const EventStreamProvider<Event> playEvent  = const EventStreamProvider<Event>("videoPlay");
 
-    EventStream<Event> get onEnded => VideoObject.endedEvent.forTarget(this);
+  EventStream<Event> get onEnded => VideoObject.endedEvent.forTarget(this);
+  EventStream<Event> get onPause => VideoObject.pauseEvent.forTarget(this);
+  EventStream<Event> get onError => VideoObject.errorEvent.forTarget(this);
+  EventStream<Event> get onPlay  => VideoObject.playEvent.forTarget(this);
 
-    EventStream<Event> get onPause => VideoObject.pauseEvent.forTarget(this);
-
-    EventStream<Event> get onError => VideoObject.errorEvent.forTarget(this);
-
-    EventStream<Event> get onPlay => VideoObject.playEvent.forTarget(this);
-
-    VideoObject(Video video, [bool autoplay = false, num pixelRatio = 1.0]) :
+  VideoObject(Video video, [bool autoplay = false, num pixelRatio = 1.0]) :
     this.video = video,
     this.renderTexture = new RenderTexture.fromVideoElement(video.videoElement, pixelRatio) {
 
-        var videoElement = video.videoElement;
-        videoElement.onEnded.listen((e) => this.dispatchEvent(new Event("videoEnded")));
-        videoElement.onPause.listen((e) => this.dispatchEvent(new Event("videoPause")));
-        videoElement.onError.listen((e) => this.dispatchEvent(new Event("videoError")));
-        videoElement.onPlay.listen((e) => this.dispatchEvent(new Event("videoPlay")));
+    var videoElement = video.videoElement;
+    videoElement.onEnded.listen((e) => this.dispatchEvent(new Event("videoEnded")));
+    videoElement.onPause.listen((e) => this.dispatchEvent(new Event("videoPause")));
+    videoElement.onError.listen((e) => this.dispatchEvent(new Event("videoError")));
+    videoElement.onPlay.listen((e) => this.dispatchEvent(new Event("videoPlay")));
 
-        if (autoplay) play();
-    }
+    if (autoplay) play();
+  }
 
-    //----------------------------------------------------------------------------
+  //----------------------------------------------------------------------------
 
-    @override
-    Rectangle<num> get bounds {
-        var width = this.renderTexture.width;
-        var height = this.renderTexture.height;
-        return new Rectangle<num>(0.0, 0.0, width, height);
-    }
+  @override
+  Rectangle<num> get bounds {
+    var width = this.renderTexture.width;
+    var height = this.renderTexture.height;
+    return new Rectangle<num>(0.0, 0.0, width, height);
+  }
 
-    @override
-    render(RenderState renderState) {
-        renderState.renderQuad(renderTexture.quad);
-    }
+  @override
+  render(RenderState renderState) {
+    renderState.renderQuad(renderTexture.quad);
+  }
 
-    //----------------------------------------------------------------------------
+  //----------------------------------------------------------------------------
 
-    void play() {
-        video.play();
-    }
+  void play() {
+    video.play();
+  }
 
-    void pause() {
-        video.pause();
-    }
+  void pause() {
+    video.pause();
+  }
 
-    bool get muted => video.muted;
+  bool get muted => video.muted;
+  void set muted(muted) {
+    video.muted = muted;
+  }
 
-    void set muted(muted) {
-        video.muted = muted;
-    }
+  bool get loop => video.loop;
+  void set loop(loop) {
+    video.loop = loop;
+  }
 
-    bool get loop => video.loop;
+  num get volume => video.volume;
+  void set volume(volume) {
+    video.volume = volume;
+  }
 
-    void set loop(loop) {
-        video.loop = loop;
-    }
-
-    num get volume => video.volume;
-
-    void set volume(volume) {
-        video.volume = volume;
-    }
-
-    bool get isPlaying => video.isPlaying;
+  bool get isPlaying => video.isPlaying;
 }

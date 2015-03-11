@@ -8327,6 +8327,12 @@ var $$ = Object.create(null);
     beginPath$0: function(receiver) {
       return receiver.beginPath();
     },
+    createLinearGradient$4: function(receiver, x0, y0, x1, y1) {
+      return receiver.createLinearGradient(x0, y0, x1, y1);
+    },
+    createRadialGradient$6: function(receiver, x0, y0, r0, x1, y1, r1) {
+      return receiver.createRadialGradient(x0, y0, r0, x1, y1, r1);
+    },
     isPointInPath$4: function(receiver, path_OR_x, x_OR_y, winding_OR_y, winding) {
       return receiver.isPointInPath(path_OR_x, x_OR_y, winding_OR_y, winding);
     },
@@ -8350,6 +8356,9 @@ var $$ = Object.create(null);
     },
     moveTo$2: function(receiver, x, y) {
       return receiver.moveTo(x, y);
+    },
+    quadraticCurveTo$4: function(receiver, cpx, cpy, x, y) {
+      return receiver.quadraticCurveTo(cpx, cpy, x, y);
     },
     fill$1: function(receiver, winding) {
       receiver.fill(winding);
@@ -10405,16 +10414,16 @@ var $$ = Object.create(null);
     }
   },
   Board: {
-    "^": "DisplayObjectContainer;canvas,renderLoop,map>,context,pencils<,selected,cellSize,dragMouseEvent<,dragging<,resourceManager,endPoint,resourceBasePath,layerSelectorName,pencilSelectorName,contextId,editionMode,debug,debugContainer,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    "^": "DisplayObjectContainer;canvas,renderLoop,map>,context,pencils<,selected,cellSize,dragMouseEvent<,dragging<,resourceManager,endPoint,resourceBasePath,layerSelectorName,pencilSelectorName,contextId,editionMode,showGrid,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     map$1: function($receiver, arg0) {
       return this.map.call$1(arg0);
     },
     attachEvents$0: function() {
-      this.get$stage().on$1(0, "resize").listen$1(new S.Board_attachEvents_closure());
-      this.get$stage().on$1(0, "mouseWheel").listen$1(new S.Board_attachEvents_closure0(this));
-      this.get$stage().on$1(0, "mouseDown").listen$1(new S.Board_attachEvents_closure1(this));
-      this.get$stage().on$1(0, "mouseUp").listen$1(new S.Board_attachEvents_closure2(this));
-      this.get$stage().on$1(0, "mouseMove").listen$1(new S.Board_attachEvents_closure3(this));
+      this.get$stage().on$1(0, "mouseWheel").listen$1(new S.Board_attachEvents_closure(this));
+      this.get$stage().on$1(0, "mouseDown").listen$1(new S.Board_attachEvents_closure0(this));
+      this.get$stage().on$1(0, "mouseUp").listen$1(new S.Board_attachEvents_closure1(this));
+      this.get$stage().on$1(0, "mouseMove").listen$1(new S.Board_attachEvents_closure2(this));
+      this.addButton$0();
     },
     queryApi$3: function(eventName, json, handler) {
       var request, t1;
@@ -10518,6 +10527,50 @@ var $$ = Object.create(null);
       }
       throw H.wrapException("No pencil selected or missing pencil");
     },
+    addButton$0: function() {
+      var t1, t2, t3, shape, grad, button;
+      t1 = H.setRuntimeTypeInfo([], [U._GraphicsCommand]);
+      t2 = new U.Graphics(t1, H.setRuntimeTypeInfo(new U.Rectangle0(0, 0, 0, 0), [P.num]), true);
+      t3 = $.DisplayObject__nextID;
+      $.DisplayObject__nextID = t3 + 1;
+      shape = new A.Shape(t2, t3, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
+      t1.push(new U._GraphicsCommandMoveTo(C.JSInt_methods.toDouble$0(7), C.JSInt_methods.toDouble$0(2)));
+      t2._boundsRefresh = true;
+      t1.push(new U._GraphicsCommandLineTo(C.JSInt_methods.toDouble$0(97), C.JSInt_methods.toDouble$0(2)));
+      t2._boundsRefresh = true;
+      t1.push(U._GraphicsCommandQuadraticCurveTo$(102, 2, 102, 7));
+      t2._boundsRefresh = true;
+      t1.push(new U._GraphicsCommandLineTo(C.JSInt_methods.toDouble$0(102), C.JSInt_methods.toDouble$0(22)));
+      t2._boundsRefresh = true;
+      t1.push(U._GraphicsCommandQuadraticCurveTo$(102, 27, 97, 27));
+      t2._boundsRefresh = true;
+      t1.push(new U._GraphicsCommandLineTo(C.JSInt_methods.toDouble$0(7), C.JSInt_methods.toDouble$0(27)));
+      t2._boundsRefresh = true;
+      t1.push(U._GraphicsCommandQuadraticCurveTo$(2, 27, 2, 22));
+      t2._boundsRefresh = true;
+      t1.push(new U._GraphicsCommandLineTo(C.JSInt_methods.toDouble$0(2), C.JSInt_methods.toDouble$0(7)));
+      t2._boundsRefresh = true;
+      t1.push(U._GraphicsCommandQuadraticCurveTo$(2, 2, 7, 2));
+      t2._boundsRefresh = true;
+      t1.push(new U._GraphicsCommandStrokeColor(V.color2rgba(4292072403), 2, "round", "round"));
+      t2._boundsRefresh = true;
+      grad = new U.GraphicsGradient(null, null, null, null, null, null, null, null);
+      grad.GraphicsGradient$linear$4(0, 0, 0, 40);
+      grad._colorStops.push(P.LinkedHashMap_LinkedHashMap$_literal(["offset", 0, "color", V.color2rgba(4294309365)], null, null));
+      grad._colorStops.push(P.LinkedHashMap_LinkedHashMap$_literal(["offset", 0.2, "color", V.color2rgba(4294967295)], null, null));
+      grad._colorStops.push(P.LinkedHashMap_LinkedHashMap$_literal(["offset", 1, "color", V.color2rgba(4294506751)], null, null));
+      t1.push(new U._GraphicsCommandFillGradient(grad));
+      t2._boundsRefresh = true;
+      t2 = $.DisplayObject__nextID;
+      $.DisplayObject__nextID = t2 + 1;
+      button = new A.SimpleButton(shape, shape, shape, null, true, null, false, true, "auto", true, 0, t2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
+      button.SimpleButton$4(shape, shape, shape, null);
+      button.hitTestState = shape;
+      button.on$1(0, "click").listen$1(new S.Board_addButton_closure(this));
+      t2 = this.get$stage();
+      t2.addChildAt$2(button, t2._children.length);
+      return button;
+    },
     Board$2: function(canvas, options) {
       var t1, stage, t2, t3;
       t1 = this.canvas;
@@ -10565,53 +10618,41 @@ var $$ = Object.create(null);
       t2.push(stage);
       stage._renderLoop = t1;
       stage.addChildAt$2(this, stage._children.length);
-    },
-    static: {"^": "Board_maxZoom,Board_minZoom,Board_zoomIncrement"}
+    }
   },
   Board_attachEvents_closure: {
-    "^": "Closure:63;",
+    "^": "Closure:63;this_0",
     call$1: [function(e) {
-    }, "call$1", null, 2, 0, null, 2, "call"]
-  },
-  Board_attachEvents_closure0: {
-    "^": "Closure:64;this_0",
-    call$1: [function(e) {
-      var t1, t2;
+      var t1 = this.this_0;
       if (J.get$isNegative$n(J.get$deltaY$x(e))) {
-        t1 = this.this_0;
-        if (J.$lt$n(t1.cellSize, $.Board_maxZoom))
-          t1.cellSize = J.$add$ns(t1.cellSize, $.Board_zoomIncrement);
+        t1.set$scaleX(t1._scaleX * 1.1);
+        t1.set$scaleY(t1._scaleY * 1.1);
       } else {
-        t1 = this.this_0;
-        if (J.$gt$n(t1.cellSize, $.Board_minZoom)) {
-          t2 = J.$sub$n(t1.cellSize, $.Board_zoomIncrement);
-          t1.cellSize = t2;
-          if (J.$lt$n(t2, $.Board_minZoom))
-            t1.cellSize = $.Board_minZoom;
-        }
+        t1.set$scaleX(t1._scaleX * 0.9);
+        t1.set$scaleY(t1._scaleY * 0.9);
       }
     }, "call$1", null, 2, 0, null, 2, "call"]
   },
-  Board_attachEvents_closure1: {
-    "^": "Closure:64;this_1",
+  Board_attachEvents_closure0: {
+    "^": "Closure:63;this_1",
     call$1: [function(e) {
       var t1 = this.this_1;
       t1.dragMouseEvent = e;
       t1.dragging = H.setRuntimeTypeInfo(new U.Point(e.get$stageX(), e.get$stageY()), [null]);
     }, "call$1", null, 2, 0, null, 2, "call"]
   },
-  Board_attachEvents_closure2: {
-    "^": "Closure:64;this_2",
+  Board_attachEvents_closure1: {
+    "^": "Closure:63;this_2",
     call$1: [function(e) {
       var t1 = this.this_2;
       t1.dragging = null;
       t1.map.updateGrid$0();
     }, "call$1", null, 2, 0, null, 2, "call"]
   },
-  Board_attachEvents_closure3: {
-    "^": "Closure:64;this_3",
+  Board_attachEvents_closure2: {
+    "^": "Closure:63;this_3",
     call$1: [function(e) {
-      var t1, t2, t3, point;
+      var t1, t2, t3;
       t1 = this.this_3;
       if (t1.dragging != null) {
         t2 = t1._x;
@@ -10625,15 +10666,6 @@ var $$ = Object.create(null);
           return H.iae(t2);
         t1.set$y(0, t3 + t2);
         t1.dragging = H.setRuntimeTypeInfo(new U.Point(e.get$stageX(), e.get$stageY()), [null]);
-      }
-      if (t1.debug) {
-        point = t1.map.viewPointToGamePoint$1(H.setRuntimeTypeInfo(new U.Point(J.$sub$n(e.get$stageX(), t1._x), J.$sub$n(e.get$stageY(), t1._y)), [null]));
-        if (null == t1.debugContainer) {
-          t1.debugContainer = Y.TextField$("", new Y.TextFormat("Monospace", 10, 4292072403, 0, 4278190080, null, false, false, false, "left", 0, 0, 0, 0, 0, 0));
-          t2 = t1.get$stage();
-          t2.addChildAt$2(t1.debugContainer, t2._children.length);
-        }
-        t1.debugContainer.set$text(0, "Game coordinates: " + H.S(point.x) + ", " + H.S(point.y));
       }
     }, "call$1", null, 2, 0, null, 2, "call"]
   },
@@ -10676,7 +10708,27 @@ var $$ = Object.create(null);
         t4.createCell$4(layer, t5, pencil, false);
       }
       t1.attachEvents$0();
-    }, "call$1", null, 2, 0, null, 65, "call"]
+    }, "call$1", null, 2, 0, null, 64, "call"]
+  },
+  Board_addButton_closure: {
+    "^": "Closure:63;this_0",
+    call$1: [function(e) {
+      var t1, t2, layer, t3, t4;
+      t1 = this.this_0;
+      t1.showGrid = !t1.showGrid;
+      for (t2 = t1.map.layers, t2 = t2.get$values(t2), t2 = H.setRuntimeTypeInfo(new H.MappedIterator(null, J.get$iterator$ax(t2._iterable), t2._f), [H.getTypeArgumentByIndex(t2, 0), H.getTypeArgumentByIndex(t2, 1)]); t2.moveNext$0();) {
+        layer = t2.__internal$_current;
+        t3 = J.getInterceptor$x(layer);
+        if (!J.$eq(t3.get$type(layer), "grid"))
+          continue;
+        t3 = t3.get$cells(layer);
+        t3 = t3.get$values(t3);
+        t4 = new H.MappedIterator(null, J.get$iterator$ax(t3._iterable), t3._f);
+        t4.$builtinTypeInfo = [H.getTypeArgumentByIndex(t3, 0), H.getTypeArgumentByIndex(t3, 1)];
+        for (; t4.moveNext$0();)
+          t4.__internal$_current.set$visible(t1.showGrid);
+      }
+    }, "call$1", null, 2, 0, null, 2, "call"]
   },
   Cell: {
     "^": "DisplayObjectContainer;layer>,map>,position,pencil<,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
@@ -10718,7 +10770,7 @@ var $$ = Object.create(null);
       }, "call$2", "Cell_pointEquals$closure", 4, 0, 34, 35, 36]}
   },
   Cell_attachEvents_closure: {
-    "^": "Closure:64;this_0",
+    "^": "Closure:63;this_0",
     call$1: [function(e) {
       var board, selectedPencil, targetLayer, cell, exception, t1, t2, exception0;
       t1 = this.this_0;
@@ -10776,11 +10828,6 @@ var $$ = Object.create(null);
       if (C.JSInt_methods.$mod(J.floor$0$n(gamePoint.y), 2) === 0)
         viewX = J.$add$ns(viewX, J.$div$n(this.board.cellSize, 2));
       return H.setRuntimeTypeInfo(new U.Point(viewX, viewY), [null]);
-    },
-    viewPointToGamePoint$1: function(viewPoint) {
-      var t1 = new U.Point(C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(viewPoint.x, this.board.cellSize))), C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(viewPoint.y, this.board.cellSize) / this.skewFactor)));
-      t1.$builtinTypeInfo = [null];
-      return t1;
     },
     HexMap$1: function(board) {
       this.skewFactor = Math.cos(H.checkNum(0.5235987755982988));
@@ -10862,7 +10909,7 @@ var $$ = Object.create(null);
   SquareMap: {
     "^": "DisplayObjectContainer;board<,gridPencil,layers,skewFactor,renderOffset,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     createCell$4: function(layer, point, pencil, callApi) {
-      var t1, json, t2;
+      var t1, json, t2, t3, cell;
       if (null == layer)
         throw H.wrapException("layer cannot be null");
       t1 = J.getInterceptor$x(layer);
@@ -10871,12 +10918,14 @@ var $$ = Object.create(null);
         this.board.queryApi$3("bluebear.editor.mapUpdate", json, new S.SquareMap_createCell_closure());
       }
       this.removeCell$2(layer, point);
-      t1 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
-      t2 = $.DisplayObject__nextID;
-      $.DisplayObject__nextID = t2 + 1;
-      t2 = new S.Cell(layer, null, point, pencil, t1, true, true, false, true, "auto", true, 0, t2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
-      t2.Cell$3(layer, point, pencil);
-      return t2;
+      t2 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
+      t3 = $.DisplayObject__nextID;
+      $.DisplayObject__nextID = t3 + 1;
+      cell = new S.Cell(layer, null, point, pencil, t2, true, true, false, true, "auto", true, 0, t3, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
+      cell.Cell$3(layer, point, pencil);
+      if (J.$eq(t1.get$type(layer), "grid") && !this.board.showGrid)
+        cell._visible = false;
+      return cell;
     },
     createCell$3: function(layer, point, pencil) {
       return this.createCell$4(layer, point, pencil, true);
@@ -10925,15 +10974,10 @@ var $$ = Object.create(null);
     gamePointToViewPoint$1: function(gamePoint) {
       return H.setRuntimeTypeInfo(new U.Point(J.$mul$ns(gamePoint.x, this.board.cellSize), J.$mul$ns(gamePoint.y, this.board.cellSize)), [null]);
     },
-    viewPointToGamePoint$1: function(viewPoint) {
-      var t1 = new U.Point(C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(viewPoint.x, this.board.cellSize))), C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(viewPoint.y, this.board.cellSize))));
-      t1.$builtinTypeInfo = [null];
-      return t1;
-    },
     addChildAt$2: function(child, index) {
       var t1, t2;
       A.DisplayObjectContainer.prototype.addChildAt$2.call(this, child, index);
-      if (!!J.getInterceptor(child).$isCell) {
+      if (!!child.$isCell) {
         t1 = this.get$sortCells();
         t2 = this._children;
         C.JSArray_methods.checkMutable$1(t2, "sort");
@@ -10959,7 +11003,7 @@ var $$ = Object.create(null);
         return J.$sub$n(t1.x, t3.x);
       }
       return J.$sub$n(t1.y, t3.y);
-    }, "call$2", "get$sortCells", 4, 0, 66],
+    }, "call$2", "get$sortCells", 4, 0, 65],
     renderLayerLine$5: function(layer, x1, y1, x2, y2) {
       var dx, dy, t1, x, t2;
       dx = x2 - x1;
@@ -11004,10 +11048,15 @@ var $$ = Object.create(null);
   CoordinatedGridPencil: {
     "^": "DisplayObjectContainer;_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     CoordinatedGridPencil$2: function(shape, point) {
-      var t1, coordinates;
+      var t1, t2, t3, t4, coordinates;
       t1 = this._children;
       this.addChildAt$2(shape, t1.length);
-      coordinates = Y.TextField$(H.S(point.x) + "," + H.S(point.y), new Y.TextFormat("Monospace", 10, 4292072403, 0, 4278190080, null, false, false, false, "left", 0, 0, 0, 0, 0, 0));
+      t2 = H.S(point.x) + "," + H.S(point.y);
+      t3 = H.setRuntimeTypeInfo([], [Y.TextLineMetrics]);
+      t4 = $.DisplayObject__nextID;
+      $.DisplayObject__nextID = t4 + 1;
+      coordinates = new Y.TextField("", null, "none", "dynamic", 0, 0, 0, 0, 0, 0, 0, false, false, false, false, false, "\u2022", 16777215, 0, 0, 100, 100, 0, 0, t3, 3, true, null, false, true, "auto", true, 0, t4, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
+      coordinates.TextField$2(t2, new Y.TextFormat("Monospace", 10, 4292072403, 0, 4278190080, null, false, false, false, "left", 0, 0, 0, 0, 0, 0));
       coordinates.set$x(0, -10);
       coordinates.set$y(0, -5);
       this.addChildAt$2(coordinates, t1.length);
@@ -11144,7 +11193,7 @@ var $$ = Object.create(null);
     t5 = H.setRuntimeTypeInfo([], [A.DisplayObject]);
     t6 = $.DisplayObject__nextID;
     $.DisplayObject__nextID = t6 + 1;
-    board = new S.Board(canvas, null, null, null, t2, null, null, null, null, new O.ResourceManager(t3, t4), null, null, null, null, null, true, true, null, t5, true, true, false, true, "auto", true, 0, t6, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
+    board = new S.Board(canvas, null, null, null, t2, null, null, null, null, new O.ResourceManager(t3, t4), null, null, null, null, null, true, true, t5, true, true, false, true, "auto", true, 0, t6, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
     board.Board$2(canvas, t1);
     board.queryApi$3("bluebear.engine.mapLoad", P.LinkedHashMap_LinkedHashMap$_literal(["contextId", board.contextId], null, null), board.get$loadMap());
   }, "call$0", "main$closure", 0, 0, 11]
@@ -11230,7 +11279,7 @@ var $$ = Object.create(null);
       var t1 = new A.BitmapData(0, 0, null, null);
       t1.BitmapData$fromRenderTextureQuad$3(renderTexture.get$quad(), null, null);
       return t1;
-    }, "call$1", null, 2, 0, null, 67, "call"]
+    }, "call$1", null, 2, 0, null, 66, "call"]
   },
   BitmapDataLoadOptions: {
     "^": "Object;png,jpg,webp,autoHiDpi,corsEnabled"
@@ -11331,6 +11380,9 @@ var $$ = Object.create(null);
     },
     get$visible: function() {
       return this._visible;
+    },
+    set$visible: function(value) {
+      this._visible = value;
     },
     get$off: function() {
       return this._off;
@@ -11495,7 +11547,7 @@ var $$ = Object.create(null);
         if (t1 != null)
           t1.removeChild$1(child);
         for (ancestor = this; ancestor != null; ancestor = ancestor._parent)
-          if (ancestor == null ? child == null : ancestor === child)
+          if (ancestor === child)
             throw H.wrapException(P.ArgumentError$("An object cannot be added as a child to one of it's children (or children's children, etc.)."));
         C.JSArray_methods.insert$2(this._children, index, child);
         child._parent = this;
@@ -11658,6 +11710,70 @@ var $$ = Object.create(null);
       this.graphics.render$1(renderState);
     }
   },
+  SimpleButton: {
+    "^": "InteractiveObject;upState,overState,downState,hitTestState,enabled,_currentState,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
+    get$bounds: function() {
+      var t1 = this._currentState;
+      if (t1 == null)
+        return A.DisplayObject.prototype.get$bounds.call(this);
+      return t1.get$boundsTransformed();
+    },
+    hitTestInput$2: function(localX, localY) {
+      var t1, deltaX, deltaY, t2, t3, t4, t5;
+      t1 = this.hitTestState;
+      if (t1 == null)
+        return;
+      t1 = t1.get$transformationMatrix()._data;
+      deltaX = localX - t1[4];
+      deltaY = localY - t1[5];
+      t2 = t1[3];
+      t3 = t1[2];
+      t4 = t1[0];
+      t1 = t1[1];
+      t5 = t4 * t2 - t1 * t3;
+      return this.hitTestState.hitTestInput$2((t2 * deltaX - t3 * deltaY) / t5, (t4 * deltaY - t1 * deltaX) / t5) != null ? this : null;
+    },
+    render$1: function(renderState) {
+      var t1 = this._currentState;
+      if (t1 != null)
+        renderState.renderObject$1(t1);
+    },
+    _onMouseEvent$1: [function(mouseEvent) {
+      if (J.$eq(J.get$type$x(mouseEvent), "mouseOut"))
+        this._currentState = this.upState;
+      else
+        this._currentState = mouseEvent.get$buttonDown() ? this.downState : this.overState;
+    }, "call$1", "get$_onMouseEvent", 2, 0, 67, 68],
+    _onTouchEvent$1: [function(touchEvent) {
+      if (touchEvent.get$isPrimaryTouchPoint())
+        switch (J.get$type$x(touchEvent)) {
+          case "touchOver":
+            this._currentState = this.downState;
+            break;
+          case "touchOut":
+            this._currentState = this.upState;
+            break;
+          case "touchBegin":
+            this._currentState = this.downState;
+            break;
+          case "touchEnd":
+            this._currentState = this.upState;
+            break;
+        }
+    }, "call$1", "get$_onTouchEvent", 2, 0, 69, 70],
+    SimpleButton$4: function(upState, overState, downState, hitTestState) {
+      this.mouseCursor = "pointer";
+      this.on$1(0, "mouseOver").listen$1(this.get$_onMouseEvent());
+      this.on$1(0, "mouseOut").listen$1(this.get$_onMouseEvent());
+      this.on$1(0, "mouseDown").listen$1(this.get$_onMouseEvent());
+      this.on$1(0, "mouseUp").listen$1(this.get$_onMouseEvent());
+      this.on$1(0, "touchOver").listen$1(this.get$_onTouchEvent());
+      this.on$1(0, "touchOut").listen$1(this.get$_onTouchEvent());
+      this.on$1(0, "touchBegin").listen$1(this.get$_onTouchEvent());
+      this.on$1(0, "touchEnd").listen$1(this.get$_onTouchEvent());
+      this._currentState = this.upState;
+    }
+  },
   Stage: {
     "^": "DisplayObjectContainer;_display$_canvas,_renderContext,_juggler,_renderLoop,_color,_sourceWidth,_sourceHeight,_frameRate,_stageWidth<,_stageHeight<,_contentRectangle,_clientTransformation,_stageTransformation,_focus,_renderState,_stageRenderMode,_stageScaleMode,_stageAlign,_mouseCursor,_mousePosition,_mouseTarget,_drags,_touchPoints,_mouseButtons,_touchEventSubscriptions,_children,_mouseChildren,_tabChildren,doubleClickEnabled,mouseEnabled,mouseCursor,tabEnabled,tabIndex,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     hitTestInput$2: function(localX, localY) {
@@ -11772,7 +11888,7 @@ var $$ = Object.create(null);
       mouseCursor = $.Mouse__cursorName;
       if (mouseTarget != null && mouseCursor === "auto") {
         mc = mouseTarget.get$mouseCursor();
-        if (mc !== "auto")
+        if (mc != null && mc !== "auto")
           mouseCursor = mc;
       }
       if (mouseCursor === "auto")
@@ -11964,7 +12080,7 @@ var $$ = Object.create(null);
           target.dispatchEvent$1(0, new R.MouseEvent(0, 0, mouseButton.buttonDown, 0, t2, t3, t4, t5, t6, t7, t1, mouseEventType, true, C.EventPhase_1, null, null, false, false));
         }
       }
-    }, "call$1", "get$_onMouseEvent", 2, 0, 68, 69],
+    }, "call$1", "get$_onMouseEvent", 2, 0, 71, 72],
     _onMouseWheelEvent$1: [function($event) {
       var t1, stagePoint, localPoint, target, t2, t3, t4, t5, t6, t7, t8, mouseEvent;
       t1 = J.getInterceptor$x($event);
@@ -11983,7 +12099,7 @@ var $$ = Object.create(null);
       target.dispatchEvent$1(0, mouseEvent);
       if (mouseEvent._stopsPropagation)
         t1.preventDefault$0($event);
-    }, "call$1", "get$_onMouseWheelEvent", 2, 0, 70, 69],
+    }, "call$1", "get$_onMouseWheelEvent", 2, 0, 73, 72],
     _onMultitouchInputModeChanged$1: [function(inputMode) {
       var t1, t2, t3, t4, t5, t6;
       C.JSArray_methods.forEach$1(this._touchEventSubscriptions, new A.Stage__onMultitouchInputModeChanged_closure());
@@ -12008,7 +12124,7 @@ var $$ = Object.create(null);
         t6._tryResume$0();
         this._touchEventSubscriptions = [t1, t2, t3, t4, t5, t6];
       }
-    }, "call$1", "get$_onMultitouchInputModeChanged", 2, 0, 71, 72],
+    }, "call$1", "get$_onMultitouchInputModeChanged", 2, 0, 74, 75],
     _onTouchEvent$1: [function($event) {
       var jsEvent, t1, t2, jsChangedTouches, eventType, jsChangedTouch, identifier, client, altKey, ctrlKey, shiftKey, changedTouch;
       if ($.get$isCocoonJS() === true) {
@@ -12040,7 +12156,7 @@ var $$ = Object.create(null);
           this._onTouchEventProcessor$6(eventType, t2.get$identifier(changedTouch), t2.get$client(changedTouch), altKey, ctrlKey, shiftKey);
         }
       }
-    }, "call$1", "get$_onTouchEvent", 2, 0, 73, 69],
+    }, "call$1", "get$_onTouchEvent", 2, 0, 76, 72],
     _onTouchEventProcessor$6: function(eventType, identifier, client, altKey, ctrlKey, shiftKey) {
       var stagePoint, localPoint, target, t1, touchPoint, touchPointID, primaryTouchPoint, t2, oldTarget, oldTargetList, newTargetList, p, commonCount, t3, t4, t5, ot, i, target0, touchEventType, isTap;
       stagePoint = this._clientTransformation.transformPoint$1(client);
@@ -12132,7 +12248,7 @@ var $$ = Object.create(null);
       if (t1.get$keyCode($event) === 8)
         t1.preventDefault$0($event);
       return;
-    }, "call$1", "get$_onKeyEvent", 2, 0, 74, 69],
+    }, "call$1", "get$_onKeyEvent", 2, 0, 77, 72],
     Stage$7$alpha$color$frameRate$height$webGL$width: function(canvas, alpha, color, frameRate, height, webGL, width) {
       var t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, exception;
       if (!J.getInterceptor(canvas).$isCanvasElement)
@@ -12225,7 +12341,7 @@ var $$ = Object.create(null);
     "^": "Closure:30;this_0",
     call$1: [function(cursorName) {
       return this.this_0._updateMouseCursor$0();
-    }, "call$1", null, 2, 0, null, 75, "call"]
+    }, "call$1", null, 2, 0, null, 78, "call"]
   },
   Stage__onMouseEvent_closure: {
     "^": "Closure:30;stagePoint_0",
@@ -12269,7 +12385,7 @@ var $$ = Object.create(null);
     static: {"^": "StageScaleMode_EXACT_FIT,StageScaleMode_NO_BORDER,StageScaleMode_NO_SCALE,StageScaleMode_SHOW_ALL"}
   },
   _MouseButton: {
-    "^": "Object;mouseDownEventType,mouseUpEventType,mouseClickEventType,mouseDoubleClickEventType,target>,buttonDown,clickTime,clickCount"
+    "^": "Object;mouseDownEventType,mouseUpEventType,mouseClickEventType,mouseDoubleClickEventType,target>,buttonDown<,clickTime,clickCount"
   },
   _TouchPoint: {
     "^": "Object;touchPointID<,primaryTouchPoint<,target>,currentTarget*",
@@ -12288,6 +12404,14 @@ var $$ = Object.create(null);
     drawCanvas$1: function(context) {
       var t1 = J.getInterceptor$x(context);
       t1.set$fillStyle(context, this.color);
+      t1.fill$0(context);
+    }
+  },
+  _GraphicsCommandFillGradient: {
+    "^": "_GraphicsCommandFill;gradient",
+    drawCanvas$1: function(context) {
+      var t1 = J.getInterceptor$x(context);
+      t1.set$fillStyle(context, this.gradient.getCanvasGradient$1(context));
       t1.fill$0(context);
     }
   },
@@ -12319,6 +12443,44 @@ var $$ = Object.create(null);
     drawCanvas$1: function(context) {
       J.moveTo$2$x(context, this.x, this.y);
     }
+  },
+  _GraphicsCommandQuadraticCurveTo: {
+    "^": "_GraphicsCommand;controlX,controlY,endX,endY",
+    _computeQuadraticBaseValue$4: function(t, a, b, c) {
+      var mt = 1 - t;
+      return mt * mt * a + 2 * mt * t * b + t * t * c;
+    },
+    _computeQuadraticFirstDerivativeRoot$3: function(a, b, c) {
+      var denominator = a - 2 * b + c;
+      return denominator !== 0 ? (a - b) / denominator : -1;
+    },
+    updateBounds$1: function(bounds) {
+      var sx, sy, cx, cy, ex, ey, tx, ty, mx;
+      if (!(!isNaN(bounds.cursorX) && !isNaN(bounds.cursorY))) {
+        bounds.cursorX = this.controlX;
+        bounds.cursorY = this.controlY;
+      }
+      sx = bounds.cursorX;
+      sy = bounds.cursorY;
+      cx = this.controlX;
+      cy = this.controlY;
+      ex = this.endX;
+      ey = this.endY;
+      bounds.updatePath$2(sx, sy);
+      tx = this._computeQuadraticFirstDerivativeRoot$3(sx, cx, ex);
+      ty = this._computeQuadraticFirstDerivativeRoot$3(sy, cy, ey);
+      mx = tx >= 0 && tx <= 1 ? this._computeQuadraticBaseValue$4(tx, sx, cx, ex) : sx;
+      bounds.updatePath$2(mx, ty >= 0 && ty <= 1 ? this._computeQuadraticBaseValue$4(ty, sy, cy, ey) : sy);
+      bounds.updatePath$2(ex, ey);
+      bounds.cursorX = ex;
+      bounds.cursorY = ey;
+    },
+    drawCanvas$1: function(context) {
+      J.quadraticCurveTo$4$x(context, this.controlX, this.controlY, this.endX, this.endY);
+    },
+    static: {_GraphicsCommandQuadraticCurveTo$: function(controlX, controlY, endX, endY) {
+        return new U._GraphicsCommandQuadraticCurveTo(J.toDouble$0$n(controlX), J.toDouble$0$n(controlY), J.toDouble$0$n(endX), J.toDouble$0$n(endY));
+      }}
   },
   _GraphicsCommandStrokeColor: {
     "^": "_GraphicsCommandStroke;color,lineWidth,lineJoin,lineCap",
@@ -12535,7 +12697,27 @@ var $$ = Object.create(null);
     }
   },
   GraphicsGradient: {
-    "^": "Object;"
+    "^": "Object;_drawing$_kind,_startX,_startY,_startRadius,_endX,_endY,_endRadius,_colorStops",
+    getCanvasGradient$1: function(context) {
+      var canvasGradient, t1, colorStop, t2;
+      canvasGradient = this._drawing$_kind === "linear" ? J.createLinearGradient$4$x(context, this._startX, this._startY, this._endX, this._endY) : null;
+      if (this._drawing$_kind === "radial")
+        canvasGradient = J.createRadialGradient$6$x(context, this._startX, this._startY, this._startRadius, this._endX, this._endY, this._endRadius);
+      for (t1 = this._colorStops, t1 = new H.ListIterator(t1, t1.length, 0, null); t1.moveNext$0();) {
+        colorStop = t1.__internal$_current;
+        t2 = J.getInterceptor$asx(colorStop);
+        canvasGradient.addColorStop(t2.$index(colorStop, "offset"), t2.$index(colorStop, "color"));
+      }
+      return canvasGradient;
+    },
+    GraphicsGradient$linear$4: function(startX, startY, endX, endY) {
+      this._drawing$_kind = "linear";
+      this._startX = startX;
+      this._startY = startY;
+      this._endX = endX;
+      this._endY = endY;
+      this._colorStops = [];
+    }
   }
 }],
 ["stagexl.engine", "package:stagexl/src/engine.dart", , L, {
@@ -12877,7 +13059,7 @@ var $$ = Object.create(null);
       if (t1._state >= 4)
         H.throwExpression(t1._addEventError$0());
       t1._sendData$1(new L.RenderContextEvent());
-    }, "call$1", "get$_onContextLost", 2, 0, 76, 77],
+    }, "call$1", "get$_onContextLost", 2, 0, 79, 80],
     _onContextRestored$1: [function(contextEvent) {
       var t1;
       this._contextValid = true;
@@ -12888,7 +13070,7 @@ var $$ = Object.create(null);
       if (t1._state >= 4)
         H.throwExpression(t1._addEventError$0());
       t1._sendData$1(new L.RenderContextEvent());
-    }, "call$1", "get$_onContextRestored", 2, 0, 76, 77],
+    }, "call$1", "get$_onContextRestored", 2, 0, 79, 80],
     _updateStencilDepth$1: function(stencilDepth) {
       var t1 = this._activeRenderFrameBuffer;
       if (t1 != null) {
@@ -12952,7 +13134,7 @@ var $$ = Object.create(null);
       if (this._running && J.$ge$n(deltaTime, 0))
         if (typeof deltaTime === "number")
           this.advanceTime$1(deltaTime);
-    }, "call$1", "get$_onGlobalFrame", 2, 0, 37, 78]
+    }, "call$1", "get$_onGlobalFrame", 2, 0, 37, 81]
   },
   RenderProgram: {
     "^": "Object;",
@@ -13425,7 +13607,7 @@ var $$ = Object.create(null);
       t2 = new L.RenderTexture(0, 0, true, 1, 0, 0, null, null, null, C.RenderTextureFiltering_9729, -1, false, null, null, -1);
       t2.RenderTexture$fromImageElement$2(image, t1);
       return t2;
-    }, "call$1", null, 2, 0, null, 79, "call"]
+    }, "call$1", null, 2, 0, null, 82, "call"]
   },
   RenderTextureFiltering: {
     "^": "Object;value>",
@@ -13822,14 +14004,14 @@ var $$ = Object.create(null);
     "^": "Event;"
   },
   MouseEvent: {
-    "^": "InputEvent;deltaX>,deltaY>,buttonDown,clickCount,localX,localY,stageX,stageY,altKey,ctrlKey,shiftKey,_type,_bubbles,_eventPhase,_events$_target,_currentTarget,_stopsPropagation,_stopsImmediatePropagation",
+    "^": "InputEvent;deltaX>,deltaY>,buttonDown<,clickCount,localX,localY,stageX,stageY,altKey,ctrlKey,shiftKey,_type,_bubbles,_eventPhase,_events$_target,_currentTarget,_stopsPropagation,_stopsImmediatePropagation",
     static: {"^": "MouseEvent_CLICK,MouseEvent_DOUBLE_CLICK,MouseEvent_MOUSE_DOWN,MouseEvent_MOUSE_UP,MouseEvent_MOUSE_MOVE,MouseEvent_MOUSE_OUT,MouseEvent_MOUSE_OVER,MouseEvent_MOUSE_WHEEL,MouseEvent_MIDDLE_CLICK,MouseEvent_MIDDLE_MOUSE_DOWN,MouseEvent_MIDDLE_MOUSE_UP,MouseEvent_RIGHT_CLICK,MouseEvent_RIGHT_MOUSE_DOWN,MouseEvent_RIGHT_MOUSE_UP,MouseEvent_CONTEXT_MENU,MouseEvent_ROLL_OUT,MouseEvent_ROLL_OVER"}
   },
   TextEvent0: {
     "^": "Event;"
   },
   TouchEvent: {
-    "^": "InputEvent;touchPointID<,isPrimaryTouchPoint,localX,localY,stageX,stageY,altKey,ctrlKey,shiftKey,_type,_bubbles,_eventPhase,_events$_target,_currentTarget,_stopsPropagation,_stopsImmediatePropagation",
+    "^": "InputEvent;touchPointID<,isPrimaryTouchPoint<,localX,localY,stageX,stageY,altKey,ctrlKey,shiftKey,_type,_bubbles,_eventPhase,_events$_target,_currentTarget,_stopsPropagation,_stopsImmediatePropagation",
     static: {"^": "TouchEvent_TOUCH_BEGIN,TouchEvent_TOUCH_END,TouchEvent_TOUCH_CANCEL,TouchEvent_TOUCH_MOVE,TouchEvent_TOUCH_OVER,TouchEvent_TOUCH_OUT,TouchEvent_TOUCH_ROLL_OUT,TouchEvent_TOUCH_ROLL_OVER,TouchEvent_TOUCH_TAP"}
   }
 }],
@@ -14128,17 +14310,17 @@ var $$ = Object.create(null);
         J.set$src$x(t3, J.substring$2$s(t1, 0, match._match.index) + "webp");
       else
         J.set$src$x(t3, t1);
-    }, "call$1", "get$_onWebpSupported", 2, 0, 80, 81],
+    }, "call$1", "get$_onWebpSupported", 2, 0, 83, 84],
     _onImageLoad$1: [function($event) {
       this._onLoadSubscription.cancel$0();
       this._onErrorSubscription.cancel$0();
       this._image_loader$_completer.complete$1(0, this.image);
-    }, "call$1", "get$_onImageLoad", 2, 0, 82, 69],
+    }, "call$1", "get$_onImageLoad", 2, 0, 85, 72],
     _onImageError$1: [function($event) {
       this._onLoadSubscription.cancel$0();
       this._onErrorSubscription.cancel$0();
       this._image_loader$_completer.completeError$1(new P.StateError("Failed to load image."));
-    }, "call$1", "get$_onImageError", 2, 0, 82, 69],
+    }, "call$1", "get$_onImageError", 2, 0, 85, 72],
     ImageLoader$3: function(url, webpAvailable, corsEnabled) {
       var t1, t2, t3;
       t1 = this.image;
@@ -14265,7 +14447,7 @@ var $$ = Object.create(null);
     "^": "Closure:30;",
     call$1: [function(r) {
       return J.get$complete$x(r);
-    }, "call$1", null, 2, 0, null, 83, "call"]
+    }, "call$1", null, 2, 0, null, 86, "call"]
   },
   ResourceManager_load_closure0: {
     "^": "Closure:30;this_0",
@@ -14328,7 +14510,7 @@ var $$ = Object.create(null);
     "^": "Closure:30;this_0",
     call$1: [function(resource) {
       this.this_0._resources$_value = resource;
-    }, "call$1", null, 2, 0, null, 84, "call"]
+    }, "call$1", null, 2, 0, null, 87, "call"]
   },
   ResourceManagerResource_closure0: {
     "^": "Closure:30;this_1",
@@ -14859,7 +15041,7 @@ var $$ = Object.create(null);
           this._refreshPending |= 3;
         }
       }
-    }, "call$1", "get$_onKeyDown", 2, 0, 85, 86],
+    }, "call$1", "get$_onKeyDown", 2, 0, 88, 89],
     _onTextInput$1: [function(textEvent) {
       var textLength, caretIndex, newText, t1, t2;
       if (this._text$_type === "input") {
@@ -14881,7 +15063,7 @@ var $$ = Object.create(null);
         this._caretTime = 0;
         this._refreshPending |= 3;
       }
-    }, "call$1", "get$_onTextInput", 2, 0, 87, 88],
+    }, "call$1", "get$_onTextInput", 2, 0, 90, 91],
     _onMouseDown$1: [function(mouseEvent) {
       var mouseX, mouseY, canvasContext, t1, line, textLineMetrics, text, lineX, t2, t3, t4, bestDistance, bestIndex, c, width, distance;
       mouseX = J.toDouble$0$n(mouseEvent.get$localX());
@@ -14914,7 +15096,7 @@ var $$ = Object.create(null);
           this._refreshPending |= 3;
         }
       }
-    }, "call$1", "get$_onMouseDown", 2, 0, 64, 89],
+    }, "call$1", "get$_onMouseDown", 2, 0, 63, 68],
     TextField$2: function(text, textFormat) {
       this.set$text(0, text);
       this._defaultTextFormat = new Y.TextFormat(textFormat.font, textFormat.size, textFormat.color, textFormat.strokeWidth, textFormat.strokeColor, textFormat.fillGradient, textFormat.bold, textFormat.italic, textFormat.underline, textFormat.align, textFormat.topMargin, textFormat.bottomMargin, textFormat.leftMargin, textFormat.rightMargin, textFormat.indent, textFormat.leading);
@@ -14922,16 +15104,7 @@ var $$ = Object.create(null);
       this.on$1(0, "keyDown").listen$1(this.get$_onKeyDown());
       this.on$1(0, "textInput").listen$1(this.get$_onTextInput());
       this.on$1(0, "mouseDown").listen$1(this.get$_onMouseDown());
-    },
-    static: {TextField$: function(text, textFormat) {
-        var t1, t2;
-        t1 = H.setRuntimeTypeInfo([], [Y.TextLineMetrics]);
-        t2 = $.DisplayObject__nextID;
-        $.DisplayObject__nextID = t2 + 1;
-        t2 = new Y.TextField("", null, "none", "dynamic", 0, 0, 0, 0, 0, 0, 0, false, false, false, false, false, "\u2022", 16777215, 0, 0, 100, 100, 0, 0, t1, 3, true, null, false, true, "auto", true, 0, t2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
-        t2.TextField$2(text, textFormat);
-        return t2;
-      }}
+    }
   },
   TextFormat: {
     "^": "Object;font,size,color,strokeWidth,strokeColor,fillGradient,bold,italic,underline,align,topMargin,bottomMargin,leftMargin,rightMargin,indent,leading",
@@ -15045,11 +15218,11 @@ $$ = null;
   _.$isStream = TRUE;
   _.$isObject = TRUE;
   U._GraphicsCommand.$isObject = TRUE;
+  Y.TextLineMetrics.$isObject = TRUE;
   Y._FontStyleMetrics.$isObject = TRUE;
   _ = P.Symbol;
   _.$isSymbol = TRUE;
   _.$isObject = TRUE;
-  Y.TextLineMetrics.$isObject = TRUE;
   _ = W.TableCellElement;
   _.$isHtmlElement = TRUE;
   _.$isEventTarget = TRUE;
@@ -15101,13 +15274,9 @@ $$ = null;
   H._IsolateContext.$isObject = TRUE;
   _ = R.MouseEvent;
   _.$isMouseEvent = TRUE;
-  _.$isEvent = TRUE;
   _.$isObject = TRUE;
   _ = P.StackTrace;
   _.$isStackTrace = TRUE;
-  _.$isObject = TRUE;
-  _ = R.Event;
-  _.$isEvent = TRUE;
   _.$isObject = TRUE;
   _ = P._BufferingStreamSubscription;
   _.$is_BufferingStreamSubscription = TRUE;
@@ -15154,17 +15323,18 @@ $$ = null;
   _ = P.Stream;
   _.$isStream = TRUE;
   _.$isObject = TRUE;
+  _ = R.TouchEvent;
+  _.$isTouchEvent = TRUE;
+  _.$isObject = TRUE;
   _ = U.Rectangle0;
   _.$isRectangle0 = TRUE;
   _.$isRectangle = TRUE;
   _.$isObject = TRUE;
   _ = R.KeyboardEvent0;
   _.$isKeyboardEvent0 = TRUE;
-  _.$isEvent = TRUE;
   _.$isObject = TRUE;
   _ = R.TextEvent0;
   _.$isTextEvent0 = TRUE;
-  _.$isEvent = TRUE;
   _.$isObject = TRUE;
   _ = U.GraphicsGradient;
   _.$isGraphicsGradient = TRUE;
@@ -15348,6 +15518,12 @@ J.contains$1$asx = function(receiver, a0) {
 J.contains$2$asx = function(receiver, a0, a1) {
   return J.getInterceptor$asx(receiver).contains$2(receiver, a0, a1);
 };
+J.createLinearGradient$4$x = function(receiver, a0, a1, a2, a3) {
+  return J.getInterceptor$x(receiver).createLinearGradient$4(receiver, a0, a1, a2, a3);
+};
+J.createRadialGradient$6$x = function(receiver, a0, a1, a2, a3, a4, a5) {
+  return J.getInterceptor$x(receiver).createRadialGradient$6(receiver, a0, a1, a2, a3, a4, a5);
+};
 J.dispatchEvent$1$x = function(receiver, a0) {
   return J.getInterceptor$x(receiver).dispatchEvent$1(receiver, a0);
 };
@@ -15467,6 +15643,9 @@ J.noSuchMethod$1 = function(receiver, a0) {
 };
 J.preventDefault$0$x = function(receiver) {
   return J.getInterceptor$x(receiver).preventDefault$0(receiver);
+};
+J.quadraticCurveTo$4$x = function(receiver, a0, a1, a2, a3) {
+  return J.getInterceptor$x(receiver).quadraticCurveTo$4(receiver, a0, a1, a2, a3);
 };
 J.remove$0$ax = function(receiver) {
   return J.getInterceptor$ax(receiver).remove$0(receiver);
@@ -15785,9 +15964,6 @@ $.Device__isIE = null;
 $.Device__isFirefox = null;
 $.Device__isWebKit = null;
 $.Device__cachedCssPrefix = null;
-$.Board_maxZoom = 256;
-$.Board_minZoom = 80;
-$.Board_zoomIncrement = 10;
 $.DisplayObject__nextID = 0;
 $._TouchPoint__globalTouchPointID = 1;
 $.RenderContextWebGL__globalContextIdentifier = 0;
@@ -16062,11 +16238,14 @@ init.metadata = ["object",
 {func: "dynamic__Symbol_dynamic", args: [P.Symbol, null]},
 {func: "String__int", ret: P.String, args: [P.$int]},
 {func: "void__String", void: true, args: [P.String]},
-{func: "dynamic__Event", args: [R.Event]},
 {func: "dynamic__MouseEvent", args: [R.MouseEvent]},
 "res",
 {func: "int__DisplayObject_DisplayObject", ret: P.$int, args: [A.DisplayObject, A.DisplayObject]},
 "renderTexture",
+{func: "void__MouseEvent", void: true, args: [R.MouseEvent]},
+"mouseEvent",
+{func: "void__TouchEvent", void: true, args: [R.TouchEvent]},
+"touchEvent",
 {func: "dynamic__MouseEvent0", args: [W.MouseEvent0]},
 "event",
 {func: "dynamic__WheelEvent", args: [W.WheelEvent]},
@@ -16088,7 +16267,6 @@ init.metadata = ["object",
 "keyboardEvent",
 {func: "dynamic__TextEvent", args: [R.TextEvent0]},
 "textEvent",
-"mouseEvent",
 ];
 $ = null;
 Isolate = Isolate.$finishIsolateConstructor(Isolate);

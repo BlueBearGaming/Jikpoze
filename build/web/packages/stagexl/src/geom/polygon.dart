@@ -34,239 +34,233 @@ import 'rectangle.dart';
 
 class Polygon {
 
-    final List<Point<num>> points;
+  final List<Point<num>> points;
 
-    Polygon(List<Point<num>> points) : points = points.toList(growable: false) {
+  Polygon(List<Point<num>> points) : points = points.toList(growable: false) {
 
-        if (this.points.length < 3) {
-            throw new ArgumentError("Please provide three or more points.");
+    if (this.points.length < 3) {
+      throw new ArgumentError("Please provide three or more points.");
+    }
+  }
+
+  //-----------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------
+
+  bool isSimple() {
+
+    int length = points.length;
+    if (length <= 3) return true;
+
+    for(int i = 0; i < length; i++) {
+
+      Point<num> a1 = points[i];
+      Point<num> a2 = points[i + 1 < length ? i + 1 : 0];
+
+      for(int j = 0; j < length; j++) {
+
+        if ((i - j).abs() < 2) continue;
+        if (j == length - 1 && i == 0) continue;
+        if (i == length - 1 && j == 0) continue;
+
+        Point<num> b1 = points[j];
+        Point<num> b2 = points[j + 1 < length ? j + 1 : 0];
+
+        if(_getLineIntersection(a1, a2, b1, b2) != null) return false;
+      }
+    }
+
+    return true;
+  }
+
+  //-----------------------------------------------------------------------------------------------
+
+  bool isConvex()  {
+
+    int length = points.length;
+    if (length <= 3) return true;
+
+    for(int i = 0; i < length; i++) {
+      Point<num> p1 = points[(i + 0) % length];
+      Point<num> p2 = points[(i + 1) % length];
+      Point<num> p3 = points[(i + 2) % length];
+      if(!_convex(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y)) return false;
+    }
+
+    return true;
+  }
+
+  //-----------------------------------------------------------------------------------------------
+
+  Rectangle<num> getBounds() {
+
+    num maxX = double.NEGATIVE_INFINITY;
+    num minX = double.INFINITY;
+    num maxY = double.NEGATIVE_INFINITY;
+    num minY = double.INFINITY;
+
+    for(int i = 0; i < points.length; i++) {
+      Point<num> point = points[i];
+      maxX = max(maxX, point.x);
+      minX = min(minX, point.x);
+      maxY = max(maxY, point.y);
+      minY = min(minY, point.y);
+    }
+
+    return new Rectangle<num>(minX, minY, maxX - minX, maxY - minY);
+  }
+
+  //-----------------------------------------------------------------------------------------------
+
+  List<int> triangulate() {
+
+    int i = 0;
+    int al = points.length;
+    List<int> result = new List<int>();
+    List<int> available = new List<int>();
+
+    for(int p = 0; p < points.length; p++) {
+      available.add(p);
+    }
+
+    while(al > 3) {
+
+      int i0 = available[(i + 0) % al];
+      int i1 = available[(i + 1) % al];
+      int i2 = available[(i + 2) % al];
+
+      num ax = points[i0].x;
+      num ay = points[i0].y;
+      num bx = points[i1].x;
+      num by = points[i1].y;
+      num cx = points[i2].x;
+      num cy = points[i2].y;
+
+      bool earFound = false;
+
+      if(_convex(ax, ay, bx, by, cx, cy)) {
+        earFound = true;
+
+        for(int j = 0; j < al; j++) {
+          int vi = available[j];
+          if(vi == i0 || vi == i1 || vi == i2) continue;
+          if(_pointInTriangle(points[vi].x, points[vi].y, ax, ay, bx, by, cx, cy)) {
+            earFound = false;
+            break;
+          }
         }
+      }
+
+      if(earFound) {
+        result.addAll([i0, i1, i2]);
+        available.removeAt((i + 1) % al);
+        al--;
+        i = 0;
+      } else if(i++ > 3 * al) {
+        break; // no convex angles :(
+      }
     }
 
-    //-----------------------------------------------------------------------------------------------
-    //-----------------------------------------------------------------------------------------------
+    result.addAll([available[0], available[1], available[2]]);
 
-    bool isSimple() {
+    // http://dartbug.com/10489
+    return result.toList(growable: false);
+  }
 
-        int length = points.length;
-        if (length <= 3) return true;
+  //-----------------------------------------------------------------------------------------------
 
-        for (int i = 0; i < length; i++) {
+  bool contains(num px, num py) {
 
-            Point<num> a1 = points[i];
-            Point<num> a2 = points[i + 1 < length ? i + 1 : 0];
+    num ax = 0;
+    num ay = 0;
+    num bx = points[points.length - 1].x - px;
+    num by = points[points.length - 1].y - py;
+    int depth = 0;
 
-            for (int j = 0; j < length; j++) {
+    for(int i = 0; i < points.length; i++) {
 
-                if ((i - j).abs() < 2) continue;
-                if (j == length - 1 && i == 0) continue;
-                if (i == length - 1 && j == 0) continue;
+      ax = bx;
+      ay = by;
+      bx = points[i].x - px;
+      by = points[i].y - py;
 
-                Point<num> b1 = points[j];
-                Point<num> b2 = points[j + 1 < length ? j + 1 : 0];
+      if (ay < 0 && by < 0) continue;  // both "up" or both "down"
+      if (ay > 0 && by > 0) continue;  // both "up" or both "down"
+      if (ax < 0 && bx < 0) continue;  // both points on left
 
-                if (_getLineIntersection(a1, a2, b1, b2) != null) return false;
-            }
-        }
+      num lx = ax - ay * (bx - ax) / (by - ay);
 
-        return true;
+      if (lx == 0) return true;        // point on edge
+      if (lx > 0) depth++;
     }
 
-    //-----------------------------------------------------------------------------------------------
+    return (depth & 1) == 1;
+  }
 
-    bool isConvex() {
+  //-----------------------------------------------------------------------------------------------
 
-        int length = points.length;
-        if (length <= 3) return true;
+  bool _inRect(Point<num> point, Point<num> a1, Point<num> a2) {
 
-        for (int i = 0; i < length; i++) {
-            Point<num> p1 = points[(i + 0) % length];
-            Point<num> p2 = points[(i + 1) % length];
-            Point<num> p3 = points[(i + 2) % length];
-            if (!_convex(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y)) return false;
-        }
+    num x = point.x;
+    num y = point.y;
+    num left   = a1.x < a2.x ? a1.x : a2.x;
+    num top    = a1.y < a2.y ? a1.y : a2.y;
+    num right  = a1.x > a2.x ? a1.x : a2.x;
+    num bottom = a1.y > a2.y ? a1.y : a2.y;
 
-        return true;
-    }
+    return x >= left && x <= right && y >= top && y <= bottom;
+  }
 
-    //-----------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------
 
-    Rectangle<num> getBounds() {
+  Point<num> _getLineIntersection(Point<num> a1, Point<num> a2, Point<num> b1, Point<num> b2) {
 
-        num maxX = double.NEGATIVE_INFINITY;
-        num minX = double.INFINITY;
-        num maxY = double.NEGATIVE_INFINITY;
-        num minY = double.INFINITY;
+    num dax = (a1.x - a2.x);
+    num dbx = (b1.x - b2.x);
+    num day = (a1.y - a2.y);
+    num dby = (b1.y - b2.y);
 
-        for (int i = 0; i < points.length; i++) {
-            Point<num> point = points[i];
-            maxX = max(maxX, point.x);
-            minX = min(minX, point.x);
-            maxY = max(maxY, point.y);
-            minY = min(minY, point.y);
-        }
+    num den = dax * dby - day * dbx;
+    if (den == 0) return null;  // parallel
 
-        return new Rectangle<num>(minX, minY, maxX - minX, maxY - minY);
-    }
+    num a = (a1.x * a2.y - a1.y * a2.x);
+    num b = (b1.x * b2.y - b1.y * b2.x);
 
-    //-----------------------------------------------------------------------------------------------
+    num x = (a * dbx - dax * b ) / den;
+    num y = (a * dby - day * b ) / den;
+    Point<num> point = new Point<num>(x, y);
 
-    List<int> triangulate() {
+    return _inRect(point, a1, a2) && _inRect(point, b1, b2) ? point : null;
+  }
 
-        int i = 0;
-        int al = points.length;
-        List<int> result = new List<int>();
-        List<int> available = new List<int>();
+  //-----------------------------------------------------------------------------------------------
 
-        for (int p = 0; p < points.length; p++) {
-            available.add(p);
-        }
+  bool _convex(num ax, num ay, num bx, num by, num cx, num cy) {
 
-        while (al > 3) {
+    return (ay - by) * (cx - bx) + (bx - ax) * (cy - by) >= 0;
+  }
 
-            int i0 = available[(i + 0) % al];
-            int i1 = available[(i + 1) % al];
-            int i2 = available[(i + 2) % al];
+  //-----------------------------------------------------------------------------------------------
 
-            num ax = points[i0].x;
-            num ay = points[i0].y;
-            num bx = points[i1].x;
-            num by = points[i1].y;
-            num cx = points[i2].x;
-            num cy = points[i2].y;
+  bool _pointInTriangle (num px, num py, num ax, num ay, num bx, num by, num cx, num cy) {
 
-            bool earFound = false;
+    num v0x = cx - ax;
+    num v0y = cy - ay;
+    num v1x = bx - ax;
+    num v1y = by - ay;
+    num v2x = px - ax;
+    num v2y = py - ay;
 
-            if (_convex(ax, ay, bx, by, cx, cy)) {
-                earFound = true;
+    num dot00 = v0x * v0x + v0y * v0y;
+    num dot01 = v0x * v1x + v0y * v1y;
+    num dot02 = v0x * v2x + v0y * v2y;
+    num dot11 = v1x * v1x + v1y * v1y;
+    num dot12 = v1x * v2x + v1y * v2y;
 
-                for (int j = 0; j < al; j++) {
-                    int vi = available[j];
-                    if (vi == i0 || vi == i1 || vi == i2) continue;
-                    if (_pointInTriangle(points[vi].x, points[vi].y, ax, ay, bx, by, cx, cy)) {
-                        earFound = false;
-                        break;
-                    }
-                }
-            }
+    num invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
+    num u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+    num v = (dot00 * dot12 - dot01 * dot02) * invDenom;
 
-            if (earFound) {
-                result.addAll([i0, i1, i2]);
-                available.removeAt((i + 1) % al);
-                al--;
-                i = 0;
-            } else if (i++ > 3 * al) {
-                break;
-                // no convex angles :(
-            }
-        }
-
-        result.addAll([available[0], available[1], available[2]]);
-
-        // http://dartbug.com/10489
-        return result.toList(growable: false);
-    }
-
-    //-----------------------------------------------------------------------------------------------
-
-    bool contains(num px, num py) {
-
-        num ax = 0;
-        num ay = 0;
-        num bx = points[points.length - 1].x - px;
-        num by = points[points.length - 1].y - py;
-        int depth = 0;
-
-        for (int i = 0; i < points.length; i++) {
-
-            ax = bx;
-            ay = by;
-            bx = points[i].x - px;
-            by = points[i].y - py;
-
-            if (ay < 0 && by < 0) continue;
-            // both "up" or both "down"
-            if (ay > 0 && by > 0) continue;
-            // both "up" or both "down"
-            if (ax < 0 && bx < 0) continue;
-            // both points on left
-
-            num lx = ax - ay * (bx - ax) / (by - ay);
-
-            if (lx == 0) return true;
-            // point on edge
-            if (lx > 0) depth++;
-        }
-
-        return (depth & 1) == 1;
-    }
-
-    //-----------------------------------------------------------------------------------------------
-
-    bool _inRect(Point<num> point, Point<num> a1, Point<num> a2) {
-
-        num x = point.x;
-        num y = point.y;
-        num left = a1.x < a2.x ? a1.x : a2.x;
-        num top = a1.y < a2.y ? a1.y : a2.y;
-        num right = a1.x > a2.x ? a1.x : a2.x;
-        num bottom = a1.y > a2.y ? a1.y : a2.y;
-
-        return x >= left && x <= right && y >= top && y <= bottom;
-    }
-
-    //-----------------------------------------------------------------------------------------------
-
-    Point<num> _getLineIntersection(Point<num> a1, Point<num> a2, Point<num> b1, Point<num> b2) {
-
-        num dax = (a1.x - a2.x);
-        num dbx = (b1.x - b2.x);
-        num day = (a1.y - a2.y);
-        num dby = (b1.y - b2.y);
-
-        num den = dax * dby - day * dbx;
-        if (den == 0) return null;
-        // parallel
-
-        num a = (a1.x * a2.y - a1.y * a2.x);
-        num b = (b1.x * b2.y - b1.y * b2.x);
-
-        num x = (a * dbx - dax * b ) / den;
-        num y = (a * dby - day * b ) / den;
-        Point<num> point = new Point<num>(x, y);
-
-        return _inRect(point, a1, a2) && _inRect(point, b1, b2) ? point : null;
-    }
-
-    //-----------------------------------------------------------------------------------------------
-
-    bool _convex(num ax, num ay, num bx, num by, num cx, num cy) {
-
-        return (ay - by) * (cx - bx) + (bx - ax) * (cy - by) >= 0;
-    }
-
-    //-----------------------------------------------------------------------------------------------
-
-    bool _pointInTriangle(num px, num py, num ax, num ay, num bx, num by, num cx, num cy) {
-
-        num v0x = cx - ax;
-        num v0y = cy - ay;
-        num v1x = bx - ax;
-        num v1y = by - ay;
-        num v2x = px - ax;
-        num v2y = py - ay;
-
-        num dot00 = v0x * v0x + v0y * v0y;
-        num dot01 = v0x * v1x + v0y * v1y;
-        num dot02 = v0x * v2x + v0y * v2y;
-        num dot11 = v1x * v1x + v1y * v1y;
-        num dot12 = v1x * v2x + v1y * v2y;
-
-        num invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
-        num u = (dot11 * dot02 - dot01 * dot12) * invDenom;
-        num v = (dot00 * dot12 - dot01 * dot02) * invDenom;
-
-        return (u >= 0) && (v >= 0) && (u + v < 1);
-    }
+    return (u >= 0) && (v >= 0) && (u + v < 1);
+  }
 
 }

@@ -15,5 +15,5 @@ part of stagexl.filters;
 ///     sprite.filters = [new FlattenFilter()];
 ///
 class FlattenFilter extends BitmapFilter {
-    BitmapFilter clone() => new FlattenFilter();
+  BitmapFilter clone() => new FlattenFilter();
 }
