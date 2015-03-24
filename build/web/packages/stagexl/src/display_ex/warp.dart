@@ -9,13 +9,13 @@ part of stagexl.display_ex;
 
 class Warp extends DisplayObjectContainer {
 
-  Matrix _matrix = new Matrix.fromIdentity();
+    Matrix _matrix = new Matrix.fromIdentity();
 
-  Matrix get transformationMatrix => _matrix;
+    Matrix get transformationMatrix => _matrix;
 
-  Matrix get matrix => _matrix;
+    Matrix get matrix => _matrix;
 
-  void set matrix(Matrix value) {
-    _matrix = value;
-  }
+    void set matrix(Matrix value) {
+        _matrix = value;
+    }
 }

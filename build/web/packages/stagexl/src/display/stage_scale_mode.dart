@@ -4,11 +4,12 @@ part of stagexl.display;
 
 class StageScaleMode {
 
-  final int index;
-  const StageScaleMode._(this.index);
+    final int index;
 
-  static const StageScaleMode EXACT_FIT = const StageScaleMode._(0);
-  static const StageScaleMode NO_BORDER = const StageScaleMode._(1);
-  static const StageScaleMode NO_SCALE = const StageScaleMode._(2);
-  static const StageScaleMode SHOW_ALL = const StageScaleMode._(3);
+    const StageScaleMode._(this.index);
+
+    static const StageScaleMode EXACT_FIT = const StageScaleMode._(0);
+    static const StageScaleMode NO_BORDER = const StageScaleMode._(1);
+    static const StageScaleMode NO_SCALE = const StageScaleMode._(2);
+    static const StageScaleMode SHOW_ALL = const StageScaleMode._(3);
 }

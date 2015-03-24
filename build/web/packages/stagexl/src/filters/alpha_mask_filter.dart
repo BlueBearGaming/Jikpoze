@@ -2,60 +2,60 @@ part of stagexl.filters;
 
 class AlphaMaskFilter extends BitmapFilter {
 
-  final BitmapData bitmapData;
-  final Matrix matrix;
+    final BitmapData bitmapData;
+    final Matrix matrix;
 
-  AlphaMaskFilter(BitmapData bitmapData, [
-                  Matrix matrix = null]) :
+    AlphaMaskFilter(BitmapData bitmapData, [
+    Matrix matrix = null]) :
 
     bitmapData = bitmapData,
     matrix = (matrix != null) ? matrix : new Matrix.fromIdentity();
 
-  //-----------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------
 
-  BitmapFilter clone() => new AlphaMaskFilter(bitmapData, matrix.clone());
+    BitmapFilter clone() => new AlphaMaskFilter(bitmapData, matrix.clone());
 
-  //-----------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------
 
-  void apply(BitmapData bitmapData, [Rectangle<int> rectangle]) {
+    void apply(BitmapData bitmapData, [Rectangle<int> rectangle]) {
 
-    RenderTextureQuad renderTextureQuad = rectangle == null
+        RenderTextureQuad renderTextureQuad = rectangle == null
         ? bitmapData.renderTextureQuad
         : bitmapData.renderTextureQuad.cut(rectangle);
 
-    int offsetX = renderTextureQuad.offsetX;
-    int offsetY = renderTextureQuad.offsetY;
-    int width = renderTextureQuad.textureWidth;
-    int height = renderTextureQuad.textureHeight;
-    Matrix matrix = renderTextureQuad.drawMatrix;
-    CanvasElement canvas = renderTextureQuad.renderTexture.canvas;
-    RenderContextCanvas renderContext = new RenderContextCanvas(canvas);
-    RenderState renderState = new RenderState(renderContext, matrix);
-    CanvasRenderingContext2D context = renderContext.rawContext;
+        int offsetX = renderTextureQuad.offsetX;
+        int offsetY = renderTextureQuad.offsetY;
+        int width = renderTextureQuad.textureWidth;
+        int height = renderTextureQuad.textureHeight;
+        Matrix matrix = renderTextureQuad.drawMatrix;
+        CanvasElement canvas = renderTextureQuad.renderTexture.canvas;
+        RenderContextCanvas renderContext = new RenderContextCanvas(canvas);
+        RenderState renderState = new RenderState(renderContext, matrix);
+        CanvasRenderingContext2D context = renderContext.rawContext;
 
-    context.save();
-    context.globalCompositeOperation = "destination-in";
-    context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
-    context.rect(offsetX, offsetY, width, height);
-    context.clip();
-    renderState.globalMatrix.prepend(this.matrix);
-    renderState.renderQuad(this.bitmapData.renderTextureQuad);
-    context.restore();
-  }
+        context.save();
+        context.globalCompositeOperation = "destination-in";
+        context.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
+        context.rect(offsetX, offsetY, width, height);
+        context.clip();
+        renderState.globalMatrix.prepend(this.matrix);
+        renderState.renderQuad(this.bitmapData.renderTextureQuad);
+        context.restore();
+    }
 
-  //-------------------------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------------------------
 
-  void renderFilter(RenderState renderState, RenderTextureQuad renderTextureQuad, int pass) {
-    RenderContextWebGL renderContext = renderState.renderContext;
-    RenderTexture renderTexture = renderTextureQuad.renderTexture;
-    _AlphaMaskProgram alphaMaskProgram = _AlphaMaskProgram.instance;
+    void renderFilter(RenderState renderState, RenderTextureQuad renderTextureQuad, int pass) {
+        RenderContextWebGL renderContext = renderState.renderContext;
+        RenderTexture renderTexture = renderTextureQuad.renderTexture;
+        _AlphaMaskProgram alphaMaskProgram = _AlphaMaskProgram.instance;
 
-    renderContext.activateRenderProgram(alphaMaskProgram);
-    renderContext.activateRenderTexture(renderTexture);
-    bitmapData.renderTexture.activate(renderContext, gl.TEXTURE1);
-    alphaMaskProgram.configure(this, renderTextureQuad);
-    alphaMaskProgram.renderQuad(renderState, renderTextureQuad);
-  }
+        renderContext.activateRenderProgram(alphaMaskProgram);
+        renderContext.activateRenderTexture(renderTexture);
+        bitmapData.renderTexture.activate(renderContext, gl.TEXTURE1);
+        alphaMaskProgram.configure(this, renderTextureQuad);
+        alphaMaskProgram.renderQuad(renderState, renderTextureQuad);
+    }
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -63,9 +63,9 @@ class AlphaMaskFilter extends BitmapFilter {
 
 class _AlphaMaskProgram extends BitmapFilterProgram {
 
-  static final _AlphaMaskProgram instance = new _AlphaMaskProgram();
+    static final _AlphaMaskProgram instance = new _AlphaMaskProgram();
 
-  String get fragmentShaderSource => """
+    String get fragmentShaderSource => """
       precision mediump float;
       uniform sampler2D uSampler;
       uniform sampler2D uMaskSampler;
@@ -80,25 +80,25 @@ class _AlphaMaskProgram extends BitmapFilterProgram {
       }
       """;
 
-  void configure(AlphaMaskFilter alphaMaskFilter, RenderTextureQuad renderTextureQuad) {
+    void configure(AlphaMaskFilter alphaMaskFilter, RenderTextureQuad renderTextureQuad) {
 
-    //var matrix = renderTextureQuad.samplerMatrix.cloneInvert();
-    //matrix.concat(alphaMaskFilter.matrix.cloneInvert());
-    //matrix.concat(alphaMaskFilter.bitmapData.renderTextureQuad.samplerMatrix);
+        //var matrix = renderTextureQuad.samplerMatrix.cloneInvert();
+        //matrix.concat(alphaMaskFilter.matrix.cloneInvert());
+        //matrix.concat(alphaMaskFilter.bitmapData.renderTextureQuad.samplerMatrix);
 
-    var matrix = new Matrix.fromIdentity();
-    matrix.copyFromAndConcat(alphaMaskFilter.matrix, renderTextureQuad.samplerMatrix);
-    matrix.invertAndConcat(alphaMaskFilter.bitmapData.renderTextureQuad.samplerMatrix);
+        var matrix = new Matrix.fromIdentity();
+        matrix.copyFromAndConcat(alphaMaskFilter.matrix, renderTextureQuad.samplerMatrix);
+        matrix.invertAndConcat(alphaMaskFilter.bitmapData.renderTextureQuad.samplerMatrix);
 
-    var uMaskMatrix = new Float32List.fromList([
-        matrix.a, matrix.c, matrix.tx,
-        matrix.b, matrix.d, matrix.ty,
-        0.0, 0.0, 1.0]);
+        var uMaskMatrix = new Float32List.fromList([
+            matrix.a, matrix.c, matrix.tx,
+            matrix.b, matrix.d, matrix.ty,
+            0.0, 0.0, 1.0]);
 
-    var uMaskMatrixLocation = uniformLocations["uMaskMatrix"];
-    var uMaskSamplerLocation = uniformLocations["uMaskSampler"];
+        var uMaskMatrixLocation = uniformLocations["uMaskMatrix"];
+        var uMaskSamplerLocation = uniformLocations["uMaskSampler"];
 
-    renderingContext.uniformMatrix3fv(uMaskMatrixLocation, false, uMaskMatrix);
-    renderingContext.uniform1i(uMaskSamplerLocation, 1);
-  }
+        renderingContext.uniformMatrix3fv(uMaskMatrixLocation, false, uMaskMatrix);
+        renderingContext.uniform1i(uMaskSamplerLocation, 1);
+    }
 }

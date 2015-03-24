@@ -8,7 +8,7 @@ part of stagexl.drawing;
 /// miter, round, and bevel.
 
 class JointStyle {
-  static const String MITER = "miter";
-  static const String ROUND = "round";
-  static const String BEVEL = "bevel";
+    static const String MITER = "miter";
+    static const String ROUND = "round";
+    static const String BEVEL = "bevel";
 }

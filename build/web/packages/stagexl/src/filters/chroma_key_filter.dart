@@ -25,73 +25,75 @@ part of stagexl.filters;
 
 class ChromaKeyFilter extends BitmapFilter {
 
-  int _backgroundColor;
-  int _solidThreshold;
-  int _invisibleThreshold;
+    int _backgroundColor;
+    int _solidThreshold;
+    int _invisibleThreshold;
 
-  ChromaKeyFilter({int backgroundColor: 0xFF00FF00, int solidThreshold: 140, int invisibleThreshold: 20}) {
+    ChromaKeyFilter({int backgroundColor: 0xFF00FF00, int solidThreshold: 140, int invisibleThreshold: 20}) {
 
-    if (invisibleThreshold < 0) {
-      throw new ArgumentError("The minimum solidThreshold is 0.");
+        if (invisibleThreshold < 0) {
+            throw new ArgumentError("The minimum solidThreshold is 0.");
+        }
+        if (solidThreshold < invisibleThreshold) {
+            throw new ArgumentError("solidThreshold cannot be lower than invisibleThreshold");
+        }
+
+        _backgroundColor = backgroundColor;
+        _solidThreshold = solidThreshold;
+        _invisibleThreshold = invisibleThreshold;
     }
-    if (solidThreshold < invisibleThreshold) {
-      throw new ArgumentError("solidThreshold cannot be lower than invisibleThreshold");
+
+    int get backgroundColor => _backgroundColor;
+
+    int get solidThreshold => _solidThreshold;
+
+    int get invisibleThreshold => _invisibleThreshold;
+
+    void set backgroundColor(int backgroundColor) {
+        _backgroundColor = backgroundColor;
     }
 
-    _backgroundColor = backgroundColor;
-    _solidThreshold = solidThreshold;
-    _invisibleThreshold = invisibleThreshold;
-  }
-
-  int get backgroundColor => _backgroundColor;
-  int get solidThreshold => _solidThreshold;
-  int get invisibleThreshold => _invisibleThreshold;
-
-  void set backgroundColor (int backgroundColor) {
-    _backgroundColor = backgroundColor;
-  }
-
-  void set solidThreshold (int solidThreshold) {
-    if (solidThreshold < _invisibleThreshold) {
-      throw new ArgumentError("solidThreshold cannot be lower than _invisibleThreshold");
+    void set solidThreshold(int solidThreshold) {
+        if (solidThreshold < _invisibleThreshold) {
+            throw new ArgumentError("solidThreshold cannot be lower than _invisibleThreshold");
+        }
+        _solidThreshold = solidThreshold;
     }
-    _solidThreshold = solidThreshold;
-  }
 
-  void set invisibleThreshold (int invisibleThreshold) {
-    if (invisibleThreshold < 0) {
-      throw new ArgumentError("The minimum solidThreshold is 0.");
+    void set invisibleThreshold(int invisibleThreshold) {
+        if (invisibleThreshold < 0) {
+            throw new ArgumentError("The minimum solidThreshold is 0.");
+        }
+        _invisibleThreshold = invisibleThreshold;
     }
-    _invisibleThreshold = invisibleThreshold;
-  }
 
-  BitmapFilter clone() => new ChromaKeyFilter(backgroundColor: _backgroundColor, solidThreshold: _solidThreshold, invisibleThreshold: _invisibleThreshold);
+    BitmapFilter clone() => new ChromaKeyFilter(backgroundColor: _backgroundColor, solidThreshold: _solidThreshold, invisibleThreshold: _invisibleThreshold);
 
-  //-------------------------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------------------------
 
-  void apply(BitmapData bitmapData, [Rectangle<int> rectangle]) {
+    void apply(BitmapData bitmapData, [Rectangle<int> rectangle]) {
 
-    RenderTextureQuad renderTextureQuad = rectangle == null
+        RenderTextureQuad renderTextureQuad = rectangle == null
         ? bitmapData.renderTextureQuad
         : bitmapData.renderTextureQuad.cut(rectangle);
 
-    ImageData imageData = renderTextureQuad.getImageData();
-    // this filter is only WebGL compliant
-    renderTextureQuad.putImageData(imageData);
-  }
+        ImageData imageData = renderTextureQuad.getImageData();
+        // this filter is only WebGL compliant
+        renderTextureQuad.putImageData(imageData);
+    }
 
-  //-------------------------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------------------------
 
-  void renderFilter(RenderState renderState, RenderTextureQuad renderTextureQuad, int pass) {
-    RenderContextWebGL renderContext = renderState.renderContext;
-    RenderTexture renderTexture = renderTextureQuad.renderTexture;
-    _ChromaKeyProgram chromaKeyProgram = _ChromaKeyProgram.instance;
+    void renderFilter(RenderState renderState, RenderTextureQuad renderTextureQuad, int pass) {
+        RenderContextWebGL renderContext = renderState.renderContext;
+        RenderTexture renderTexture = renderTextureQuad.renderTexture;
+        _ChromaKeyProgram chromaKeyProgram = _ChromaKeyProgram.instance;
 
-    renderContext.activateRenderProgram(chromaKeyProgram);
-    renderContext.activateRenderTexture(renderTexture);
-    chromaKeyProgram.configure(backgroundColor, solidThreshold, invisibleThreshold);
-    chromaKeyProgram.renderQuad(renderState, renderTextureQuad);
-  }
+        renderContext.activateRenderProgram(chromaKeyProgram);
+        renderContext.activateRenderTexture(renderTexture);
+        chromaKeyProgram.configure(backgroundColor, solidThreshold, invisibleThreshold);
+        chromaKeyProgram.renderQuad(renderState, renderTextureQuad);
+    }
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -99,9 +101,9 @@ class ChromaKeyFilter extends BitmapFilter {
 
 class _ChromaKeyProgram extends BitmapFilterProgram {
 
-  static final _ChromaKeyProgram instance = new _ChromaKeyProgram();
+    static final _ChromaKeyProgram instance = new _ChromaKeyProgram();
 
-  String get fragmentShaderSource =>  """
+    String get fragmentShaderSource => """
       precision mediump float;
       uniform sampler2D uSampler;
       varying vec2 vTextCoord;
@@ -159,18 +161,18 @@ class _ChromaKeyProgram extends BitmapFilterProgram {
       }
       """;
 
-  void configure(int backgroundColor, int solidThreshold, int invisibleThreshold) {
-    num r = colorGetR(backgroundColor) / 255.0;
-    num g = colorGetG(backgroundColor) / 255.0;
-    num b = colorGetB(backgroundColor) / 255.0;
+    void configure(int backgroundColor, int solidThreshold, int invisibleThreshold) {
+        num r = colorGetR(backgroundColor) / 255.0;
+        num g = colorGetG(backgroundColor) / 255.0;
+        num b = colorGetB(backgroundColor) / 255.0;
 
-    renderingContext.uniform4f(uniformLocations["backgroundColor"], r, g, b, 1.0);
+        renderingContext.uniform4f(uniformLocations["backgroundColor"], r, g, b, 1.0);
 
-    renderingContext.uniform1f(uniformLocations["solidThreshold"], solidThreshold / 255.0);
-    renderingContext.uniform1f(uniformLocations["invisibleThreshold"], invisibleThreshold / 255.0);
+        renderingContext.uniform1f(uniformLocations["solidThreshold"], solidThreshold / 255.0);
+        renderingContext.uniform1f(uniformLocations["invisibleThreshold"], invisibleThreshold / 255.0);
 
-    // this affect the color corection on semi transparent pixel, for now not public
-    // it is quite experimental
-    renderingContext.uniform1f(uniformLocations["weight"], 0.8);
-  }
+        // this affect the color corection on semi transparent pixel, for now not public
+        // it is quite experimental
+        renderingContext.uniform1f(uniformLocations["weight"], 0.8);
+    }
 }

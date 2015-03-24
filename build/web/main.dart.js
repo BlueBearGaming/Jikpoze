@@ -10829,6 +10829,11 @@ var $$ = Object.create(null);
         viewX = J.$add$ns(viewX, J.$div$n(this.board.cellSize, 2));
       return H.setRuntimeTypeInfo(new U.Point(viewX, viewY), [null]);
     },
+    viewPointToGamePoint$1: function(viewPoint) {
+      var t1 = new U.Point(C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(viewPoint.x, this.board.cellSize))), C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(viewPoint.y, this.board.cellSize) / this.skewFactor)));
+      t1.$builtinTypeInfo = [null];
+      return t1;
+    },
     HexMap$1: function(board) {
       this.skewFactor = Math.cos(H.checkNum(0.5235987755982988));
     }
@@ -10941,10 +10946,27 @@ var $$ = Object.create(null);
       return cell;
     },
     updateGrid$0: function() {
-      var t1, layer;
-      for (t1 = this.layers, t1 = t1.get$iterator(t1); t1.moveNext$0(), false;) {
-        layer = t1.get$current();
-        layer.get$type(layer);
+      var t1, layer, t2, root, t3, t4, topLeft, bottomRight, dist, x, y, line;
+      for (t1 = this.layers, t1 = t1.get$values(t1), t1 = H.setRuntimeTypeInfo(new H.MappedIterator(null, J.get$iterator$ax(t1._iterable), t1._f), [H.getTypeArgumentByIndex(t1, 0), H.getTypeArgumentByIndex(t1, 1)]); t1.moveNext$0();) {
+        layer = t1.__internal$_current;
+        if (J.$eq(J.get$type$x(layer), "grid")) {
+          t2 = this.board._x;
+          root = this.get$root();
+          t3 = (!!J.getInterceptor(root).$isStage ? root : null).get$_stageWidth();
+          t4 = this.board._y;
+          root = this.get$root();
+          t2 = new U.Point(-t2 - t3 / 3, -t4 - (!!J.getInterceptor(root).$isStage ? root : null).get$_stageHeight() / 3);
+          t2.$builtinTypeInfo = [null];
+          topLeft = this.viewPointToGamePoint$1(t2);
+          bottomRight = this.viewPointToGamePoint$1(this.getBottomRightViewPointForCache$0());
+          dist = J.floor$0$n(J.$sub$n(bottomRight.x, topLeft.x));
+          x = J.floor$0$n(topLeft.x);
+          y = J.floor$0$n(topLeft.y);
+          for (t2 = x + dist, line = 0; line < J.floor$0$n(J.$sub$n(bottomRight.y, topLeft.y)); ++line) {
+            this.renderLayerLine$5(layer, x, y, t2, y);
+            ++y;
+          }
+        }
       }
     },
     getGridPencil$0: function() {
@@ -10973,6 +10995,11 @@ var $$ = Object.create(null);
     },
     gamePointToViewPoint$1: function(gamePoint) {
       return H.setRuntimeTypeInfo(new U.Point(J.$mul$ns(gamePoint.x, this.board.cellSize), J.$mul$ns(gamePoint.y, this.board.cellSize)), [null]);
+    },
+    viewPointToGamePoint$1: function(viewPoint) {
+      var t1 = new U.Point(C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(viewPoint.x, this.board.cellSize))), C.JSNumber_methods.toInt$0(Math.floor(J.$div$n(viewPoint.y, this.board.cellSize))));
+      t1.$builtinTypeInfo = [null];
+      return t1;
     },
     addChildAt$2: function(child, index) {
       var t1, t2;

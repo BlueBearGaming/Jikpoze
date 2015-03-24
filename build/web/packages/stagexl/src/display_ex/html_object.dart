@@ -34,74 +34,74 @@ part of stagexl.display_ex;
 
 class HtmlObject extends DisplayObject {
 
-  final Element element;
+    final Element element;
 
-  CssStyleDeclaration _style;
-  String _styleOpacity = "";
-  String _styleTransform = "";
-  String _styleVisibility = "";
+    CssStyleDeclaration _style;
+    String _styleOpacity = "";
+    String _styleTransform = "";
+    String _styleVisibility = "";
 
-  HtmlObject(this.element) {
+    HtmlObject(this.element) {
 
-    _style = this.element.style;
-    _style.position = "absolute";
-    _style.left = "0px";
-    _style.top = "0px";
-    _style.transformOrigin = "0% 0% 0";
-    _style.visibility = "hidden";
+        _style = this.element.style;
+        _style.position = "absolute";
+        _style.left = "0px";
+        _style.top = "0px";
+        _style.transformOrigin = "0% 0% 0";
+        _style.visibility = "hidden";
 
-    this.onRemovedFromStage.listen(_onRemovedFromStage);
-  }
-
-  //-----------------------------------------------------------------------------------------------
-
-  _hideElement() {
-    _style.visibility = _styleVisibility = "hidden";
-  }
-
-  _onRemovedFromStage(Event e) {
-    _hideElement();
-  }
-
-  set visible(bool value) {
-    super.visible = value;
-    if (value == false) _hideElement();
-  }
-
-  set off(bool value) {
-    super.off = value;
-    if (value) _hideElement();
-  }
-
-  //-----------------------------------------------------------------------------------------------
-
-  void render(RenderState renderState) {
-
-    var globalMatrix = renderState.globalMatrix;
-    var globalAlpha = renderState.globalAlpha;
-    var visibility = this.visible && this.off == false;
-
-    var mxa = globalMatrix.a.toStringAsFixed(4);
-    var mxb = globalMatrix.b.toStringAsFixed(4);
-    var mxc = globalMatrix.c.toStringAsFixed(4);
-    var mxd = globalMatrix.d.toStringAsFixed(4);
-    var mxtx = globalMatrix.tx.toStringAsFixed(4);
-    var mxty = globalMatrix.ty.toStringAsFixed(4);
-
-    var styleOpacity = globalAlpha.toStringAsFixed(4);
-    var styleTransform = "matrix($mxa,$mxb,$mxc,$mxd,$mxtx,$mxty)";
-    var styleVisibility = visibility ? "visible" : "hidden";
-
-    if (_styleVisibility != styleVisibility) {
-      _style.visibility = _styleVisibility = styleVisibility;
+        this.onRemovedFromStage.listen(_onRemovedFromStage);
     }
 
-    if (_styleOpacity != styleOpacity) {
-      _style.opacity = _styleOpacity = styleOpacity;
+    //-----------------------------------------------------------------------------------------------
+
+    _hideElement() {
+        _style.visibility = _styleVisibility = "hidden";
     }
 
-    if (_styleTransform != styleTransform) {
-      _style.transform = _styleTransform = styleTransform;
+    _onRemovedFromStage(Event e) {
+        _hideElement();
     }
-  }
+
+    set visible(bool value) {
+        super.visible = value;
+        if (value == false) _hideElement();
+    }
+
+    set off(bool value) {
+        super.off = value;
+        if (value) _hideElement();
+    }
+
+    //-----------------------------------------------------------------------------------------------
+
+    void render(RenderState renderState) {
+
+        var globalMatrix = renderState.globalMatrix;
+        var globalAlpha = renderState.globalAlpha;
+        var visibility = this.visible && this.off == false;
+
+        var mxa = globalMatrix.a.toStringAsFixed(4);
+        var mxb = globalMatrix.b.toStringAsFixed(4);
+        var mxc = globalMatrix.c.toStringAsFixed(4);
+        var mxd = globalMatrix.d.toStringAsFixed(4);
+        var mxtx = globalMatrix.tx.toStringAsFixed(4);
+        var mxty = globalMatrix.ty.toStringAsFixed(4);
+
+        var styleOpacity = globalAlpha.toStringAsFixed(4);
+        var styleTransform = "matrix($mxa,$mxb,$mxc,$mxd,$mxtx,$mxty)";
+        var styleVisibility = visibility ? "visible" : "hidden";
+
+        if (_styleVisibility != styleVisibility) {
+            _style.visibility = _styleVisibility = styleVisibility;
+        }
+
+        if (_styleOpacity != styleOpacity) {
+            _style.opacity = _styleOpacity = styleOpacity;
+        }
+
+        if (_styleTransform != styleTransform) {
+            _style.transform = _styleTransform = styleTransform;
+        }
+    }
 }

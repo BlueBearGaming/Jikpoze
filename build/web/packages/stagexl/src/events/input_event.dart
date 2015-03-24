@@ -22,47 +22,47 @@ part of stagexl.events;
 
 abstract class InputEvent extends Event {
 
-  /// The mouse or touch event that is currently dispatched. The value is only
-  /// set if the code is running in the context of a mouse or touch event
-  /// propagation, otherwise the value is `null`.
+    /// The mouse or touch event that is currently dispatched. The value is only
+    /// set if the code is running in the context of a mouse or touch event
+    /// propagation, otherwise the value is `null`.
 
-  static InputEvent current;
+    static InputEvent current;
 
-  /// The x-coordinate at which the event occurred relative
-  /// to the containing display object.
+    /// The x-coordinate at which the event occurred relative
+    /// to the containing display object.
 
-  final num localX;
+    final num localX;
 
-  /// The y-coordinate at which the event occurred relative
-  /// to the containing display object.
+    /// The y-coordinate at which the event occurred relative
+    /// to the containing display object.
 
-  final num localY;
+    final num localY;
 
-  /// The x-coordinate of the input event relative to the stage.
+    /// The x-coordinate of the input event relative to the stage.
 
-  final num stageX;
+    final num stageX;
 
-  /// The y-coordinate of the input event relative to the stage.
+    /// The y-coordinate of the input event relative to the stage.
 
-  final num stageY;
+    final num stageY;
 
-  /// Indicates whether the Alt key is active (true) or inactive (false).
+    /// Indicates whether the Alt key is active (true) or inactive (false).
 
-  final bool altKey;
+    final bool altKey;
 
-  /// Indicates whether the Ctrl key is active (true) or inactive (false).
+    /// Indicates whether the Ctrl key is active (true) or inactive (false).
 
-  final bool ctrlKey;
+    final bool ctrlKey;
 
-  /// Indicates whether the Shift key is active (true) or inactive (false).
+    /// Indicates whether the Shift key is active (true) or inactive (false).
 
-  final bool shiftKey;
+    final bool shiftKey;
 
-  /// Creates a new [InputEvent].
+    /// Creates a new [InputEvent].
 
-  InputEvent(String type, bool bubbles,
-      this.localX, this.localY,
-      this.stageX, this.stageY,
-      this.altKey, this.ctrlKey, this.shiftKey) : super(type, bubbles);
+    InputEvent(String type, bool bubbles,
+               this.localX, this.localY,
+               this.stageX, this.stageY,
+               this.altKey, this.ctrlKey, this.shiftKey) : super(type, bubbles);
 
 }

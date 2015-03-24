@@ -6,16 +6,17 @@ part of stagexl.display;
 
 class StageAlign {
 
-  final int index;
-  const StageAlign._(this.index);
+    final int index;
 
-  static const StageAlign BOTTOM = const StageAlign._(0);
-  static const StageAlign BOTTOM_LEFT = const StageAlign._(1);
-  static const StageAlign BOTTOM_RIGHT = const StageAlign._(2);
-  static const StageAlign LEFT = const StageAlign._(3);
-  static const StageAlign RIGHT = const StageAlign._(4);
-  static const StageAlign TOP = const StageAlign._(5);
-  static const StageAlign TOP_LEFT = const StageAlign._(6);
-  static const StageAlign TOP_RIGHT = const StageAlign._(7);
-  static const StageAlign NONE = const StageAlign._(8);
+    const StageAlign._(this.index);
+
+    static const StageAlign BOTTOM = const StageAlign._(0);
+    static const StageAlign BOTTOM_LEFT = const StageAlign._(1);
+    static const StageAlign BOTTOM_RIGHT = const StageAlign._(2);
+    static const StageAlign LEFT = const StageAlign._(3);
+    static const StageAlign RIGHT = const StageAlign._(4);
+    static const StageAlign TOP = const StageAlign._(5);
+    static const StageAlign TOP_LEFT = const StageAlign._(6);
+    static const StageAlign TOP_RIGHT = const StageAlign._(7);
+    static const StageAlign NONE = const StageAlign._(8);
 }

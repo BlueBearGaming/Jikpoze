@@ -68,7 +68,7 @@ class SquareMap extends DisplayObjectContainer {
     }
 
     void updateGrid() {
-        for (Layer layer in layers) {
+        for (Layer layer in layers.values) {
             if (layer.type == 'grid') {
                 Point topLeft = viewPointToGamePoint(getTopLeftViewPointForCache());
                 Point bottomRight = viewPointToGamePoint(getBottomRightViewPointForCache());
@@ -76,7 +76,7 @@ class SquareMap extends DisplayObjectContainer {
                 int x = topLeft.x.floor();
                 int y = topLeft.y.floor();
                 for (int line = 0; line < (bottomRight.y - topLeft.y).floor(); line++) {
-                    renderLayerLine(layer, x, y, x + dist, y - dist);
+                    renderLayerLine(layer, x, y, x + dist, y);
                     y++;
                 }
             }

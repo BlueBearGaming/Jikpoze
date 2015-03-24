@@ -24,80 +24,80 @@ part of stagexl.animation;
 ///
 class AnimationChain implements Animatable {
 
-  final List<Animatable> _animatables = new List<Animatable>();
+    final List<Animatable> _animatables = new List<Animatable>();
 
-  Function _onStart;
-  Function _onComplete;
+    Function _onStart;
+    Function _onComplete;
 
-  num _time = 0.0;
-  num _delay = 0.0;
-  bool _started = false;
-  bool _completed = false;
+    num _time = 0.0;
+    num _delay = 0.0;
+    bool _started = false;
+    bool _completed = false;
 
-  //----------------------------------------------------------------------------
+    //----------------------------------------------------------------------------
 
-  /// Adds the [animatable] to this [AnimationChain].
-  void add(Animatable animatable) {
-    _animatables.add(animatable);
-  }
-
-  @override
-  bool advanceTime(num time) {
-
-    _time += time;
-
-    if (_started == false) {
-      if (_time > _delay) {
-        _started = true;
-        if (_onStart != null) _onStart();
-      } else {
-        return true;
-      }
+    /// Adds the [animatable] to this [AnimationChain].
+    void add(Animatable animatable) {
+        _animatables.add(animatable);
     }
 
-    if (_animatables.length > 0) {
-      if (_animatables[0].advanceTime(time) == false) {
-        _animatables.removeAt(0);
-      }
+    @override
+    bool advanceTime(num time) {
+
+        _time += time;
+
+        if (_started == false) {
+            if (_time > _delay) {
+                _started = true;
+                if (_onStart != null) _onStart();
+            } else {
+                return true;
+            }
+        }
+
+        if (_animatables.length > 0) {
+            if (_animatables[0].advanceTime(time) == false) {
+                _animatables.removeAt(0);
+            }
+        }
+
+        if (_animatables.length == 0) {
+            _completed = true;
+            if (_onComplete != null) _onComplete();
+            return false;
+        } else {
+            return true;
+        }
     }
 
-    if (_animatables.length == 0) {
-      _completed = true;
-      if (_onComplete != null) _onComplete();
-      return false;
-    } else {
-      return true;
+    //----------------------------------------------------------------------------
+
+    /// The delay this [AnimatableChain] waits until it starts animating.
+    ///
+    /// The delay may be changed as long as the animation has not been started.
+    num get delay => _delay;
+
+    set delay(num value) {
+        if (_started == false) {
+            _time = _time + _delay - value;
+            _delay = value;
+        }
     }
-  }
 
-  //----------------------------------------------------------------------------
+    /// Indicates if this [AnimatableChain] is completed.
+    bool get isComplete => _completed;
 
-  /// The delay this [AnimatableChain] waits until it starts animating.
-  ///
-  /// The delay may be changed as long as the animation has not been started.
-  num get delay => _delay;
+    //----------------------------------------------------------------------------
 
-  set delay(num value) {
-    if (_started == false) {
-      _time = _time + _delay - value;
-      _delay = value;
+    /// The function that is called when an [AnimationChain] starts.
+    ///
+    /// This happens after the specified [delay].
+    void set onStart(void function()) {
+        _onStart = function;
     }
-  }
 
-  /// Indicates if this [AnimatableChain] is completed.
-  bool get isComplete => _completed;
-
-  //----------------------------------------------------------------------------
-
-  /// The function that is called when an [AnimationChain] starts.
-  ///
-  /// This happens after the specified [delay].
-  void set onStart(void function()) {
-    _onStart = function;
-  }
-
-  /// The function that is called when an [AnimationChain] is completed.
-  void set onComplete(void function()) {
-    _onComplete = function;
-  }
+    /// The function that is called when an [AnimationChain] is completed.
+    void set onComplete(void function()) {
+        _onComplete = function;
+    }
 }
