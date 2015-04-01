@@ -4,6 +4,7 @@ class Pencil {
 
     Board board;
     BlueBear.Pencil pencil;
+    BitmapData bitmapData;
 
     Pencil(this.board) {
         if (null == board) {
@@ -17,6 +18,8 @@ class Pencil {
         }
         if (null != pencil.image) {
             board.resourceManager.addBitmapData('image.' + pencil.name, board.resourceBasePath + pencil.image.fileName);
+        } else {
+            board.resourceManager.addBitmapData('image.' + pencil.name, board.resourceBasePath + pencil.pencilSet.sprite.fileName);
         }
     }
 
@@ -35,6 +38,13 @@ class Pencil {
     }
 
     BitmapData getBitmapData() {
-        return board.resourceManager.getBitmapData('image.' + pencil.name);
+        if (null == bitmapData) {
+            bitmapData = board.resourceManager.getBitmapData('image.' + pencil.name);
+            if (null == pencil.image) {
+                Rectangle spriteRectangle = new Rectangle(pencil.spriteX, pencil.spriteY, pencil.spriteWidth, pencil.spriteHeight);
+                bitmapData = new BitmapData.fromBitmapData(bitmapData, spriteRectangle);
+            }
+        }
+        return bitmapData;
     }
 }

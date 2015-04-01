@@ -143,6 +143,9 @@ class Board extends DisplayObjectContainer {
         map.name = 'map.' + contextMap.name;
         cellSize = contextMap.cellSize; // @todo load from contextMap
 
+        x = stage.stageWidth / 2; // Center origin
+        y = stage.stageHeight / 2;
+
         // Create layers
         for (BlueBear.Layer contextLayer in contextMap.layers) {
             Layer layer;

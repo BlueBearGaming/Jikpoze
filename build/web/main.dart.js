@@ -643,6 +643,11 @@ var $$ = Object.create(null);
         throw H.wrapException(P.ArgumentError$(other));
       return receiver > other;
     },
+    $le: function(receiver, other) {
+      if (typeof other !== "number")
+        throw H.wrapException(P.ArgumentError$(other));
+      return receiver <= other;
+    },
     $ge: function(receiver, other) {
       if (typeof other !== "number")
         throw H.wrapException(P.ArgumentError$(other));
@@ -3472,7 +3477,7 @@ var $$ = Object.create(null);
 ["bluebear", "lib/bluebear/bluebear.dart", , D, {
   "^": "",
   Context: {
-    "^": "Object;id,map>,mapItems",
+    "^": "Object;id,label,map>,mapItems",
     map$1: function($receiver, arg0) {
       return this.map.call$1(arg0);
     },
@@ -3480,6 +3485,7 @@ var $$ = Object.create(null);
       var t1, t2, t3;
       t1 = J.getInterceptor$asx(data);
       this.id = t1.$index(data, "id");
+      this.label = t1.$index(data, "label");
       this.map = D.Map$fromJsonData(t1.$index(data, "map"));
       if (null != t1.$index(data, "mapItems"))
         for (t1 = J.get$iterator$ax(t1.$index(data, "mapItems")), t2 = this.mapItems; t1.moveNext$0();) {
@@ -3489,7 +3495,7 @@ var $$ = Object.create(null);
         }
     },
     static: {Context$fromJsonData: function(data) {
-        var t1 = new D.Context(null, null, H.setRuntimeTypeInfo([], [D.MapItem]));
+        var t1 = new D.Context(null, null, null, H.setRuntimeTypeInfo([], [D.MapItem]));
         t1.Context$fromJsonData$1(data);
         return t1;
       }}
@@ -3500,7 +3506,12 @@ var $$ = Object.create(null);
       var t1 = J.getInterceptor$asx(data);
       this.name = t1.$index(data, "name");
       this.fileName = t1.$index(data, "fileName");
-    }
+    },
+    static: {Image$fromJsonData: function(data) {
+        var t1 = new D.Image(null, null);
+        t1.Image$fromJsonData$1(data);
+        return t1;
+      }}
   },
   Layer0: {
     "^": "Object;name>,label,type>,description,index>",
@@ -3550,8 +3561,8 @@ var $$ = Object.create(null);
     $isMapItem: true
   },
   Pencil0: {
-    "^": "Object;name>,label,description,type>,imageX<,imageY<,width>,height>,boundingBox,allowedLayerTypes,image<",
-    Pencil$fromJsonData$1: function(data) {
+    "^": "Object;pencilSet<,name>,label,description,type>,imageX<,imageY<,width>,height>,boundingBox,allowedLayerTypes,image<,spriteX<,spriteY<,spriteWidth<,spriteHeight<",
+    Pencil$fromJsonData$2: function(data, pencilSet) {
       var t1, t2, t3, point, t4;
       t1 = J.getInterceptor$asx(data);
       this.name = t1.$index(data, "name");
@@ -3571,30 +3582,36 @@ var $$ = Object.create(null);
       }
       for (t2 = J.get$iterator$ax(t1.$index(data, "allowedLayerTypes")), t3 = this.allowedLayerTypes; t2.moveNext$0();)
         t3.push(t2.get$current());
-      t2 = new D.Image(null, null);
-      t2.Image$fromJsonData$1(t1.$index(data, "image"));
-      this.image = t2;
+      if (null != t1.$index(data, "image"))
+        this.image = D.Image$fromJsonData(t1.$index(data, "image"));
+      this.spriteX = t1.$index(data, "spriteX");
+      this.spriteY = t1.$index(data, "spriteY");
+      this.spriteWidth = t1.$index(data, "spriteWidth");
+      this.spriteHeight = t1.$index(data, "spriteHeight");
     },
     $isPencil0: true,
-    static: {Pencil$fromJsonData: function(data) {
-        var t1 = new D.Pencil0(null, null, null, null, null, null, null, null, H.setRuntimeTypeInfo([], [U.Point]), H.setRuntimeTypeInfo([], [P.String]), null);
-        t1.Pencil$fromJsonData$1(data);
+    static: {Pencil$fromJsonData: function(data, pencilSet) {
+        var t1 = new D.Pencil0(pencilSet, null, null, null, null, null, null, null, null, H.setRuntimeTypeInfo([], [U.Point]), H.setRuntimeTypeInfo([], [P.String]), null, null, null, null, null);
+        t1.Pencil$fromJsonData$2(data, pencilSet);
         return t1;
       }}
   },
   PencilSet: {
-    "^": "Object;name>,label,pencils<",
+    "^": "Object;name>,label,pencils<,sprite,type>",
     PencilSet$fromJsonData$1: function(data) {
-      var t1, t2;
+      var t1, t2, t3;
       t1 = J.getInterceptor$asx(data);
       this.name = t1.$index(data, "name");
       this.label = t1.$index(data, "label");
-      for (t1 = J.get$iterator$ax(t1.$index(data, "pencils")), t2 = this.pencils; t1.moveNext$0();)
-        t2.push(D.Pencil$fromJsonData(t1.get$current()));
+      for (t2 = J.get$iterator$ax(t1.$index(data, "pencils")), t3 = this.pencils; t2.moveNext$0();)
+        t3.push(D.Pencil$fromJsonData(t2.get$current(), this));
+      if (null != t1.$index(data, "sprite"))
+        this.sprite = D.Image$fromJsonData(t1.$index(data, "sprite"));
+      this.type = t1.$index(data, "type");
     },
     $isPencilSet: true,
     static: {PencilSet$fromJsonData: function(data) {
-        var t1 = new D.PencilSet(null, null, H.setRuntimeTypeInfo([], [D.Pencil0]));
+        var t1 = new D.PencilSet(null, null, H.setRuntimeTypeInfo([], [D.Pencil0]), null, null);
         t1.PencilSet$fromJsonData$1(data);
         return t1;
       }}
@@ -7864,6 +7881,9 @@ var $$ = Object.create(null);
     $gt: function(_, other) {
       return this._duration > other.get$_duration();
     },
+    $le: function(_, other) {
+      return C.JSInt_methods.$le(this._duration, other.get$_duration());
+    },
     $ge: function(_, other) {
       return C.JSInt_methods.$ge(this._duration, other.get$_duration());
     },
@@ -9894,6 +9914,8 @@ var $$ = Object.create(null);
   },
   max: function(a, b) {
     var t1;
+    if (typeof a !== "number")
+      throw H.wrapException(P.ArgumentError$(a));
     if (a > b)
       return a;
     if (a < b)
@@ -10397,6 +10419,8 @@ var $$ = Object.create(null);
     "^": "Bitmap;bitmapData,displayObjectID,_x,_y,_pivotX,_pivotY,_scaleX,_scaleY,_skewX,_skewY,_display$_rotation,_alpha,_visible,_off,_mask,_blendMode,_filters,_cacheTextureQuad,_cacheDebugBorder,_display$_name,_parent,_transformationMatrix,_transformationMatrixRefresh,shadow,compositeOperation,userData,_eventStreams",
     hitTestInput$2: function(localX, localY) {
       var x, y, t1;
+      if (this.bitmapData == null)
+        return;
       x = C.JSNumber_methods.toInt$0(localX);
       y = C.JSNumber_methods.toInt$0(localY);
       if (x >= 0)
@@ -10407,9 +10431,12 @@ var $$ = Object.create(null);
           t1 = false;
       else
         t1 = false;
-      if (t1)
-        if (C.JSNumber_methods._shrOtherPositive$1(A.BitmapDataUpdateBatch$(this.bitmapData).getPixel32$2(x, y), 24) >= 128)
+      if (t1) {
+        t1 = this.bitmapData;
+        t1.toString;
+        if (C.JSNumber_methods._shrOtherPositive$1(A.BitmapDataUpdateBatch$(t1).getPixel32$2(x, y), 24) >= 128)
           return this;
+      }
       return;
     }
   },
@@ -10474,6 +10501,8 @@ var $$ = Object.create(null);
       }
       t1._display$_name = C.JSString_methods.$add("map.", contextMap.name);
       this.cellSize = contextMap.cellSize;
+      this.set$x(0, this.get$stage()._stageWidth / 2);
+      this.set$y(0, this.get$stage()._stageHeight / 2);
       for (t1 = contextMap.layers, t1 = new H.ListIterator(t1, t1.length, 0, null); t1.moveNext$0();) {
         contextLayer = t1.__internal$_current;
         t2 = this.map;
@@ -10493,7 +10522,7 @@ var $$ = Object.create(null);
         for (t3 = J.get$iterator$ax(t1.__internal$_current.get$pencils()); t3.moveNext$0();) {
           pencil = t3.__internal$_current;
           t4 = J.get$name$x(pencil);
-          t5 = new S.Pencil(this, pencil);
+          t5 = new S.Pencil(this, pencil, null);
           t5.Pencil$fromBlueBearPencil$2(this, pencil);
           t2.$indexSet(0, t4, t5);
         }
@@ -10813,7 +10842,7 @@ var $$ = Object.create(null);
       t1 = this.gridPencil;
       if (null == t1) {
         t1 = this.board;
-        t2 = new S.HexGridPencil(t1, null);
+        t2 = new S.HexGridPencil(t1, null, null);
         if (null == t1)
           H.throwExpression("board cannot be null");
         this.gridPencil = t2;
@@ -10877,7 +10906,7 @@ var $$ = Object.create(null);
       t1 = this.gridPencil;
       if (null == t1) {
         t1 = this.board;
-        t2 = new S.IsoGridPencil(t1, null);
+        t2 = new S.IsoGridPencil(t1, null, null);
         if (null == t1)
           H.throwExpression("board cannot be null");
         this.gridPencil = t2;
@@ -10974,7 +11003,7 @@ var $$ = Object.create(null);
       t1 = this.gridPencil;
       if (null == t1) {
         t1 = this.board;
-        t2 = new S.GridPencil(t1, null);
+        t2 = new S.GridPencil(t1, null, null);
         if (null == t1)
           H.throwExpression("board cannot be null");
         this.gridPencil = t2;
@@ -11090,7 +11119,7 @@ var $$ = Object.create(null);
     }
   },
   GridPencil: {
-    "^": "Pencil;board,pencil",
+    "^": "Pencil;board,pencil,bitmapData",
     getDisplayObject$1: function(point) {
       var t1, t2, t3, shape;
       t1 = H.setRuntimeTypeInfo([], [U._GraphicsCommand]);
@@ -11128,7 +11157,7 @@ var $$ = Object.create(null);
     }
   },
   HexGridPencil: {
-    "^": "GridPencil;board,pencil",
+    "^": "GridPencil;board,pencil,bitmapData",
     buildGraphics$1: function(g) {
       var size, t1, t2, t3, i;
       size = J.$div$n(this.board.cellSize, Math.cos(H.checkNum(2.617993877991494))) / 2;
@@ -11147,7 +11176,7 @@ var $$ = Object.create(null);
     }
   },
   IsoGridPencil: {
-    "^": "GridPencil;board,pencil",
+    "^": "GridPencil;board,pencil,bitmapData",
     buildGraphics$1: function(g) {
       var size, skewFactor, t1, t2, t3;
       size = J.$div$n(this.board.cellSize, 2);
@@ -11168,40 +11197,59 @@ var $$ = Object.create(null);
     }
   },
   Pencil: {
-    "^": "Object;board,pencil<",
+    "^": "Object;board,pencil<,bitmapData",
     getDisplayObject$1: function(point) {
-      var t1, t2, value, t3, bitmap, size, t4, normalWidth, normalHeight;
-      t1 = this.pencil;
-      t2 = J.getInterceptor$x(t1);
-      value = this.board.resourceManager._getResourceValue$2("BitmapData", C.JSString_methods.$add("image.", t2.get$name(t1)));
-      if (!J.getInterceptor(value).$isBitmapData)
-        H.throwExpression("dart2js_hint");
-      t3 = $.DisplayObject__nextID;
-      $.DisplayObject__nextID = t3 + 1;
-      bitmap = new S.HitboxBitmap(value, t3, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
+      var t1, value, spriteRectangle, t2, bitmap, size, t3, t4, normalWidth, normalHeight;
+      if (null == this.bitmapData) {
+        t1 = this.pencil;
+        value = this.board.resourceManager._getResourceValue$2("BitmapData", C.JSString_methods.$add("image.", J.get$name$x(t1)));
+        if (!J.getInterceptor(value).$isBitmapData)
+          H.throwExpression("dart2js_hint");
+        this.bitmapData = value;
+        if (null == t1.get$image()) {
+          spriteRectangle = H.setRuntimeTypeInfo(new U.Rectangle0(t1.get$spriteX(), t1.get$spriteY(), t1.get$spriteWidth(), t1.get$spriteHeight()), [null]);
+          t1 = new A.BitmapData(0, 0, null, null);
+          t1.BitmapData$fromBitmapData$2(this.bitmapData, spriteRectangle);
+          this.bitmapData = t1;
+        }
+      }
+      t1 = this.bitmapData;
+      t2 = $.DisplayObject__nextID;
+      $.DisplayObject__nextID = t2 + 1;
+      bitmap = new S.HitboxBitmap(t1, t2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
       size = this.board.cellSize;
+      t2 = this.pencil;
+      t1 = J.getInterceptor$x(t2);
       t3 = J.getInterceptor$ns(size);
-      t4 = t3.$mul(size, t2.get$width(t1));
+      t4 = t3.$mul(size, t1.get$width(t2));
       bitmap.set$scaleX(1);
       normalWidth = bitmap.get$width(bitmap);
-      bitmap.set$scaleX(normalWidth !== 0 ? J.$div$n(t4, normalWidth) : 1);
-      t2 = t3.$mul(size, t2.get$height(t1));
+      bitmap.set$scaleX(!J.$eq(normalWidth, 0) ? J.$div$n(t4, normalWidth) : 1);
+      t1 = t3.$mul(size, t1.get$height(t2));
       bitmap.set$scaleY(1);
       normalHeight = bitmap.get$height(bitmap);
-      bitmap.set$scaleY(normalHeight !== 0 ? J.$div$n(t2, normalHeight) : 1);
-      bitmap.set$x(0, J.$sub$n(t3.$mul(size, t1.get$imageX()), bitmap.get$boundsTransformed().width / 2));
-      bitmap.set$y(0, J.$sub$n(t3.$mul(size, t1.get$imageY()), bitmap.get$boundsTransformed().height / 2));
+      bitmap.set$scaleY(!J.$eq(normalHeight, 0) ? J.$div$n(t1, normalHeight) : 1);
+      bitmap.set$x(0, J.$sub$n(t3.$mul(size, t2.get$imageX()), J.$div$n(bitmap.get$boundsTransformed().width, 2)));
+      bitmap.set$y(0, J.$sub$n(t3.$mul(size, t2.get$imageY()), J.$div$n(bitmap.get$boundsTransformed().height, 2)));
       return bitmap;
     },
     Pencil$fromBlueBearPencil$2: function(board, pencil) {
-      var t1, t2, t3;
+      var t1, t2, t3, t4;
       if (null == this.board)
         throw H.wrapException("board cannot be null");
       t1 = this.pencil;
-      if (null != t1.get$image()) {
-        t2 = this.board.resourceManager;
-        t3 = C.JSString_methods.$add("image.", J.get$name$x(t1));
+      t2 = t1.get$image();
+      t3 = J.getInterceptor$x(t1);
+      t4 = this.board;
+      if (null != t2) {
+        t2 = t4.resourceManager;
+        t3 = C.JSString_methods.$add("image.", t3.get$name(t1));
         t1 = J.$add$ns(this.board.resourceBasePath, t1.get$image().get$fileName());
+        t2._addResource$4("BitmapData", t3, t1, A.BitmapData_load(t1, null));
+      } else {
+        t2 = t4.resourceManager;
+        t3 = C.JSString_methods.$add("image.", t3.get$name(t1));
+        t1 = J.$add$ns(this.board.resourceBasePath, t1.get$pencilSet().sprite.fileName);
         t2._addResource$4("BitmapData", t3, t1, A.BitmapData_load(t1, null));
       }
     },
@@ -11222,7 +11270,7 @@ var $$ = Object.create(null);
     $.DisplayObject__nextID = t6 + 1;
     board = new S.Board(canvas, null, null, null, t2, null, null, null, null, new O.ResourceManager(t3, t4), null, null, null, null, null, true, true, t5, true, true, false, true, "auto", true, 0, t6, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, true, false, null, null, [], null, false, "", null, T.Matrix$fromIdentity(), true, null, null, null, null);
     board.Board$2(canvas, t1);
-    board.queryApi$3("bluebear.engine.mapLoad", P.LinkedHashMap_LinkedHashMap$_literal(["contextId", board.contextId], null, null), board.get$loadMap());
+    board.queryApi$3("bluebear.engine.mapLoad", P.LinkedHashMap_LinkedHashMap$_literal(["contextId", board.contextId, "userContext", P.LinkedHashMap_LinkedHashMap$_literal(["viewCenter", P.LinkedHashMap_LinkedHashMap$_literal(["x", 0, "y", 0], null, null)], null, null), "loadContext", P.LinkedHashMap_LinkedHashMap$_literal(["topLeft", P.LinkedHashMap_LinkedHashMap$_literal(["x", -20, "y", -20], null, null), "bottomRight", P.LinkedHashMap_LinkedHashMap$_literal(["x", 20, "y", 20], null, null)], null, null)], null, null), board.get$loadMap());
   }, "call$0", "main$closure", 0, 0, 11]
 },
 1],
@@ -11261,18 +11309,22 @@ var $$ = Object.create(null);
     "^": "DisplayObject;",
     get$bounds: function() {
       var t1 = this.bitmapData;
-      t1 = H.setRuntimeTypeInfo(new U.Rectangle0(0, 0, t1._display$_width, t1._display$_height), [P.num]);
-      return t1;
+      return t1 == null ? H.setRuntimeTypeInfo(new U.Rectangle0(0, 0, 0, 0), [P.num]) : H.setRuntimeTypeInfo(new U.Rectangle0(0, 0, t1._display$_width, t1._display$_height), [P.num]);
     },
     hitTestInput$2: function(localX, localY) {
-      if (localX < 0 || localX >= this.bitmapData._display$_width)
+      var t1 = this.bitmapData;
+      if (t1 == null)
         return;
-      if (localY < 0 || localY >= this.bitmapData._display$_height)
+      if (localX < 0 || localX >= t1._display$_width)
+        return;
+      if (localY < 0 || localY >= t1._display$_height)
         return;
       return this;
     },
     render$1: function(renderState) {
-      renderState._engine$_renderContext.renderQuad$2(renderState, this.bitmapData._renderTextureQuad);
+      var t1 = this.bitmapData;
+      if (t1 != null)
+        renderState._engine$_renderContext.renderQuad$2(renderState, t1._renderTextureQuad);
     }
   },
   BitmapData: {
@@ -11285,6 +11337,14 @@ var $$ = Object.create(null);
     },
     render$1: function(renderState) {
       renderState._engine$_renderContext.renderQuad$2(renderState, this._renderTextureQuad);
+    },
+    BitmapData$fromBitmapData$2: function(bitmapData, rectangle) {
+      var t1;
+      this._display$_width = V.ensureInt(rectangle.width);
+      this._display$_height = V.ensureInt(rectangle.height);
+      t1 = bitmapData._renderTextureQuad;
+      this._display$_renderTexture = t1._renderTexture;
+      this._renderTextureQuad = t1.cut$1(rectangle);
     },
     BitmapData$fromRenderTextureQuad$3: function(renderTextureQuad, width, height) {
       width = renderTextureQuad._textureWidth + renderTextureQuad._offsetX;
@@ -11601,26 +11661,22 @@ var $$ = Object.create(null);
       C.JSArray_methods.removeAt$1(t1, childIndex);
     },
     get$bounds: function() {
-      var t1, left, $top, right, bottom, i, rectangle, left0, top0, right0, bottom0;
+      var t1, left, $top, right, bottom, i, rectangle;
       t1 = this._children;
       if (t1.length === 0)
         return A.DisplayObject.prototype.get$bounds.call(this);
       for (left = 1 / 0, $top = 1 / 0, right = -1 / 0, bottom = -1 / 0, i = 0; i < t1.length; ++i) {
         rectangle = t1[i].get$boundsTransformed();
-        left0 = rectangle.left;
-        if (left0 < left)
-          left = left0;
-        top0 = rectangle.top;
-        if (top0 < $top)
-          $top = top0;
-        right0 = left0 + rectangle.width;
-        if (right0 > right)
-          right = right0;
-        bottom0 = top0 + rectangle.height;
-        if (bottom0 > bottom)
-          bottom = bottom0;
+        if (J.$lt$n(rectangle.left, left))
+          left = rectangle.left;
+        if (J.$lt$n(rectangle.top, $top))
+          $top = rectangle.top;
+        if (J.$gt$n(J.$add$ns(rectangle.left, rectangle.width), right))
+          right = J.$add$ns(rectangle.left, rectangle.width);
+        if (J.$gt$n(J.$add$ns(rectangle.top, rectangle.height), bottom))
+          bottom = J.$add$ns(rectangle.top, rectangle.height);
       }
-      return H.setRuntimeTypeInfo(new U.Rectangle0(left, $top, right - left, bottom - $top), [P.num]);
+      return H.setRuntimeTypeInfo(new U.Rectangle0(left, $top, J.$sub$n(right, left), J.$sub$n(bottom, $top)), [P.num]);
     },
     hitTestInput$2: function(localX, localY) {
       var t1, i, hit, child, mask, matrix, t2, deltaX, deltaY, t3, t4, t5, t6, childX, childY, displayObject;
@@ -13659,45 +13715,77 @@ var $$ = Object.create(null);
         throw H.wrapException(P.Error$());
     },
     clip$1: function(_, rectangle) {
-      var right, left, t1, left0, bottom, $top, t2, top0, right0, bottom0, textureX, textureY;
+      var right, left, t1, left0, t2, $top, t3, top0, right0, bottom, bottom0, textureX, textureY;
       right = this._offsetX;
       left = right + this._textureWidth;
       t1 = rectangle.left;
-      left0 = right > t1 ? right : t1;
+      if (typeof t1 !== "number")
+        return H.iae(t1);
+      if (right > t1)
+        left0 = right;
+      else
+        left0 = t1;
       if (left < left0)
         left0 = left;
+      t2 = this._offsetY;
+      $top = t2 + this._textureHeight;
+      t3 = rectangle.top;
+      if (typeof t3 !== "number")
+        return H.iae(t3);
+      if (t2 > t3)
+        top0 = t2;
+      else
+        top0 = t3;
+      $top = $top < top0 ? $top : top0;
+      t2 = rectangle.width;
+      if (typeof t2 !== "number")
+        return H.iae(t2);
+      t2 = t1 + t2;
+      right0 = left < t2 ? left : t2;
+      right = right > right0 ? right : right0;
       bottom = this._offsetY;
-      $top = bottom + this._textureHeight;
-      t2 = rectangle.top;
-      top0 = bottom > t2 ? bottom : t2;
-      if ($top < top0)
-        top0 = $top;
-      t1 += rectangle.width;
-      right0 = left < t1 ? left : t1;
-      if (right > right0)
-        right0 = right;
-      t1 = t2 + rectangle.height;
-      bottom0 = $top < t1 ? $top : t1;
-      if (bottom > bottom0)
-        bottom0 = bottom;
+      t1 = bottom + this._textureHeight;
+      t2 = J.$add$ns(rectangle.top, rectangle.height);
+      if (typeof t2 !== "number")
+        return H.iae(t2);
+      if (t1 < t2)
+        bottom0 = t1;
+      else
+        bottom0 = t2;
+      bottom = bottom > bottom0 ? bottom : bottom0;
       t1 = this._rotation;
       if (t1 === 0) {
-        textureX = this._textureX - right + left0;
-        textureY = this._textureY - bottom + top0;
+        textureX = this._textureX - this._offsetX + left0;
+        textureY = this._textureY - this._offsetY + $top;
       } else if (t1 === 1) {
-        textureX = this._textureX + bottom - top0;
-        textureY = this._textureY - right + left0;
+        textureX = this._textureX + this._offsetY - $top;
+        textureY = this._textureY - this._offsetX + left0;
       } else if (t1 === 2) {
-        textureX = this._textureX + right - left0;
-        textureY = this._textureY + bottom - top0;
+        textureX = this._textureX + this._offsetX - left0;
+        textureY = this._textureY + this._offsetY - $top;
       } else if (t1 === 3) {
-        textureX = this._textureX - bottom + top0;
-        textureY = this._textureY + right - left0;
+        textureX = this._textureX - this._offsetY + $top;
+        textureY = this._textureY + this._offsetX - left0;
       } else {
         textureX = 0;
         textureY = 0;
       }
-      return L.RenderTextureQuad$(this._renderTexture, t1, left0, top0, textureX, textureY, right0 - left0, bottom0 - top0);
+      return L.RenderTextureQuad$(this._renderTexture, t1, left0, $top, textureX, textureY, right - left0, bottom - $top);
+    },
+    cut$1: function(rectangle) {
+      var renderTextureQuad, t1, t2;
+      renderTextureQuad = this.clip$1(0, rectangle);
+      t1 = renderTextureQuad._offsetX;
+      t2 = rectangle.left;
+      if (typeof t2 !== "number")
+        return H.iae(t2);
+      renderTextureQuad._offsetX = t1 - t2;
+      t2 = renderTextureQuad._offsetY;
+      t1 = rectangle.top;
+      if (typeof t1 !== "number")
+        return H.iae(t1);
+      renderTextureQuad._offsetY = t2 - t1;
+      return renderTextureQuad;
     },
     RenderTextureQuad$8: function(renderTexture, rotation, offsetX, offsetY, textureX, textureY, textureWidth, textureHeight) {
       var t1, t2, x4, y2, x3, y4, y3, x2, y1, x1, renderTextureWidth, renderTextureHeight, storePixelRatio;
@@ -14068,10 +14156,10 @@ var $$ = Object.create(null);
     },
     transformRectangle$2: function(rectangle, returnRectangle) {
       var rl, rr, rt, rb, t1, t2, t3, t4, t5, x1, t6, t7, t8, t9, y1, x2, y2, x3, y3, x4, y4, left, $top, right, bottom;
-      rl = C.JSNumber_methods.toDouble$0(rectangle.left);
-      rr = rectangle.left + rectangle.width;
-      rt = C.JSNumber_methods.toDouble$0(rectangle.top);
-      rb = rectangle.top + rectangle.height;
+      rl = J.toDouble$0$n(rectangle.left);
+      rr = J.toDouble$0$n(J.$add$ns(rectangle.left, rectangle.width));
+      rt = J.toDouble$0$n(rectangle.top);
+      rb = J.toDouble$0$n(J.$add$ns(rectangle.top, rectangle.height));
       t1 = this._data;
       t2 = t1[0];
       t3 = rl * t2;
@@ -14255,20 +14343,13 @@ var $$ = Object.create(null);
       return "Rectangle<" + H.S(new H.TypeImpl(H.runtimeTypeToString(H.getTypeArgumentByIndex(this, 0)), null)) + "> [left=" + H.S(this.left) + ", top=" + H.S(this.top) + ", width=" + H.S(this.width) + ", height=" + H.S(this.height) + "]";
     },
     get$right: function(_) {
-      return this.left + this.width;
+      return J.$add$ns(this.left, this.width);
     },
     get$bottom: function(_) {
-      return this.top + this.height;
+      return J.$add$ns(this.top, this.height);
     },
     contains$2: function(_, px, py) {
-      var t1, t2;
-      t1 = this.left;
-      if (t1 <= px) {
-        t2 = this.top;
-        t1 = t2 <= py && t1 + this.width > px && t2 + this.height > py;
-      } else
-        t1 = false;
-      return t1;
+      return J.$le$n(this.left, px) && J.$le$n(this.top, py) && J.$gt$n(J.$add$ns(this.left, this.width), px) && J.$gt$n(J.$add$ns(this.top, this.height), py);
     },
     get$x: function(_) {
       return this.left;
@@ -14326,7 +14407,7 @@ var $$ = Object.create(null);
 ["stagexl.internal.image_loader", "package:stagexl/src/internal/image_loader.dart", , N, {
   "^": "",
   ImageLoader: {
-    "^": "Object;image<,_image_loader$_completer,_url,_onLoadSubscription,_onErrorSubscription",
+    "^": "Object;image<,_completer,_url,_onLoadSubscription,_onErrorSubscription",
     _onWebpSupported$1: [function(webpSupported) {
       var t1, match, t2, t3;
       t1 = this._url;
@@ -14341,12 +14422,12 @@ var $$ = Object.create(null);
     _onImageLoad$1: [function($event) {
       this._onLoadSubscription.cancel$0();
       this._onErrorSubscription.cancel$0();
-      this._image_loader$_completer.complete$1(0, this.image);
+      this._completer.complete$1(0, this.image);
     }, "call$1", "get$_onImageLoad", 2, 0, 85, 72],
     _onImageError$1: [function($event) {
       this._onLoadSubscription.cancel$0();
       this._onErrorSubscription.cancel$0();
-      this._image_loader$_completer.completeError$1(new P.StateError("Failed to load image."));
+      this._completer.completeError$1(new P.StateError("Failed to load image."));
     }, "call$1", "get$_onImageError", 2, 0, 85, 72],
     ImageLoader$3: function(url, webpAvailable, corsEnabled) {
       var t1, t2, t3;
@@ -14415,7 +14496,7 @@ var $$ = Object.create(null);
         throw H.wrapException(P.StateError$("ResourceManager already contains a resource called '" + $name + "'"));
       else
         t1.$indexSet(0, key, resource);
-      resource._completer.future.then$1(new O.ResourceManager__addResource_closure(this));
+      resource._resources$_completer.future.then$1(new O.ResourceManager__addResource_closure(this));
     },
     _getResourceValue$2: function(kind, $name) {
       var resource, t1;
@@ -14502,7 +14583,7 @@ var $$ = Object.create(null);
     }
   },
   ResourceManagerResource: {
-    "^": "Object;kind,name>,url>,_resources$_value,_resources$_error,_completer",
+    "^": "Object;kind,name>,url>,_resources$_value,_resources$_error,_resources$_completer",
     toString$0: function(_) {
       return "ResourceManagerResource [kind=" + this.kind + ", name=" + this.name + ", url = " + H.S(this.url) + "]";
     },
@@ -14513,7 +14594,7 @@ var $$ = Object.create(null);
       return this._resources$_error;
     },
     get$complete: function(_) {
-      return this._completer.future;
+      return this._resources$_completer.future;
     },
     ResourceManagerResource$4: function(kind, $name, url, loader) {
       var t1, onError, result, t2;
@@ -14549,7 +14630,7 @@ var $$ = Object.create(null);
     "^": "Closure:40;this_2",
     call$0: function() {
       var t1 = this.this_2;
-      t1._completer.complete$1(0, t1);
+      t1._resources$_completer.complete$1(0, t1);
     }
   }
 }],
@@ -15500,6 +15581,11 @@ J.$indexSet$ax = function(receiver, a0, a1) {
   if ((receiver.constructor == Array || H.isJsIndexable(receiver, receiver[init.dispatchPropertyName])) && !receiver.immutable$list && a0 >>> 0 === a0 && a0 < receiver.length)
     return receiver[a0] = a1;
   return J.getInterceptor$ax(receiver).$indexSet(receiver, a0, a1);
+};
+J.$le$n = function(receiver, a0) {
+  if (typeof receiver == "number" && typeof a0 == "number")
+    return receiver <= a0;
+  return J.getInterceptor$n(receiver).$le(receiver, a0);
 };
 J.$lt$n = function(receiver, a0) {
   if (typeof receiver == "number" && typeof a0 == "number")
