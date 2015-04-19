@@ -6,6 +6,7 @@ class MapItem {
     String pencilName;
     int x;
     int y;
+    Jikpoze.Cell cell;
 
     MapItem.fromJsonData(var data) {
         id = data['id'];

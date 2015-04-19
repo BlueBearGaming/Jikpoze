@@ -2,7 +2,7 @@ part of jikpoze;
 
 class GridPencil extends Pencil {
 
-    GridPencil(Board board) : super(board);
+    GridPencil(Board board) : super(board, name: 'grid', type: 'grid');
 
     DisplayObject getDisplayObject(Point point) {
         Shape shape = new Shape();

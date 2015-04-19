@@ -3,48 +3,41 @@ part of jikpoze;
 class Pencil {
 
     Board board;
-    BlueBear.Pencil pencil;
     BitmapData bitmapData;
+    String name;
+    String type;
+    num width;
+    num height;
+    num imageX;
+    num imageY;
 
-    Pencil(this.board) {
+    Pencil(this.board, {String name, String type, num width, num height, num imageX, num imageY}) {
         if (null == board) {
             throw 'board cannot be null';
         }
-    }
-
-    Pencil.fromBlueBearPencil(this.board, this.pencil) {
-        if (null == board) {
-            throw 'board cannot be null';
+        if (null == name) {
+            throw 'name cannot be null';
         }
-        if (null != pencil.image) {
-            board.resourceManager.addBitmapData('image.' + pencil.name, board.resourceBasePath + pencil.image.fileName);
-        } else {
-            board.resourceManager.addBitmapData('image.' + pencil.name, board.resourceBasePath + pencil.pencilSet.sprite.fileName);
-        }
+        this.name = name;
+        this.type = type;
+        this.width = width;
+        this.height = height;
+        this.imageX = imageX;
+        this.imageY = imageY;
+        board.pencils[name] = this;
     }
 
     DisplayObject getDisplayObject(Point point) {
-        Bitmap bitmap = new HitboxBitmap(getBitmapData());
+        Bitmap bitmap = new HitboxBitmap(bitmapData);
         updateBitmap(bitmap);
         return bitmap;
     }
 
     void updateBitmap(Bitmap bitmap) {
         int size = board.cellSize;
-        bitmap.width = size * pencil.width;
-        bitmap.height = size * pencil.height;
-        bitmap.x = size * pencil.imageX - bitmap.width / 2;
-        bitmap.y = size * pencil.imageY - bitmap.height / 2;
-    }
-
-    BitmapData getBitmapData() {
-        if (null == bitmapData) {
-            bitmapData = board.resourceManager.getBitmapData('image.' + pencil.name);
-            if (null == pencil.image) {
-                Rectangle spriteRectangle = new Rectangle(pencil.spriteX, pencil.spriteY, pencil.spriteWidth, pencil.spriteHeight);
-                bitmapData = new BitmapData.fromBitmapData(bitmapData, spriteRectangle);
-            }
-        }
-        return bitmapData;
+        bitmap.width = size * width;
+        bitmap.height = size * height;
+        bitmap.x = size * imageX - bitmap.width / 2;
+        bitmap.y = size * imageY - bitmap.height / 2;
     }
 }

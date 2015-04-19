@@ -20,36 +20,11 @@ class SquareMap extends DisplayObjectContainer {
         this.board = board;
     }
 
-    Cell createCell(Layer layer, Point point, Pencil pencil, [bool callApi = true]) {
-        if (null == layer) {
-            throw 'layer cannot be null';
+    Cell createCell(Layer layer, Point point, Pencil pencil) {
+        if (layer.type != pencil.type) {
+            print("Warning ! Layer and pencil types does not match: ${layer.type} != ${pencil.type} for layer '${layer.name}' and pencil '${pencil.name}' at position ${point.x}, ${point.y}");
+            return null;
         }
-        if (null == point) {
-            throw 'point cannot be null';
-        }
-        if (null != layer.layer && null != pencil.pencil && callApi) {
-            Object json = {
-                "contextId": board.contextId,
-                "mapItems": [{
-                    "layerName": layer.layer.name,
-                    "pencilName": pencil.pencil.name,
-                    "x": point.x,
-                    "y": point.y
-                }]
-            };
-            board.queryApi('bluebear.editor.mapUpdate', json, (response) {
-                try{
-                    print(Convert.JSON.decode(response));
-                } catch (e) {
-                    print(response);
-                }
-            });
-        }
-        removeCell(layer, point);
-        return doCreateCell(layer, point, pencil);
-    }
-
-    Cell doCreateCell(Layer layer, Point point, Pencil pencil) {
         Cell cell = new Cell(layer, point, pencil);
         if (layer.type == 'grid' && !board.showGrid) {
             cell.visible = false;
@@ -85,8 +60,8 @@ class SquareMap extends DisplayObjectContainer {
 
     void renderCell(Layer layer, Point point) {
         if (layer.cells.containsKey(point)) {
-            //layer.cells[point].draw();
-        } else if (layer.layer.type == 'grid') {
+            //layer.cells[point].draw(); // Not necessary anymore ?
+        } else if (layer.type == 'grid') {
             createCell(layer, point, getGridPencil());
         }
     }
@@ -103,7 +78,7 @@ class SquareMap extends DisplayObjectContainer {
     }
 
     Point getBottomRightViewPointForCache() {
-        return new Point(-board.x + stage.stageWidth * (1 + 1/3), -board.y + stage.stageHeight * (1 + 1/3));
+        return new Point(-board.x + stage.stageWidth * (1 + 1 / 3), -board.y + stage.stageHeight * (1 + 1 / 3));
     }
 
     Point gamePointToViewPoint(Point gamePoint) {
@@ -140,13 +115,22 @@ class SquareMap extends DisplayObjectContainer {
                 return ac.layer.index - bc.layer.index;
             }
         }
-        if (ac.position.y == bc.position.y) { // if on same column
-            if (ac.position.x == bc.position.x) { // if exactly same position
-                return ac.layer.index - bc.layer.index; // then the layer's index will sort them
+        // if on same column
+        if (ac.position.y == bc.position.y) {
+            // if exactly same position
+            if (ac.position.x == bc.position.x) {
+                // then the layer's index will sort them
+                if (ac.layer.index == bc.layer.index) {
+                    // If same layer index (case when hovering with pencil in edition mode)
+                    return ac.zIndex - bc.zIndex;
+                }
+                return ac.layer.index - bc.layer.index;
             }
-            return ac.position.x - bc.position.x; // left to right order
+            // left to right order
+            return ac.position.x - bc.position.x;
         }
-        return ac.position.y - bc.position.y; // back to front order
+        // back to front order
+        return ac.position.y - bc.position.y;
     }
 
     void renderLayerLine(Layer layer, int x1, int y1, int x2, int y2) {

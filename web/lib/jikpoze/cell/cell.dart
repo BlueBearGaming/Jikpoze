@@ -5,6 +5,7 @@ class Cell extends DisplayObjectContainer {
     SquareMap map;
     Point position;
     Pencil pencil;
+    int zIndex = 0;
 
     Cell(this.layer, this.position, this.pencil) {
         if (null == layer) {
@@ -19,7 +20,6 @@ class Cell extends DisplayObjectContainer {
         layer.cells[position] = this;
         map = layer.map;
         map.addChild(this);
-        attachEvents();
         draw();
     }
 
@@ -29,35 +29,6 @@ class Cell extends DisplayObjectContainer {
         y = viewPoint.y;
         DisplayObject child = pencil.getDisplayObject(position);
         addChild(child);
-    }
-
-    void attachEvents() {
-        onMouseClick.listen((MouseEvent e) {
-            Board board = layer.map.board;
-            if (board.dragging != null) {
-                return;
-            }
-            // remove large mouse offset
-            if (e.stageX - 2 > board.dragMouseEvent.stageX || board.dragMouseEvent.stageX > e.stageX + 2) {
-                return;
-            }
-            if (e.stageY - 2 > board.dragMouseEvent.stageY || board.dragMouseEvent.stageY > e.stageY + 2) {
-                return;
-            }
-            try {
-                Pencil selectedPencil = board.getSelectedPencil();
-                Layer targetLayer = board.getSelectedLayer();
-                if (targetLayer.cells.containsKey(position)) {
-                    Cell cell = layer.map.removeCell(targetLayer, position);
-                    if (cell.pencil == selectedPencil) {
-                        return;
-                    }
-                }
-                layer.map.createCell(targetLayer, position, selectedPencil);
-            } catch (exception) {
-                print(exception);
-            }
-        });
     }
 
     static int getPointHashCode(Point point) {

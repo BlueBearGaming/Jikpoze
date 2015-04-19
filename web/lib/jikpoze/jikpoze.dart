@@ -3,10 +3,8 @@ library jikpoze;
 import 'dart:html' as Html;
 import 'dart:collection' as Col;
 import 'dart:math' as Math;
-import 'dart:convert' as Convert;
 import 'package:stagexl/stagexl.dart';
 import 'jenkinshasher.dart';
-import '../bluebear/bluebear.dart' as BlueBear;
 
 part 'board/board.dart';
 
