@@ -6,11 +6,8 @@ class HexMap extends SquareMap {
         skewFactor = Math.cos(Math.PI / 6);
     }
 
-    Pencil getGridPencil() {
-        if (null == gridPencil) {
-            gridPencil = new HexGridPencil(board);
-        }
-        return gridPencil;
+    Pencil _createGridPencil() {
+        return new HexGridPencil(board);
     }
 
     Point gamePointToViewPoint(Point gamePoint) {

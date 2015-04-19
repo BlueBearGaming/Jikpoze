@@ -6,16 +6,13 @@ part of bluebear;
  */
 class Editor extends Base {
 
-    Context context;
     String layerSelectorName;
     String pencilSelectorName;
-    String endPoint;
-    int contextId;
-
     Jikpoze.Cell debugPointer;
 
     Editor(canvas, Col.LinkedHashMap options) : super(canvas, options) {
         showGrid = true;
+        Jikpoze.GridPencil.showCoordinates = true;
     }
 
     void parseOptions(Col.HashMap options) {
@@ -30,6 +27,8 @@ class Editor extends Base {
     }
 
     void attachStageEvents() {
+        super.attachStageEvents();
+
         // Disabled for the moment: was causing issue with edition
 //        stage.onMouseWheel.listen((MouseEvent e) {
 //            if (e.deltaY.isNegative) {
@@ -41,42 +40,28 @@ class Editor extends Base {
 //            }
 //        });
 
-        stage.onMouseDown.listen((MouseEvent e) {
-            dragMouseEvent = e;
-            dragging = new Point(e.stageX, e.stageY);
-        });
-
-
-        stage.onMouseUp.listen((MouseEvent e) {
-            dragging = null;
-            map.updateGrid();
-            //map.updateCells(); //@todo: query missing cells
-        });
-
-        stage.onMouseMove.listen((MouseEvent e) {
-            if (dragging != null) {
-                x += e.stageX - dragging.x;
-                y += e.stageY - dragging.y;
-                dragging = new Point(e.stageX, e.stageY);
+        createDebugPointer (Point position) {
+            debugPointer = map.createCell(getSelectedLayer(), position, getSelectedPencil());
+            if (null == debugPointer) {
+                return;
             }
-        });
+            debugPointer.alpha = 0.6;
+            debugPointer.zIndex = 1000;
+            map.sortChildren(map.sortCells);
+        }
 
         stage.onMouseMove.listen((MouseEvent e) {
             // Display transparent cell under the mouse cursor to show where the "pencil" is
             Point cellPosition = viewPointToGamePoint(new Point(e.stageX, e.stageY));
             Point position = gamePointToViewPoint(cellPosition);
             if (null == debugPointer) {
-                debugPointer = map.createCell(getSelectedLayer(), cellPosition, getSelectedPencil());
-                if (null == debugPointer) {
-                    return;
-                }
+                createDebugPointer(cellPosition);
             }
             if (debugPointer.pencil != getSelectedPencil()) {
                 debugPointer.layer.cells.remove(debugPointer.position);
                 map.removeChild(debugPointer);
-                debugPointer = map.createCell(getSelectedLayer(), cellPosition, getSelectedPencil());
+                createDebugPointer(cellPosition);
             }
-            debugPointer.alpha = 0.6;
             debugPointer.x = position.x;
             debugPointer.y = position.y;
         });

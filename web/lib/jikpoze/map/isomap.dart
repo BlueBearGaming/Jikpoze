@@ -26,11 +26,8 @@ class IsoMap extends SquareMap {
         }
     }
 
-    Pencil getGridPencil() {
-        if (null == gridPencil) {
-            gridPencil = new IsoGridPencil(board);
-        }
-        return gridPencil;
+    Pencil _createGridPencil() {
+        return new IsoGridPencil(board);
     }
 
     Point gamePointToViewPoint(Point gamePoint) {

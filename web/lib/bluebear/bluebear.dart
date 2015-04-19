@@ -10,11 +10,14 @@ import '../jikpoze/jikpoze.dart' as Jikpoze;
 // Applications
 part 'application/base.dart';
 part 'application/editor.dart';
+part 'application/game.dart';
 
 // Events
 part 'event/engineevent.dart';
 part 'event/loadcontextrequest.dart';
 part 'event/loadcontextresponse.dart';
+part 'event/mapitemclickrequest.dart';
+part 'event/mapitemclickresponse.dart';
 
 // Entities
 part 'entity/context.dart';

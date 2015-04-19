@@ -7,8 +7,6 @@ part of bluebear;
 abstract class Base extends Jikpoze.Board {
 
     Context context;
-    String layerSelectorName;
-    String pencilSelectorName;
     String endPoint;
     int contextId;
 
@@ -32,7 +30,28 @@ abstract class Base extends Jikpoze.Board {
         }
     }
 
-    void attachStageEvents();
+    void attachStageEvents() {
+        stage.onMouseDown.listen((MouseEvent e) {
+            dragMouseEvent = e;
+            dragging = new Point(e.stageX, e.stageY);
+        });
+
+
+        stage.onMouseUp.listen((MouseEvent e) {
+            dragging = null;
+            map.updateGrid();
+            //map.updateCells(); //@todo: query missing cells
+        });
+
+        stage.onMouseMove.listen((MouseEvent e) {
+            if (dragging != null) {
+                x += e.stageX - dragging.x;
+                y += e.stageY - dragging.y;
+                dragging = new Point(e.stageX, e.stageY);
+            }
+        });
+    }
+
     void attachMapItemEvents(MapItem mapItem);
 
     Html.HttpRequest queryApi(String eventName, Object json, Function handler) {
@@ -95,11 +114,18 @@ abstract class Base extends Jikpoze.Board {
         });
     }
 
+    void updateMap(String responseText) {
+        if (responseText.isEmpty) {
+            throw "Server returned an empty string";
+        }
+        EngineEvent response = new EngineEvent.fromJson(responseText);
+        // @todo handle response
+    }
+
     void loadLayers() {
         for (Layer contextLayer in context.map.layers) {
             new Jikpoze.Layer(map, contextLayer.name, contextLayer.type, contextLayer.index);
         }
-        new Jikpoze.Layer(map, 'debug', 'debug', 1000);
     }
 
     void loadPencils() {

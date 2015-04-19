@@ -6,6 +6,7 @@ class MapItem {
     String pencilName;
     int x;
     int y;
+    List<String> listeners;
     Jikpoze.Cell cell;
 
     MapItem.fromJsonData(var data) {
@@ -14,5 +15,6 @@ class MapItem {
         pencilName = data['pencilName'];
         x = data['x'];
         y = data['y'];
+        listeners = data['listeners'];
     }
 }

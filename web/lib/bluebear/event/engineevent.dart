@@ -17,6 +17,9 @@ class EngineEvent {
             case LoadContextRequest.code:
                 data = new LoadContextResponse.fromJsonData(decoded['data']);
                 break;
+            case MapItemClickRequest.code:
+                data = new MapItemClickResponse.fromJsonData(decoded['data']);
+                break;
             default:
                 throw 'Unknown event $name';
         }

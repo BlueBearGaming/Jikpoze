@@ -19,4 +19,11 @@ class Layer {
             map.updateGrid();
         }
     }
+
+    void clear() {
+        for (Cell cell in cells.values) {
+            map.removeChild(cell);
+        }
+        cells.clear();
+    }
 }

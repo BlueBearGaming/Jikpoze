@@ -66,11 +66,18 @@ class SquareMap extends DisplayObjectContainer {
         }
     }
 
-    Pencil getGridPencil() {
+    Pencil getGridPencil([bool forceNew = false]) {
+        if (forceNew) {
+            return _createGridPencil();
+        }
         if (null == gridPencil) {
-            gridPencil = new GridPencil(board);
+            gridPencil = _createGridPencil();
         }
         return gridPencil;
+    }
+
+    Pencil _createGridPencil() {
+        return new GridPencil(board);
     }
 
     Point getTopLeftViewPointForCache() {

@@ -2,14 +2,20 @@ part of jikpoze;
 
 class GridPencil extends Pencil {
 
-    GridPencil(Board board) : super(board, name: 'grid', type: 'grid');
+    Graphics graphics;
+    static bool showCoordinates = false;
+
+    GridPencil(Board board) : super(board, name: 'grid', type: 'grid') {
+        graphics = new Graphics();
+        buildGraphics(graphics);
+        graphics.strokeColor(Color.Gray, 0.2);
+        graphics.fillColor(Color.Transparent);
+    }
 
     DisplayObject getDisplayObject(Point point) {
         Shape shape = new Shape();
-        buildGraphics(shape.graphics);
-        shape.graphics.strokeColor(Color.Gray, 0.2);
-        shape.graphics.fillColor(Color.Transparent);
-        if (null != point) {
+        shape.graphics = graphics;
+        if (null != point && showCoordinates) {
             return new CoordinatedGridPencil(shape, point);
         }
         return shape;
