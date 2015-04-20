@@ -41,7 +41,7 @@ class Editor extends Base {
 //        });
 
         createDebugPointer (Point position) {
-            debugPointer = map.createCell(getSelectedLayer(), position, getSelectedPencil());
+            debugPointer = map.createCell(selectedLayer, position, selectedPencil);
             if (null == debugPointer) {
                 return;
             }
@@ -57,7 +57,7 @@ class Editor extends Base {
             if (null == debugPointer) {
                 createDebugPointer(cellPosition);
             }
-            if (debugPointer.pencil != getSelectedPencil()) {
+            if (debugPointer.pencil != selectedPencil) {
                 debugPointer.layer.cells.remove(debugPointer.position);
                 map.removeChild(debugPointer);
                 createDebugPointer(cellPosition);
@@ -81,8 +81,7 @@ class Editor extends Base {
             Point position = viewPointToGamePoint(new Point(e.stageX, e.stageY));
 
             try {
-                Jikpoze.Pencil selectedPencil = getSelectedPencil();
-                Jikpoze.Layer targetLayer = getSelectedLayer();
+                Jikpoze.Layer targetLayer = selectedLayer;
                 if (targetLayer.cells.containsKey(position)) {
                     Jikpoze.Cell cellToRemove = removeCell(targetLayer, position);
                     if (cellToRemove.pencil == selectedPencil) {
@@ -108,7 +107,7 @@ class Editor extends Base {
         });
     }
 
-    Jikpoze.Layer getSelectedLayer() {
+    Jikpoze.Layer get selectedLayer {
         Html.ElementList els = Html.querySelectorAll('[name="$layerSelectorName"]');
         for (Html.Element el in els) {
             if ('SELECT' == el.tagName) {
@@ -118,7 +117,7 @@ class Editor extends Base {
         throw "No layer selected or missing layer";
     }
 
-    Jikpoze.Pencil getSelectedPencil() {
+    Jikpoze.Pencil get selectedPencil {
         Html.ElementList els = Html.querySelectorAll('[name="$pencilSelectorName"]');
         for (Html.Element el in els) {
             if ('SELECT' == el.tagName) {

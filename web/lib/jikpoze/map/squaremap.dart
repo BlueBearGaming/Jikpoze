@@ -7,7 +7,7 @@ part of jikpoze;
 class SquareMap extends DisplayObjectContainer {
 
     Board board;
-    Pencil gridPencil;
+    Pencil _gridPencil;
     Col.LinkedHashMap<String, Layer> layers = new Col.LinkedHashMap<String, Layer>();
     num skewFactor = 1;
     int renderOffset = 1;
@@ -18,6 +18,13 @@ class SquareMap extends DisplayObjectContainer {
         }
         board.addChild(this);
         this.board = board;
+    }
+
+    Pencil get gridPencil {
+        if (null == _gridPencil) {
+            _gridPencil = new GridPencil(board);
+        }
+        return _gridPencil;
     }
 
     Cell createCell(Layer layer, Point point, Pencil pencil) {
@@ -45,8 +52,8 @@ class SquareMap extends DisplayObjectContainer {
     void updateGrid() {
         for (Layer layer in layers.values) {
             if (layer.type == 'grid') {
-                Point topLeft = viewPointToGamePoint(getTopLeftViewPointForCache());
-                Point bottomRight = viewPointToGamePoint(getBottomRightViewPointForCache());
+                Point topLeft = viewPointToGamePoint(cacheViewPort.topLeft);
+                Point bottomRight = viewPointToGamePoint(cacheViewPort.bottomRight);
                 int dist = (bottomRight.x - topLeft.x).floor();
                 int x = topLeft.x.floor();
                 int y = topLeft.y.floor();
@@ -62,30 +69,17 @@ class SquareMap extends DisplayObjectContainer {
         if (layer.cells.containsKey(point)) {
             //layer.cells[point].draw(); // Not necessary anymore ?
         } else if (layer.type == 'grid') {
-            createCell(layer, point, getGridPencil());
+            createCell(layer, point, gridPencil);
         }
     }
 
-    Pencil getGridPencil([bool forceNew = false]) {
-        if (forceNew) {
-            return _createGridPencil();
-        }
-        if (null == gridPencil) {
-            gridPencil = _createGridPencil();
-        }
-        return gridPencil;
-    }
-
-    Pencil _createGridPencil() {
-        return new GridPencil(board);
-    }
-
-    Point getTopLeftViewPointForCache() {
-        return new Point(-board.x - stage.stageWidth / 3, -board.y - stage.stageHeight / 3);
-    }
-
-    Point getBottomRightViewPointForCache() {
-        return new Point(-board.x + stage.stageWidth * (1 + 1 / 3), -board.y + stage.stageHeight * (1 + 1 / 3));
+    Rectangle get cacheViewPort {
+        return new Rectangle(
+            -board.x - stage.stageWidth / 3,
+            -board.y - stage.stageHeight / 3,
+            stage.stageWidth * (1 + 2 / 3),
+            stage.stageHeight * (1 + 2 / 3)
+        );
     }
 
     Point gamePointToViewPoint(Point gamePoint) {
@@ -149,5 +143,14 @@ class SquareMap extends DisplayObjectContainer {
             y = (y1 + dy * (x - x1) / dx).floor();
             renderCell(layer, new Point(x, y));
         }
+    }
+
+    void buildCellGraphics(Graphics g) {
+        int size = (board.cellSize / 2).floor();
+        g.moveTo(size, size);
+        g.lineTo(size, -size);
+        g.lineTo(-size, -size);
+        g.lineTo(-size, size);
+        g.lineTo(size, size);
     }
 }

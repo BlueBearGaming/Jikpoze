@@ -37,11 +37,11 @@ class Board extends DisplayObjectContainer {
         }
     }
 
-    Point getTopLeftViewPoint() =>
-        viewPointToGamePoint(stage.contentRectangle.topLeft);
-
-    Point getBottomRightViewPoint() =>
-        viewPointToGamePoint(stage.contentRectangle.bottomRight);
+    Rectangle get gameViewPort {
+        Point topLeft = viewPointToGamePoint(stage.contentRectangle.topLeft);
+        Point bottomRight = viewPointToGamePoint(stage.contentRectangle.bottomRight);
+        return new Rectangle(topLeft.x, topLeft.y, bottomRight.x - topLeft.x, bottomRight.y - bottomRight.y);
+    }
 
     Point gamePointToViewPoint(Point gamePoint) {
         return map.gamePointToViewPoint(gamePoint);

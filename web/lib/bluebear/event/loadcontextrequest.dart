@@ -7,7 +7,7 @@ class LoadContextRequest {
 
     LoadContextRequest(this.contextId);
 
-    Object getJson() {
+    Object get json {
         return {
             "contextId": contextId,
             "userContext": {

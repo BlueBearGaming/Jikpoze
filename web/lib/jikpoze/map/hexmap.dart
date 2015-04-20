@@ -6,10 +6,6 @@ class HexMap extends SquareMap {
         skewFactor = Math.cos(Math.PI / 6);
     }
 
-    Pencil _createGridPencil() {
-        return new HexGridPencil(board);
-    }
-
     Point gamePointToViewPoint(Point gamePoint) {
         num viewX = gamePoint.x * board.cellSize;
         num viewY = gamePoint.y * board.cellSize * skewFactor;
@@ -28,5 +24,15 @@ class HexMap extends SquareMap {
             gameX = ((x - board.cellSize / 2) / board.cellSize).round();
         }
         return new Point(gameX, gameY);
+    }
+
+    void buildCellGraphics(Graphics g) {
+        int numberOfSides = 6; // hexagon
+        num a = Math.PI / 2;
+        num size = board.cellSize / Math.cos(a + 2 * Math.PI / numberOfSides) / 2;
+        g.moveTo(size * Math.cos(a), size * Math.sin(a));
+        for (int i = 1; i <= numberOfSides; i++) {
+            g.lineTo(size * Math.cos(a + i * 2 * Math.PI / numberOfSides), size * Math.sin(a + i * 2 * Math.PI / numberOfSides));
+        }
     }
 }

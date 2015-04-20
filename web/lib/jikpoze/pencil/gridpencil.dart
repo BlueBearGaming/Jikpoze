@@ -7,26 +7,25 @@ class GridPencil extends Pencil {
 
     GridPencil(Board board) : super(board, name: 'grid', type: 'grid') {
         graphics = new Graphics();
-        buildGraphics(graphics);
+        board.map.buildCellGraphics(graphics);
         graphics.strokeColor(Color.Gray, 0.2);
         graphics.fillColor(Color.Transparent);
     }
 
     DisplayObject getDisplayObject(Point point) {
-        Shape shape = new Shape();
-        shape.graphics = graphics;
+        Sprite sprite = new Sprite();
+        sprite.graphics = graphics;
         if (null != point && showCoordinates) {
-            return new CoordinatedGridPencil(shape, point);
+            sprite.addChild(getCoordinates(point));
         }
-        return shape;
+        return sprite;
     }
 
-    void buildGraphics(Graphics g) {
-        int size = (board.cellSize / 2).floor();
-        g.moveTo(size, size);
-        g.lineTo(size, -size);
-        g.lineTo(-size, -size);
-        g.lineTo(-size, size);
-        g.lineTo(size, size);
+    TextField getCoordinates(Point point) {
+        TextFormat format = new TextFormat('Monospace', 10, Color.LightGray);
+        TextField coordinates = new TextField('${point.x},${point.y}', format);
+        coordinates.x = -10;
+        coordinates.y = -5;
+        return coordinates;
     }
 }

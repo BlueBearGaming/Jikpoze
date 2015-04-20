@@ -9,8 +9,8 @@ class IsoMap extends SquareMap {
     void updateGrid() {
         for (Layer layer in layers.values) {
             if (layer.type == 'grid') {
-                Point topLeft = viewPointToGamePoint(getTopLeftViewPointForCache());
-                Point bottomRight = viewPointToGamePoint(getBottomRightViewPointForCache());
+                Point topLeft = viewPointToGamePoint(cacheViewPort.topLeft);
+                Point bottomRight = viewPointToGamePoint(cacheViewPort.bottomRight);
                 int dist = (bottomRight.distanceTo(topLeft) / 2).ceil();
                 int x = topLeft.x.floor();
                 int y = topLeft.y.floor();
@@ -26,10 +26,6 @@ class IsoMap extends SquareMap {
         }
     }
 
-    Pencil _createGridPencil() {
-        return new IsoGridPencil(board);
-    }
-
     Point gamePointToViewPoint(Point gamePoint) {
         num viewX = (gamePoint.x - gamePoint.y) * board.cellSize / 2;
         num viewY = (gamePoint.x + gamePoint.y) * board.cellSize * skewFactor;
@@ -42,5 +38,15 @@ class IsoMap extends SquareMap {
         num gameX = (y / 2 / skewFactor + x) / board.cellSize;
         num gameY = (y / 2 / skewFactor - x) / board.cellSize;
         return new Point(gameX.floor(), gameY.floor());
+    }
+
+    void buildCellGraphics(Graphics g) {
+        num size = board.cellSize / 2;
+        num skewFactor = board.map.skewFactor * 2;
+        g.moveTo(0, size * skewFactor);
+        g.lineTo(size, 0);
+        g.lineTo(0, -size * skewFactor);
+        g.lineTo(-size, 0);
+        g.lineTo(0, size * skewFactor);
     }
 }

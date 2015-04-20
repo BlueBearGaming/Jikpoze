@@ -22,9 +22,7 @@ part 'cell/cell.dart';
 // Pencils
 part 'pencil/pencil.dart';
 part 'pencil/gridpencil.dart';
-part 'pencil/isogridpencil.dart';
-part 'pencil/hexgridpencil.dart';
-part 'pencil/coordinatedgridpencil.dart';
+part 'pencil/selectionpencil.dart';
 
 // Bitmaps
 part 'bitmap/hitboxbitmap.dart';

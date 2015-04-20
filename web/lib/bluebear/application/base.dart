@@ -12,7 +12,7 @@ abstract class Base extends Jikpoze.Board {
 
     Base(canvas, Col.LinkedHashMap options) : super(canvas, options) {
         LoadContextRequest contextRequest = new LoadContextRequest(contextId);
-        queryApi(LoadContextRequest.code, contextRequest.getJson(), loadMap);
+        queryApi(LoadContextRequest.code, contextRequest.json, loadMap);
     }
 
     void parseOptions(Col.HashMap options) {
@@ -178,5 +178,9 @@ abstract class Base extends Jikpoze.Board {
                 pencils[pencil.name].bitmapData = bitmapData;
             }
         }
+    }
+
+    void clearSelection() {
+        map.layers['selection'].clear();
     }
 }

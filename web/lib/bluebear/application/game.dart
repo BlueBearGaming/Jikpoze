@@ -30,10 +30,6 @@ class Game extends Base {
         });
     }
 
-    void clearSelection() {
-        map.layers['selection'].clear();
-    }
-
     void attachMapItemEvents(MapItem mapItem) {
         if (null == mapItem.cell) {
             // This means the object has no representation on the board for some reason (check logs)
@@ -55,24 +51,9 @@ class Game extends Base {
             }
 
             e.stopImmediatePropagation();
-            MapItemClickRequest mapItemClickRequest = new MapItemClickRequest(contextId, mapItem);
-            queryApi(MapItemClickRequest.code, mapItemClickRequest.getJson(), (String responseText) {
-                if (responseText.isEmpty) {
-                    throw "Server returned an empty string";
-                }
 
-                clearSelection();
-                EngineEvent response = new EngineEvent.fromJson(responseText);
-
-                Jikpoze.GridPencil selectionPencil = map.getGridPencil(true);
-                selectionPencil.type = 'selection';
-                selectionPencil.graphics.strokeColor(Color.DarkBlue, 1);
-                selectionPencil.graphics.fillColor(Color.Blue);
-                for (MapItem mapItem in (response.data as MapItemClickResponse).mapItems) {
-                    Jikpoze.Cell cell = map.createCell(map.layers['selection'], new Point(mapItem.x, mapItem.y), selectionPencil);
-                    cell.alpha = 0.3;
-                }
-            });
+            // Launch event
+            new MapItemClickRequest(this, mapItem);
         });
     }
 
