@@ -8,7 +8,7 @@ class SquareMap extends DisplayObjectContainer {
 
     Board board;
     Pencil _gridPencil;
-    Col.LinkedHashMap<String, Layer> layers = new Col.LinkedHashMap<String, Layer>();
+    Map<String, Layer> layers = new Map<String, Layer>();
     num skewFactor = 1;
     int renderOffset = 1;
 

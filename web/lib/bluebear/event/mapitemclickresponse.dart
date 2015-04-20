@@ -1,11 +1,5 @@
 part of bluebear;
 
-class MapItemClickResponse {
-    List<MapItem> mapItems = new List();
-
-    MapItemClickResponse.fromJsonData(var data) {
-        for (var item in data) {
-            mapItems.add(new MapItem.fromJsonData(item));
-        }
-    }
+class MapItemClickResponse extends MapUpdateResponse {
+    MapItemClickResponse.fromJsonData(Jikpoze.Board board, var data) : super.fromJsonData(board, data);
 }

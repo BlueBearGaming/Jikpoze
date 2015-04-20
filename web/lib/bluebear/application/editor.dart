@@ -10,12 +10,12 @@ class Editor extends Base {
     String pencilSelectorName;
     Jikpoze.Cell debugPointer;
 
-    Editor(canvas, Col.LinkedHashMap options) : super(canvas, options) {
+    Editor(canvas, Map options) : super(canvas, options) {
         showGrid = true;
         Jikpoze.GridPencil.showCoordinates = true;
     }
 
-    void parseOptions(Col.HashMap options) {
+    void parseOptions(Map options) {
         super.parseOptions(options);
 
         if (options.containsKey('layerSelectorName')) {

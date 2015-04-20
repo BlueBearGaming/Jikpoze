@@ -6,7 +6,7 @@ class MapItem {
     String pencilName;
     int x;
     int y;
-    List<String> listeners;
+    Map<String, Listener> listeners = new Map<String, Listener>();
     Jikpoze.Cell cell;
 
     MapItem.fromJsonData(var data) {

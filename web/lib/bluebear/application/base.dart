@@ -10,12 +10,12 @@ abstract class Base extends Jikpoze.Board {
     String endPoint;
     int contextId;
 
-    Base(canvas, Col.LinkedHashMap options) : super(canvas, options) {
+    Base(canvas, Map options) : super(canvas, options) {
         LoadContextRequest contextRequest = new LoadContextRequest(contextId);
         queryApi(LoadContextRequest.code, contextRequest.json, loadMap);
     }
 
-    void parseOptions(Col.HashMap options) {
+    void parseOptions(Map options) {
         super.parseOptions(options);
 
         if (options.containsKey('endPoint')) {
@@ -75,11 +75,11 @@ abstract class Base extends Jikpoze.Board {
             throw "Server endpoint returned an empty string";
         }
         // Todo interrogate engine properly
-        EngineEvent response = new EngineEvent.fromJson(responseText);
+        EngineEvent response = new EngineEvent.fromJson(this, responseText);
         LoadContextResponse contextResponse = response.data;
         context = contextResponse.context;
 
-        Map contextMap = context.map;
+        BlueBearMap contextMap = context.map;
 
         // Load right type of Map
         switch (contextMap.type) {
@@ -118,8 +118,7 @@ abstract class Base extends Jikpoze.Board {
         if (responseText.isEmpty) {
             throw "Server returned an empty string";
         }
-        EngineEvent response = new EngineEvent.fromJson(responseText);
-        // @todo handle response
+        new EngineEvent.fromJson(board, responseText);
     }
 
     void loadLayers() {

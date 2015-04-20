@@ -9,7 +9,7 @@ class Board extends DisplayObjectContainer {
     Html.CanvasElement canvas;
     RenderLoop renderLoop;
     SquareMap map;
-    Col.LinkedHashMap<String, Pencil> pencils = new Col.LinkedHashMap<String, Pencil>();
+    Map<String, Pencil> pencils = new Map<String, Pencil>();
     Cell selected;
     int cellSize;
     MouseEvent dragMouseEvent;
@@ -18,7 +18,7 @@ class Board extends DisplayObjectContainer {
     String resourceBasePath;
     bool showGrid = false;
 
-    Board(this.canvas, Col.LinkedHashMap options) {
+    Board(this.canvas, Map options) {
         if (null == canvas) {
             throw "Canvas cannot be null";
         }
@@ -31,7 +31,7 @@ class Board extends DisplayObjectContainer {
         stage.addChild(this);
     }
 
-    void parseOptions(Col.LinkedHashMap options) {
+    void parseOptions(Map options) {
         if (options.containsKey('resourceBasePath')) {
             resourceBasePath = options['resourceBasePath'];
         }

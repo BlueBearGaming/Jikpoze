@@ -1,6 +1,7 @@
 part of bluebear;
 
-class Map {
+// Name "Map" conflicts with core class "Map"
+class BlueBearMap {
 
     String name;
     String label;
@@ -9,7 +10,7 @@ class Map {
     List<Layer> layers = new List<Layer>();
     List<PencilSet> pencilSets = new List<PencilSet>();
 
-    Map.fromJsonData(var data) {
+    BlueBearMap.fromJsonData(var data) {
         name = data['name'];
         label = data['label'];
         type = data['type'];

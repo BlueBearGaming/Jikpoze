@@ -6,7 +6,7 @@ part of bluebear;
  */
 class Game extends Base {
 
-    Game(canvas, Col.LinkedHashMap options) : super(canvas, options);
+    Game(canvas, Map options) : super(canvas, options);
 
 
     void attachStageEvents() {
@@ -53,7 +53,7 @@ class Game extends Base {
             e.stopImmediatePropagation();
 
             // Launch event
-            new MapItemClickRequest(this, mapItem);
+            new MapItemClickRequest(this, mapItem, 'click');
         });
     }
 
