@@ -122,15 +122,16 @@ class SquareMap extends DisplayObjectContainer {
                 return ac.layer.index - bc.layer.index;
             }
         }
+        // In some cases, (hovering with pencil in edition mode) the z-index of the item will always prevail
+        // just like if it was on a "virtual" layer just above the actual layer.
+        if (ac.layer.index == bc.layer.index && ac.zIndex != bc.zIndex) {
+            return ac.zIndex - bc.zIndex;
+        }
         // if on same column
         if (ac.position.y == bc.position.y) {
             // if exactly same position
             if (ac.position.x == bc.position.x) {
                 // then the layer's index will sort them
-                if (ac.layer.index == bc.layer.index) {
-                    // If same layer index (case when hovering with pencil in edition mode)
-                    return ac.zIndex - bc.zIndex;
-                }
                 return ac.layer.index - bc.layer.index;
             }
             // left to right order
