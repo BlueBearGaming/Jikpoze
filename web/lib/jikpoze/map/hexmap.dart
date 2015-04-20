@@ -20,9 +20,13 @@ class HexMap extends SquareMap {
     }
 
     Point viewPointToGamePoint(Point viewPoint) {
-        return new Point(
-            (viewPoint.x / board.cellSize).floor(),
-            (viewPoint.y / board.cellSize / skewFactor).floor()
-        );
+        num x = viewPoint.x;
+        num y = viewPoint.y;
+        int gameX = (x / board.cellSize).round();
+        int gameY = (y / board.cellSize / skewFactor).round();
+        if (0 == gameY % 2) {
+            gameX = ((x - board.cellSize / 2) / board.cellSize).round();
+        }
+        return new Point(gameX, gameY);
     }
 }

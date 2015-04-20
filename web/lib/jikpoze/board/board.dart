@@ -48,6 +48,6 @@ class Board extends DisplayObjectContainer {
     }
 
     Point viewPointToGamePoint(Point viewPoint) {
-        return map.viewPointToGamePoint(viewPoint - new Point(x, y - cellSize / 4));
+        return map.viewPointToGamePoint(viewPoint - new Point(x, y));
     }
 }

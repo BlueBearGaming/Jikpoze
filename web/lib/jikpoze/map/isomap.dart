@@ -37,8 +37,10 @@ class IsoMap extends SquareMap {
     }
 
     Point viewPointToGamePoint(Point viewPoint) {
-        num gameX = (viewPoint.y / 2 / skewFactor + viewPoint.x) / board.cellSize;
-        num gameY = (viewPoint.y / 2 / skewFactor - viewPoint.x) / board.cellSize;
+        num x = viewPoint.x;
+        num y = viewPoint.y + board.cellSize / 4;
+        num gameX = (y / 2 / skewFactor + x) / board.cellSize;
+        num gameY = (y / 2 / skewFactor - x) / board.cellSize;
         return new Point(gameX.floor(), gameY.floor());
     }
 }
