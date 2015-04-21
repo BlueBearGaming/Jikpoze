@@ -22,7 +22,7 @@ class MapItemClickRequest {
                 }
             }
         };
-        if (mapItem.listeners.contains(eventType)) {
+        if (mapItem.listeners.containsKey(eventType)) {
             json['source'] = mapItem.listeners[eventType].source;
         }
         return json;

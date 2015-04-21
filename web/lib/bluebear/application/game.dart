@@ -35,7 +35,7 @@ class Game extends Base {
             // This means the object has no representation on the board for some reason (check logs)
             return;
         }
-        if (!mapItem.listeners.contains('selectionable')) {
+        if (!mapItem.listeners.containsKey('selectionable')) {
             return;
         }
         mapItem.cell.onMouseClick.listen((MouseEvent e) {
