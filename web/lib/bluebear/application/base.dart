@@ -101,15 +101,16 @@ abstract class Base extends Jikpoze.Board {
         y = stage.stageHeight / 2;
 
         // Load layer from context.map
-        loadLayers();
+        loadLayers(context.map.layers);
 
         // Load all pencils in the map and load bitmap urls in the resource manager
-        loadPencils();
+        new Jikpoze.SelectionPencil(this); // Add special pencil for selection
+        loadPencilSets(context.map.pencilSets);
 
         // Wait for the resource manager to actually load all the bitmap data and load mapItems and attach events
         resourceManager.load().then((res) {
-            loadBitmapData();
-            loadMapItems();
+            loadBitmapData(context.map.pencilSets);
+            loadMapItems(context.mapItems);
             attachStageEvents();
         });
     }
@@ -118,17 +119,18 @@ abstract class Base extends Jikpoze.Board {
         if (responseText.isEmpty) {
             throw "Server returned an empty string";
         }
-        new EngineEvent.fromJson(board, responseText);
+        MapUpdateResponse response = (new EngineEvent.fromJson(this, responseText)).data as MapUpdateResponse;
+        loadMapItems(response.updated);
     }
 
-    void loadLayers() {
-        for (Layer contextLayer in context.map.layers) {
+    void loadLayers(List<Layer> layers) {
+        for (Layer contextLayer in layers) {
             new Jikpoze.Layer(map, contextLayer.name, contextLayer.type, contextLayer.index);
         }
     }
 
-    void loadPencils() {
-        for (PencilSet pencilSet in context.map.pencilSets) {
+    void loadPencilSets(List<PencilSet> pencilSets) {
+        for (PencilSet pencilSet in pencilSets) {
             for (Pencil pencil in pencilSet.pencils) {
                 new Jikpoze.Pencil(this, name: pencil.name, type: pencil.type, width: pencil.width, height: pencil.height, imageX: pencil.imageX, imageY: pencil.imageY);
 
@@ -143,8 +145,8 @@ abstract class Base extends Jikpoze.Board {
         }
     }
 
-    void loadMapItems() {
-        for (MapItem mapItem in context.mapItems) {
+    void loadMapItems(List<MapItem> mapItems) {
+        for (MapItem mapItem in mapItems) {
             Jikpoze.Layer layer = map.layers[mapItem.layerName];
             Jikpoze.Pencil pencil = pencils[mapItem.pencilName];
             if (null == layer) {
@@ -160,8 +162,8 @@ abstract class Base extends Jikpoze.Board {
         }
     }
 
-    void loadBitmapData() {
-        for (PencilSet pencilSet in context.map.pencilSets) {
+    void loadBitmapData(List<PencilSet> pencilSets) {
+        for (PencilSet pencilSet in pencilSets) {
             for (Pencil pencil in pencilSet.pencils) {
                 BitmapData bitmapData;
 

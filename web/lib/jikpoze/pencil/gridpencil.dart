@@ -5,7 +5,7 @@ class GridPencil extends Pencil {
     Graphics graphics;
     static bool showCoordinates = false;
 
-    GridPencil(Board board) : super(board, name: 'grid', type: 'grid') {
+    GridPencil(Board board, {String name: 'grid', String type: 'grid'}) : super(board, name: name, type: type) {
         graphics = new Graphics();
         board.map.buildCellGraphics(graphics);
         graphics.strokeColor(Color.Gray, 0.2);
