@@ -9,12 +9,16 @@ class MapItem {
     Map<String, Listener> listeners = new Map<String, Listener>();
     Jikpoze.Cell cell;
 
-    MapItem.fromJsonData(var data) {
+    MapItem.fromJsonData(Map data) {
         id = data['id'];
         layerName = data['layerName'];
         pencilName = data['pencilName'];
         x = data['x'];
         y = data['y'];
-        listeners = data['listeners'];
+        if (data.containsKey('listeners') && !data['listeners'].isEmpty) {
+            (data['listeners'] as Map).forEach((String key, Map value){
+                listeners[key] = new Listener.fromJsonData(value);
+            });
+        }
     }
 }

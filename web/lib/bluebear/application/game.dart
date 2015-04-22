@@ -5,9 +5,7 @@ part of bluebear;
  * of the stage and the creation of the cells.
  */
 class Game extends Base {
-
     Game(canvas, Map options) : super(canvas, options);
-
 
     void attachStageEvents() {
         super.attachStageEvents();
@@ -35,7 +33,7 @@ class Game extends Base {
             // This means the object has no representation on the board for some reason (check logs)
             return;
         }
-        if (!mapItem.listeners.containsKey('selectionable')) {
+        if (!mapItem.listeners.containsKey('click')) {
             return;
         }
         mapItem.cell.onMouseClick.listen((MouseEvent e) {
@@ -53,9 +51,7 @@ class Game extends Base {
             e.stopImmediatePropagation();
 
             // Launch event
-            new MapItemClickRequest(this, mapItem, 'click');
+            new MapItemClickRequest(mapItem, 'click');
         });
     }
-
-
 }

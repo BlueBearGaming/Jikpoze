@@ -23,6 +23,7 @@ part 'cell/cell.dart';
 part 'pencil/pencil.dart';
 part 'pencil/gridpencil.dart';
 part 'pencil/selectionpencil.dart';
+part 'pencil/emptypencil.dart';
 
 // Bitmaps
 part 'bitmap/hitboxbitmap.dart';

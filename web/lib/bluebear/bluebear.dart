@@ -12,9 +12,11 @@ part 'application/editor.dart';
 part 'application/game.dart';
 
 // Events
-part 'event/engineevent.dart';
+part 'event/eventengine.dart';
+part 'event/responseinterface.dart';
 part 'event/loadcontextrequest.dart';
 part 'event/loadcontextresponse.dart';
+part 'event/mapupdaterequest.dart';
 part 'event/mapupdateresponse.dart';
 part 'event/mapitemclickrequest.dart';
 part 'event/mapitemclickresponse.dart';

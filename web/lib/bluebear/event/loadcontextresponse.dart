@@ -1,10 +1,11 @@
 part of bluebear;
 
-class LoadContextResponse {
-    Jikpoze.Board board;
+class LoadContextResponse implements ResponseInterface {
+    EventEngine eventEngine;
     Context context;
 
-    LoadContextResponse.fromJsonData(this.board, var data) {
+    handleResponse(Map data) {
         context = new Context.fromJsonData(data);
+        EventEngine.instance.board.loadContext(context);
     }
 }

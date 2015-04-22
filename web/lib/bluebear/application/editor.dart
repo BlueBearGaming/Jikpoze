@@ -166,24 +166,11 @@ class Editor extends Base {
         if (null == point) {
             throw 'point cannot be null';
         }
-        var json = {
-            "contextId": contextId,
-            "mapItems": [{
-                "layerName": layer.name,
-                "pencilName": pencil.name,
-                "x": point.x,
-                "y": point.y
-            }]
-        };
-        queryApi('bluebear.editor.mapUpdate', json, (response) {
-            try {
-                print(JSON.decode(response));
-            } catch (e) {
-                print(response);
-            }
-        });
+
         map.removeCell(layer, point);
-        return map.createCell(layer, point, pencil);
+        Jikpoze.Cell cell = map.createCell(layer, point, pencil);
+        new MapUpdateRequest(updated: [cell]);
+        return cell;
     }
 
     Jikpoze.Cell removeCell(Jikpoze.Layer layer, Point point) {
@@ -193,21 +180,9 @@ class Editor extends Base {
         if (null == point) {
             throw 'point cannot be null';
         }
-        var json = {
-            "contextId": contextId,
-            "mapItems": [{
-                "layerName": layer.name,
-                "x": point.x,
-                "y": point.y
-            }]
-        };
-        queryApi('bluebear.editor.mapUpdate', json, (response) {
-            try {
-                print(JSON.decode(response));
-            } catch (e) {
-                print(response);
-            }
-        });
-        return map.removeCell(layer, point);
+
+        Jikpoze.Cell cell = map.removeCell(layer, point);
+        new MapUpdateRequest(removed: [cell]);
+        return cell;
     }
 }

@@ -5,14 +5,14 @@ part of bluebear;
  * of the stage and the creation of the cells.
  */
 abstract class Base extends Jikpoze.Board {
-
+    EventEngine eventEngine;
     Context context;
     String endPoint;
     int contextId;
 
     Base(canvas, Map options) : super(canvas, options) {
-        LoadContextRequest contextRequest = new LoadContextRequest(contextId);
-        queryApi(LoadContextRequest.code, contextRequest.json, loadMap);
+        eventEngine = new EventEngine(this);
+        new LoadContextRequest();
     }
 
     void parseOptions(Map options) {
@@ -54,35 +54,9 @@ abstract class Base extends Jikpoze.Board {
 
     void attachMapItemEvents(MapItem mapItem);
 
-    Html.HttpRequest queryApi(String eventName, Object json, Function handler) {
-        Html.HttpRequest request = new Html.HttpRequest(); // create a new XHR
-        // add an event handler that is called when the request finishes
-        request.onReadyStateChange.listen((_) {
-            if (request.readyState == Html.HttpRequest.DONE && (request.status == 200 || request.status == 0)) {
-                handler(request.responseText);
-            }
-        });
-
-        // POST the data to the server
-        String finalEndPoint = endPoint + eventName;
-        request.open("POST", finalEndPoint);
-        request.send(JSON.encode(json)); // perform the async POST
-        return request;
-    }
-
-    void loadMap(String responseText) {
-        if (responseText.isEmpty) {
-            throw "Server endpoint returned an empty string";
-        }
-        // Todo interrogate engine properly
-        EngineEvent response = new EngineEvent.fromJson(this, responseText);
-        LoadContextResponse contextResponse = response.data;
-        context = contextResponse.context;
-
-        BlueBearMap contextMap = context.map;
-
+    void loadContext(Context context) {
         // Load right type of Map
-        switch (contextMap.type) {
+        switch (context.map.type) {
             case 'hexagonal':
             case 'hex':
                 map = new Jikpoze.HexMap(this);
@@ -94,8 +68,8 @@ abstract class Base extends Jikpoze.Board {
             default:
                 map = new Jikpoze.SquareMap(this);
         }
-        map.name = 'map.' + contextMap.name;
-        cellSize = contextMap.cellSize;
+        map.name = 'map.' + context.map.name;
+        cellSize = context.map.cellSize;
 
         x = stage.stageWidth / 2; // Center origin
         y = stage.stageHeight / 2;
@@ -105,6 +79,7 @@ abstract class Base extends Jikpoze.Board {
 
         // Load all pencils in the map and load bitmap urls in the resource manager
         new Jikpoze.SelectionPencil(this); // Add special pencil for selection
+        new Jikpoze.EmptyPencil(this); // Add special pencil for selection
         loadPencilSets(context.map.pencilSets);
 
         // Wait for the resource manager to actually load all the bitmap data and load mapItems and attach events
@@ -113,14 +88,6 @@ abstract class Base extends Jikpoze.Board {
             loadMapItems(context.mapItems);
             attachStageEvents();
         });
-    }
-
-    void updateMap(String responseText) {
-        if (responseText.isEmpty) {
-            throw "Server returned an empty string";
-        }
-        MapUpdateResponse response = (new EngineEvent.fromJson(this, responseText)).data as MapUpdateResponse;
-        loadMapItems(response.updated);
     }
 
     void loadLayers(List<Layer> layers) {

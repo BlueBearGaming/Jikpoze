@@ -1,19 +1,17 @@
 part of bluebear;
 
 class MapItemClickRequest {
-
-    Base board;
     MapItem mapItem;
     String eventType;
     static const String code = "bluebear.engine.mapItemClick";
 
-    MapItemClickRequest(this.board, this.mapItem, this.eventType) {
-        board.queryApi(MapItemClickRequest.code, json, board.updateMap);
+    MapItemClickRequest(this.mapItem, this.eventType) {
+        EventEngine.instance.queryApi(MapItemClickRequest.code, json);
     }
 
-    Object get json {
-        var json = {
-            "contextId": board.contextId,
+    Map get json {
+        Map json = {
+            "contextId": EventEngine.instance.board.contextId,
             "target": {
                 "layer": mapItem.layerName,
                 "position": {
