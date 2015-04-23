@@ -40,6 +40,10 @@ class EventEngine {
         code = decoded['code'];
         name = decoded['name'];
 
+        if ('error' == code) {
+            throw "API returned an error: ${decoded['message']}";
+        }
+
         timestamp = new DateTime.fromMillisecondsSinceEpoch(decoded['timestamp']);
 
         switch (name) {
