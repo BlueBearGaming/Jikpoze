@@ -2,7 +2,6 @@ part of bluebear;
 
 // Name "Map" conflicts with core class "Map"
 class BlueBearMap {
-
     String name;
     String label;
     String type;

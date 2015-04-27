@@ -1,16 +1,18 @@
 part of bluebear;
 
-class MapUpdateRequest {
+class MapUpdateRequest implements RequestInterface {
+    Base board;
     List<Jikpoze.Cell> updated;
     List<Jikpoze.Cell> removed;
     String eventType;
-    static const String code = "bluebear.editor.mapUpdate";
+    static const String _code = "bluebear.editor.mapUpdate";
 
-    MapUpdateRequest({List<Jikpoze.Cell> updated: null, List<Jikpoze.Cell> removed: null}) {
+    MapUpdateRequest(this.board, {List<Jikpoze.Cell> updated: null, List<Jikpoze.Cell> removed: null}) {
         this.updated = updated;
         this.removed = removed;
-        EventEngine.instance.queryApi(MapUpdateRequest.code, json);
     }
+
+    String get code => _code;
 
     Map get json {
         List mapItems = [];
@@ -34,7 +36,7 @@ class MapUpdateRequest {
             }
         }
         return {
-            "contextId": EventEngine.instance.board.contextId,
+            "contextId": board.contextId,
             "mapItems": mapItems
         };
     }

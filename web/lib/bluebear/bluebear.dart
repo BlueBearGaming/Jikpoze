@@ -14,6 +14,7 @@ part 'application/game.dart';
 // Events
 part 'event/eventengine.dart';
 part 'event/responseinterface.dart';
+part 'event/requestinterface.dart';
 part 'event/loadcontextrequest.dart';
 part 'event/loadcontextresponse.dart';
 part 'event/mapupdaterequest.dart';

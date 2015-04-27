@@ -2,15 +2,9 @@ part of bluebear;
 
 class EventEngine {
     Base board;
-    String code;
-    String name;
-    DateTime timestamp;
-    ResponseInterface response;
-    static EventEngine instance;
+    List<Handle> handlers = [];
 
-    EventEngine(this.board) {
-        instance = this;
-    }
+    EventEngine(this.board);
 
     Html.HttpRequest queryApi(String eventName, Object json) {
         Html.HttpRequest request = new Html.HttpRequest(); // create a new XHR
@@ -37,29 +31,20 @@ class EventEngine {
             throw "Server responded with an empty string";
         }
         var decoded = JSON.decode(jsonString);
-        code = decoded['code'];
-        name = decoded['name'];
+        String code = decoded['code'];
+        String name = decoded['name'];
 
         if ('error' == code) {
             throw "API returned an error: ${decoded['message']}";
         }
 
-        timestamp = new DateTime.fromMillisecondsSinceEpoch(decoded['timestamp']);
+        DateTime timestamp = new DateTime.fromMillisecondsSinceEpoch(decoded['timestamp']);
 
-        switch (name) {
-            case LoadContextRequest.code:
-                response = new LoadContextResponse();
-                break;
-            case MapItemClickRequest.code:
-                response = new MapItemClickResponse();
-                break;
-            case MapUpdateRequest.code:
-                response = new MapUpdateResponse();
-                break;
-            default:
-                print(decoded);
-                throw 'Unknown event $name';
+        for (Handle callback in handlers) {
+            ResponseInterface response = callback(code);
+            if (null != response) {
+                response.handleResponse(decoded['data']);
+            }
         }
-        response.handleResponse(decoded['data']);
     }
 }

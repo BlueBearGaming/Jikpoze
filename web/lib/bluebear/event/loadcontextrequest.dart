@@ -1,14 +1,15 @@
 part of bluebear;
 
-class LoadContextRequest {
-    static const String code = "bluebear.engine.mapLoad";
+class LoadContextRequest implements RequestInterface {
+    Base board;
+    static const String _code = "bluebear.engine.mapLoad";
 
-    LoadContextRequest() {
-        EventEngine.instance.queryApi(LoadContextRequest.code, json);
-    }
+    LoadContextRequest(this.board);
+
+    String get code => _code;
 
     Map get json => {
-        "contextId": EventEngine.instance.board.contextId,
+        "contextId": board.contextId,
         "userContext": {
             "viewCenter": {
                 "x": 0,
