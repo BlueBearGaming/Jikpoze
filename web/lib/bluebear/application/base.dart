@@ -135,7 +135,7 @@ abstract class Base extends Jikpoze.Board {
                 BitmapData bitmapData;
 
                 if (null != pencil.image) {
-                    bitmapData = resourceManager.getBitmapData('image.' + name);
+                    bitmapData = resourceManager.getBitmapData('image.' + pencil.name);
                 } else {
                     bitmapData = resourceManager.getBitmapData('image.' + pencil.pencilSet.name);
                     // Crop to sprite selection
@@ -150,5 +150,6 @@ abstract class Base extends Jikpoze.Board {
 
     void clearSelection() {
         map.layers['selection'].clear();
+        map.layers['events'].clear();
     }
 }
