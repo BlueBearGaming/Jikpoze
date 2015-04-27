@@ -36,6 +36,7 @@ class Game extends Base {
         if (!mapItem.listeners.containsKey('click')) {
             return;
         }
+        Listener listener = mapItem.listeners['click'];
         mapItem.cell.onMouseClick.listen((MouseEvent e) {
             if (dragging != null) {
                 return;
@@ -50,8 +51,7 @@ class Game extends Base {
 
             e.stopImmediatePropagation();
 
-            // Launch event
-            new MapItemClickRequest(mapItem, 'click');
+            new MapItemClickRequest(mapItem);
         });
     }
 }

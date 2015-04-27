@@ -6,7 +6,7 @@ class Listener {
 
     Listener.fromJsonData(Map data) {
         name = data['name'];
-        if (data.containsKey('source')) {
+        if (data.containsKey('source') && null != data['source']) {
             source = data['source'];
         }
     }

@@ -2,11 +2,15 @@ part of bluebear;
 
 class MapItemClickRequest {
     MapItem mapItem;
-    String eventType;
+    Listener listener;
     static const String code = "bluebear.engine.mapItemClick";
 
-    MapItemClickRequest(this.mapItem, this.eventType) {
-        EventEngine.instance.queryApi(MapItemClickRequest.code, json);
+    MapItemClickRequest(this.mapItem) {
+        if (!mapItem.listeners.containsKey('click')) {
+            throw 'No listener configured for click';
+        }
+        listener = mapItem.listeners['click'];
+        EventEngine.instance.queryApi(listener.name, json);
     }
 
     Map get json {
@@ -20,8 +24,8 @@ class MapItemClickRequest {
                 }
             }
         };
-        if (mapItem.listeners.containsKey(eventType)) {
-            json['source'] = mapItem.listeners[eventType].source;
+        if (null != listener.source) {
+            json['source'] = listener.source;
         }
         return json;
     }
