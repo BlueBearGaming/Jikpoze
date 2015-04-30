@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Jikpose</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+<div class="col-md-2 map-editor-form">
+    <label> Layer <select class="form-control"
+                          name="bluebear_map_editor[selected_layer]">
+        <option value="background" data-layer-type="background">Background</option>
+        <option value="land" data-layer-type="land">Land</option>
+        <option value="grid" data-layer-type="grid">Grid</option>
+        <option value="selection" data-layer-type="selection">Selection</option>
+        <option value="props" data-layer-type="props">Props and
+            decals
+        </option>
+        <option value="objects" data-layer-type="objects">Objects</option>
+        <option value="units" data-layer-type="units">Units</option>
+        <option value="effects" data-layer-type="effects">Effects</option>
+        <option value="events" data-layer-type="events">Events</option>
+    </select>
+    </label>
+
+    <div class="radio pencil" data-pencil-set="test"
+         data-pencil-set-type="square">
+        <label> <input type="radio"
+                       name="bluebear_map_editor[selected_pencil]" value="grass_01">
+            Grass <span class="text-muted"></span> <img width="50" height="50"
+                                                        src="/resources/images/54e77d0616d5b.png">
+
+            <div class="clear"></div>
+        </label>
+    </div>
+    <div class="radio pencil" data-pencil-set="test"
+         data-pencil-set-type="square">
+        <label> <input type="radio"
+                       name="bluebear_map_editor[selected_pencil]" value="grass_02">
+            Darker Grass <span class="text-muted"></span> <img width="50"
+                                                               height="50" src="/resources/images/54e86b5f5d20f.png">
+
+            <div class="clear"></div>
+        </label>
+    </div>
+</div>
+
+<canvas id="canvas_map"
+        data-options="{&quot;endPoint&quot;:&quot;http:\/\/bluebear.local\/app_dev.php\/api\/events\/trigger/&quot;,&quot;editionMode&quot;:true,&quot;resourceBasePath&quot;:&quot;http:\/\/bluebear.local\/resources\/images\/&quot;,&quot;layerSelectorName&quot;:&quot;bluebear_map_editor[selected_layer]&quot;,&quot;pencilSelectorName&quot;:&quot;bluebear_map_editor[selected_pencil]&quot;,&quot;contextId&quot;:1}"></canvas>
+
+<script type="application/dart" src="main.dart"></script>
+<script src="packages/browser/dart.js"></script>
+</body>
+</html>
