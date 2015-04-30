@@ -120,7 +120,7 @@ abstract class Base extends Jikpoze.Board {
                 continue;
             }
 
-            if (mapItem.pencilName.isEmpty) {
+            if (null == mapItem.pencilName || mapItem.pencilName.isEmpty) {
                 map.removeCell(layer, mapItem.position);
             } else {
                 Jikpoze.Pencil pencil = pencils[mapItem.pencilName];
@@ -136,6 +136,7 @@ abstract class Base extends Jikpoze.Board {
                     position = mapItem.path.last;
                 }
                 mapItem.cell = map.createCell(layer, position, pencil);
+                mapItem.position = position;
                 attachMapItemEvents(mapItem);
             }
         }

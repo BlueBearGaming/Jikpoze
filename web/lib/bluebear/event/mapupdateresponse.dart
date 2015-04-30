@@ -8,7 +8,9 @@ class MapUpdateResponse implements ResponseInterface {
     handleResponse(Map data) {
         if (data.containsKey('removed')) {
             for (var item in data['removed']) {
-                removed.add(new MapItem.fromJsonData(item));
+                MapItem mapItem = new MapItem.fromJsonData(item);
+                mapItem.pencilName = null;
+                removed.add(mapItem);
             }
         }
         EventEngine.instance.board.loadMapItems(removed);
