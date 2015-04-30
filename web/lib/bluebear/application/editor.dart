@@ -158,31 +158,4 @@ class Editor extends Base {
         stage.addChild(button);
         return button;
     }
-
-    Jikpoze.Cell createCell(Jikpoze.Layer layer, Point point, Jikpoze.Pencil pencil) {
-        if (null == layer) {
-            throw 'layer cannot be null';
-        }
-        if (null == point) {
-            throw 'point cannot be null';
-        }
-
-        map.removeCell(layer, point);
-        Jikpoze.Cell cell = map.createCell(layer, point, pencil);
-        new MapUpdateRequest(updated: [cell]);
-        return cell;
-    }
-
-    Jikpoze.Cell removeCell(Jikpoze.Layer layer, Point point) {
-        if (null == layer) {
-            throw 'layer cannot be null';
-        }
-        if (null == point) {
-            throw 'point cannot be null';
-        }
-
-        Jikpoze.Cell cell = map.removeCell(layer, point);
-        new MapUpdateRequest(removed: [cell]);
-        return cell;
-    }
 }

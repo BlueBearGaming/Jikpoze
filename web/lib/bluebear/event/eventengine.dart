@@ -6,10 +6,28 @@ class EventEngine {
     String name;
     DateTime timestamp;
     ResponseInterface response;
+    SocketIoClient socket;
     static EventEngine instance;
 
     EventEngine(this.board) {
         instance = this;
+        SocketIoClient socket = new SocketIoClient('http://localhost:8000');
+        socket.onConnect((){
+            print('[SocketIO] Connected');
+            socket.onDisconnect(() {
+                print('[SocketIO] Disconnected');
+            });
+
+            socket.on('bluebear.engine.clientUpdate', (message) {
+                try {
+                    handleResponse(message['event']);
+                } catch (e) {
+                    print('Error during handleResponse: ');
+                    print(message);
+                    throw e;
+                }
+            });
+        });
     }
 
     Html.HttpRequest queryApi(String eventName, Object json) {
@@ -44,7 +62,11 @@ class EventEngine {
             throw "API returned an error: ${decoded['message']}";
         }
 
-        timestamp = new DateTime.fromMillisecondsSinceEpoch(decoded['timestamp']);
+        DateTime timestamp = new DateTime.fromMillisecondsSinceEpoch(decoded['timestamp']);
+        if (timestamp == this.timestamp) {
+            return;
+        }
+        this.timestamp = timestamp;
 
         switch (name) {
             case LoadContextRequest.code:

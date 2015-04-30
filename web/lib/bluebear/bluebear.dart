@@ -3,6 +3,7 @@ library bluebear;
 import 'dart:convert';
 import 'package:stagexl/stagexl.dart';
 import 'dart:html' as Html;
+import 'package:socket.io.client.dart/socket.io.client.dart';
 
 import '../jikpoze/jikpoze.dart' as Jikpoze;
 

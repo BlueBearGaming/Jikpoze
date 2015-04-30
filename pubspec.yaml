@@ -4,3 +4,5 @@ description: A StageXL 2D game engine
 dependencies:
   browser: any
   stagexl: any
+  socket.io.client.dart:
+    git: git@github.com:BrianGeppert/socket.io.client.dart.git
