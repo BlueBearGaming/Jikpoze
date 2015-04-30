@@ -128,7 +128,14 @@ abstract class Base extends Jikpoze.Board {
                     print('No pencil found: ${mapItem.pencilName}');
                     continue;
                 }
-                mapItem.cell = map.createCell(layer, mapItem.position, pencil);
+                if (layer.cells.containsKey(mapItem.position)) {
+                    map.removeCell(layer, mapItem.position);
+                }
+                Point position = mapItem.position;
+                if (0 < mapItem.path.length) {
+                    position = mapItem.path.last;
+                }
+                mapItem.cell = map.createCell(layer, position, pencil);
                 attachMapItemEvents(mapItem);
             }
         }
