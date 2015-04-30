@@ -115,17 +115,22 @@ abstract class Base extends Jikpoze.Board {
     void loadMapItems(List<MapItem> mapItems) {
         for (MapItem mapItem in mapItems) {
             Jikpoze.Layer layer = map.layers[mapItem.layerName];
-            Jikpoze.Pencil pencil = pencils[mapItem.pencilName];
             if (null == layer) {
                 print('No layer found: ${mapItem.layerName}');
                 continue;
             }
-            if (null == pencil) {
-                print('No pencil found: ${mapItem.pencilName}');
-                continue;
+
+            if (mapItem.pencilName.isEmpty) {
+                map.removeCell(layer, mapItem.position);
+            } else {
+                Jikpoze.Pencil pencil = pencils[mapItem.pencilName];
+                if (null == pencil) {
+                    print('No pencil found: ${mapItem.pencilName}');
+                    continue;
+                }
+                mapItem.cell = map.createCell(layer, mapItem.position, pencil);
+                attachMapItemEvents(mapItem);
             }
-            mapItem.cell = map.createCell(layer, new Point(mapItem.x, mapItem.y), pencil);
-            attachMapItemEvents(mapItem);
         }
     }
 

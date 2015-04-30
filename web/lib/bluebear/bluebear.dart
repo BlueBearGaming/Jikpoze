@@ -20,6 +20,7 @@ part 'event/mapupdaterequest.dart';
 part 'event/mapupdateresponse.dart';
 part 'event/mapitemclickrequest.dart';
 part 'event/mapitemclickresponse.dart';
+part 'event/mapitemmoveresponse.dart';
 
 // Entities
 part 'entity/context.dart';

@@ -56,6 +56,9 @@ class EventEngine {
             case MapUpdateRequest.code:
                 response = new MapUpdateResponse();
                 break;
+            case 'bluebear.engine.mapItemMove':
+                response = new MapItemMoveResponse();
+                break;
             default:
                 print(decoded);
                 throw 'Unknown event $name';

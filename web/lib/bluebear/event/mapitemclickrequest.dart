@@ -19,8 +19,8 @@ class MapItemClickRequest {
             "target": {
                 "layer": mapItem.layerName,
                 "position": {
-                    "x": mapItem.x,
-                    "y": mapItem.y
+                    "x": mapItem.position.x,
+                    "y": mapItem.position.y
                 }
             }
         };
