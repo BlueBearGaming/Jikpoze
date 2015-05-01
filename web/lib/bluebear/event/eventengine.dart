@@ -67,7 +67,7 @@ class EventEngine {
             return;
         }
         this.timestamp = timestamp;
-
+        print("Received '${name}' at ${timestamp.toIso8601String()}");
         switch (name) {
             case LoadContextRequest.code:
                 response = new LoadContextResponse();

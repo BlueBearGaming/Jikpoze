@@ -55,6 +55,11 @@ abstract class Base extends Jikpoze.Board {
     void attachMapItemEvents(MapItem mapItem);
 
     void loadContext(Context context) {
+        if (null != this.context) {
+            throw 'Context already loaded';
+        }
+        this.context = context;
+
         // Load right type of Map
         switch (context.map.type) {
             case 'hexagonal':
