@@ -8,6 +8,7 @@ abstract class Base extends Jikpoze.Board {
     EventEngine eventEngine;
     Context context;
     String endPoint;
+    String socketIOUri;
     int contextId;
 
     Base(canvas, Map options) : super(canvas, options) {
@@ -27,6 +28,11 @@ abstract class Base extends Jikpoze.Board {
             contextId = options['contextId'];
         } else {
             throw "Option 'contextId' cannot be null";
+        }
+        if (options.containsKey('socketIOUri')) {
+            socketIOUri = options['socketIOUri'];
+        } else {
+            throw "Option 'socketIOUri' cannot be null";
         }
     }
 

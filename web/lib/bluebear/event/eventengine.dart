@@ -11,7 +11,7 @@ class EventEngine {
 
     EventEngine(this.board) {
         instance = this;
-        SocketIoClient socket = new SocketIoClient('http://localhost:8000');
+        SocketIoClient socket = new SocketIoClient(board.socketIOUri);
         socket.onConnect((){
             print('[SocketIO] Connected');
             socket.onDisconnect(() {
