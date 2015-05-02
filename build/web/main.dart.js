@@ -1983,8 +1983,10 @@ uk:["qs",function(a){var z
 this.vO(a)
 if(a.Y("endPoint")===!0){z=J.M(a)
 this.j3=z.p(a,"endPoint")}else throw H.b("Option 'endPoint' cannot be null")
-if(a.Y("contextId")===!0)this.iU=z.p(a,"contextId")
-else throw H.b("Option 'contextId' cannot be null")}],
+if(a.Y("contextId")===!0)this.lq=z.p(a,"contextId")
+else throw H.b("Option 'contextId' cannot be null")
+if(a.Y("socketIOUri")===!0)this.iU=z.p(a,"socketIOUri")
+else throw H.b("Option 'socketIOUri' cannot be null")}],
 rs:["GR",function(){this.gDA().Yf(0,"mouseDown").yI(new D.DO(this))
 this.gDA().Yf(0,"mouseUp").yI(new D.Ho(this))
 this.gDA().Yf(0,"mouseMove").yI(new D.Pt(this))}],
@@ -2113,10 +2115,10 @@ z.NP(y.b.e)
 z.zH(y.c)
 z.rs()},null,null,2,0,null,59,"call"]},
 cz:{
-"^":"Vi;lq,pn,NH,Z,Uu,j3,iU,TB,ej,lZ,Ab,zR,Ky,bR,pV,of,DN,C7,x2,y1,y2,r1,r2,rx,ry,x1,a,b,c,d,e,f,r,x,y,z,ch,cx,cy,db,dx,dy,fr,fx,fy,go,id,k1,k2,k3,k4,Q",
+"^":"Vi;pn,NH,e1,Z,Uu,j3,iU,lq,TB,ej,lZ,Ab,zR,Ky,bR,pV,of,DN,C7,x2,y1,y2,r1,r2,rx,ry,x1,a,b,c,d,e,f,r,x,y,z,ch,cx,cy,db,dx,dy,fr,fx,fy,go,id,k1,k2,k3,k4,Q",
 uk:function(a){this.qs(a)
-if(a.Y("layerSelectorName")===!0)this.lq=J.T(a,"layerSelectorName")
-if(a.Y("pencilSelectorName")===!0)this.pn=J.T(a,"pencilSelectorName")},
+if(a.Y("layerSelectorName")===!0)this.pn=J.T(a,"layerSelectorName")
+if(a.Y("pencilSelectorName")===!0)this.NH=J.T(a,"pencilSelectorName")},
 rs:function(){this.GR()
 this.gDA().Yf(0,"mouseMove").yI(new D.IU(this,new D.zr(this)))
 this.lZ.Yf(0,"click").yI(new D.ty(this))
@@ -2124,12 +2126,12 @@ this.Vh()},
 Lt:function(a){if(null==a.gCQ())return
 a.gCQ().Yf(0,"click").yI(new D.lJ())},
 gPy:function(){var z,y,x
-z="[name=\""+H.d(this.lq)+"\"]"
+z="[name=\""+H.d(this.pn)+"\"]"
 y=new W.O4(document.querySelectorAll(z))
 for(z=y.gu(y);z.D();){x=z.c
 if("SELECT"===J.In(x))return this.lZ.lZ.p(0,H.Go(x,"$islp").value)}throw H.b("No layer selected or missing layer")},
 gNK:function(){var z,y,x,w
-z="[name=\""+H.d(this.pn)+"\"]"
+z="[name=\""+H.d(this.NH)+"\"]"
 y=new W.O4(document.querySelectorAll(z))
 for(z=y.gu(y);z.D();){x=z.c
 w=J.RE(x)
@@ -2185,10 +2187,10 @@ zr:{
 $1:function(a){var z,y
 z=this.Q
 y=z.lZ.Fq(z.gPy(),a,z.gNK())
-z.NH=y
+z.e1=y
 if(null==y)return
 y.sVR(0,0.6)
-z.NH.zR=1000
+z.e1.zR=1000
 z=z.lZ
 y=z.gtQ()
 C.Nm.GT(z.x2,y)}},
@@ -2199,11 +2201,11 @@ z=this.Q
 y=H.J(new U.hL(a.gEf(),a.gDz()),[null])
 x=z.lZ.fR(y.T(0,H.J(new U.hL(z.b,z.c),[null])))
 w=z.lZ.Xa(x)
-if(null==z.NH)this.a.$1(x)
-if(!J.mG(z.NH.Ab,z.gNK())){J.TO(z.NH.TB).Rz(0,z.NH.lZ)
-z.lZ.q9(z.NH)
-this.a.$1(x)}z.NH.sx(0,w.Q)
-z.NH.sy(0,w.a)},null,null,2,0,null,49,"call"]},
+if(null==z.e1)this.a.$1(x)
+if(!J.mG(z.e1.Ab,z.gNK())){J.TO(z.e1.TB).Rz(0,z.e1.lZ)
+z.lZ.q9(z.e1)
+this.a.$1(x)}z.e1.sx(0,w.Q)
+z.e1.sy(0,w.a)},null,null,2,0,null,49,"call"]},
 ty:{
 "^":"r:6;Q",
 $1:[function(a){var z,y,x,w,v,u,t,s,r,q
@@ -2247,7 +2249,7 @@ v=new H.MH(null,J.Nx(w.Q),w.a)
 v.$builtinTypeInfo=[H.Kp(w,0),H.Kp(w,1)]
 for(;v.D();)v.Q.swx(z.C7)}},null,null,2,0,null,49,"call"]},
 Z:{
-"^":"Vi;Z,Uu,j3,iU,TB,ej,lZ,Ab,zR,Ky,bR,pV,of,DN,C7,x2,y1,y2,r1,r2,rx,ry,x1,a,b,c,d,e,f,r,x,y,z,ch,cx,cy,db,dx,dy,fr,fx,fy,go,id,k1,k2,k3,k4,Q",
+"^":"Vi;Z,Uu,j3,iU,lq,TB,ej,lZ,Ab,zR,Ky,bR,pV,of,DN,C7,x2,y1,y2,r1,r2,rx,ry,x1,a,b,c,d,e,f,r,x,y,z,ch,cx,cy,db,dx,dy,fr,fx,fy,go,id,k1,k2,k3,k4,Q",
 rs:function(){this.GR()
 this.lZ.Yf(0,"click").yI(new D.pz(this))},
 Lt:function(a){if(null==a.gCQ())return
@@ -2411,19 +2413,22 @@ default:P.JS(z)
 throw H.b("Unknown event "+H.d(this.b))}w.Hr(y.p(z,"data"))},
 CM:function(a){var z,y
 $.U6=this
-z=new B.UK(null)
-y=$.rj().V7("io",["http://localhost:8000"])
-z.Q=y
-y.V7("on",["connect",new D.tX(this,z)])},
+z=this.Q.iU
+y=new B.UK(null)
+z=$.rj().V7("io",[z])
+y.Q=z
+z.V7("on",["connect",new D.tX(this,y)])},
 static:{Q:function(a){var z=new D.CH(a,null,null,null,null,null)
 z.CM(a)
 return z}}},
 tX:{
 "^":"r:0;Q,a",
-$0:[function(){P.JS("[SocketIO] Connected")
-var z=this.a
-z.Q.V7("on",["disconnect",new D.C7()])
-z.Q.V7("on",["bluebear.engine.clientUpdate",new D.eJ(this.Q)])},null,null,0,0,null,"call"]},
+$0:[function(){var z,y
+z=this.Q
+P.JS("[SocketIO] Connected to "+H.d(z.Q.iU)+"}")
+y=this.a
+y.Q.V7("on",["disconnect",new D.C7()])
+y.Q.V7("on",["bluebear.engine.clientUpdate",new D.eJ(z)])},null,null,0,0,null,"call"]},
 C7:{
 "^":"r:0;",
 $0:[function(){P.JS("[SocketIO] Disconnected")},null,null,0,0,null,"call"]},
@@ -2446,7 +2451,7 @@ if(y)this.Q.Hr(z)
 else throw H.b("Unexpected error: "+H.d(z))}},null,null,2,0,null,61,"call"]},
 Dy:{
 "^":"a;",
-ghJ:function(){return P.B(["contextId",$.U6.Q.iU,"userContext",P.B(["viewCenter",P.B(["x",0,"y",0],null,null)],null,null),"loadContext",P.B(["topLeft",P.B(["x",-20,"y",-20],null,null),"bottomRight",P.B(["x",20,"y",20],null,null)],null,null)],null,null)}},
+ghJ:function(){return P.B(["contextId",$.U6.Q.lq,"userContext",P.B(["viewCenter",P.B(["x",0,"y",0],null,null)],null,null),"loadContext",P.B(["topLeft",P.B(["x",-20,"y",-20],null,null),"bottomRight",P.B(["x",20,"y",20],null,null)],null,null)],null,null)}},
 M4:{
 "^":"a;Q,a",
 Hr:function(a){var z=D.wr(a)
@@ -2462,7 +2467,7 @@ this.a=y
 x=$.U6
 y=y.Q
 w=J.RE(z)
-v=P.B(["contextId",x.Q.iU,"target",P.B(["layer",z.gQ5(),"position",P.B(["x",J.Rd(w.gbM(z)),"y",J.U5(w.gbM(z))],null,null)],null,null)],null,null)
+v=P.B(["contextId",x.Q.lq,"target",P.B(["layer",z.gQ5(),"position",P.B(["x",J.Rd(w.gbM(z)),"y",J.U5(w.gbM(z))],null,null)],null,null)],null,null)
 z=this.a.a
 if(null!=z)v.q(0,"source",z)
 x.nm(y,v)}},
@@ -2482,7 +2487,7 @@ w=J.RE(x)
 z.push(P.B(["layerName",J.C9(w.gJN(x)),"pencilName",J.C9(x.gMc()),"x",J.Rd(w.gbM(x)),"y",J.U5(w.gbM(x))],null,null))}y=this.a
 if(null!=y)for(y.length,y=new J.m1(y,1,0,null);y.D();){x=y.c
 w=J.RE(x)
-z.push(P.B(["layerName",J.C9(w.gJN(x)),"x",J.Rd(w.gbM(x)),"y",J.U5(w.gbM(x))],null,null))}return P.B(["contextId",$.U6.Q.iU,"mapItems",z],null,null)},
+z.push(P.B(["layerName",J.C9(w.gJN(x)),"x",J.Rd(w.gbM(x)),"y",J.U5(w.gbM(x))],null,null))}return P.B(["contextId",$.U6.Q.lq,"mapItems",z],null,null)},
 Qn:function(a,b){this.Q=b
 this.a=a
 $.U6.nm("bluebear.editor.mapUpdate",this.ghJ())},
@@ -6292,7 +6297,7 @@ v=P.S(null,null,!1,P.U)
 u=H.J([],[A.R])
 t=$.V
 $.V=t+1
-t=new D.cz(null,null,null,null,null,null,null,z,null,null,x,null,null,null,null,new O.X(w,v),null,!1,u,!0,!0,!1,!0,"auto",!0,0,t,0,0,0,0,1,1,0,0,0,1,!0,!1,null,null,[],null,!1,"",null,T.oy(),!0,null,null,null,null)
+t=new D.cz(null,null,null,null,null,null,null,null,z,null,null,x,null,null,null,null,new O.X(w,v),null,!1,u,!0,!0,!1,!0,"auto",!0,0,t,0,0,0,0,1,1,0,0,0,1,!0,!1,null,null,[],null,!1,"",null,T.oy(),!0,null,null,null,null)
 t.uT(z,y)
 t.Z=D.Q(t)
 $.U6.nm("bluebear.engine.mapLoad",new D.Dy().ghJ())
@@ -6302,7 +6307,7 @@ v=P.S(null,null,!1,P.U)
 u=H.J([],[A.R])
 t=$.V
 $.V=t+1
-t=new D.Z(null,null,null,null,z,null,null,x,null,null,null,null,new O.X(w,v),null,!1,u,!0,!0,!1,!0,"auto",!0,0,t,0,0,0,0,1,1,0,0,0,1,!0,!1,null,null,[],null,!1,"",null,T.oy(),!0,null,null,null,null)
+t=new D.Z(null,null,null,null,null,z,null,null,x,null,null,null,null,new O.X(w,v),null,!1,u,!0,!0,!1,!0,"auto",!0,0,t,0,0,0,0,1,1,0,0,0,1,!0,!1,null,null,[],null,!1,"",null,T.oy(),!0,null,null,null,null)
 t.uT(z,y)
 t.Z=D.Q(t)
 $.U6.nm("bluebear.engine.mapLoad",new D.Dy().ghJ())}},"$0","Da",0,0,1]},1],["","",,B,{
