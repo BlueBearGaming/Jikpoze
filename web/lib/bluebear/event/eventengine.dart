@@ -13,7 +13,7 @@ class EventEngine {
         instance = this;
         SocketIoClient socket = new SocketIoClient(board.socketIOUri);
         socket.onConnect((){
-            print('[SocketIO] Connected to ${board.socketIOUri}}');
+            print('[SocketIO] Connected to ${board.socketIOUri}');
             socket.onDisconnect(() {
                 print('[SocketIO] Disconnected');
             });
