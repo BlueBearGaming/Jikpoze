@@ -71,10 +71,10 @@ class Editor extends Base {
                 return;
             }
             // remove large mouse offset
-            if (e.stageX - 2 > dragMouseEvent.stageX || dragMouseEvent.stageX > e.stageX + 2) {
+            if (e.stageX - 2 > dragEvent.stageX || dragEvent.stageX > e.stageX + 2) {
                 return;
             }
-            if (e.stageY - 2 > dragMouseEvent.stageY || dragMouseEvent.stageY > e.stageY + 2) {
+            if (e.stageY - 2 > dragEvent.stageY || dragEvent.stageY > e.stageY + 2) {
                 return;
             }
 

@@ -12,7 +12,6 @@ class Board extends DisplayObjectContainer {
     Map<String, Pencil> pencils = new Map<String, Pencil>();
     Cell selected;
     int cellSize;
-    MouseEvent dragMouseEvent;
     Point dragging;
     ResourceManager resourceManager = new ResourceManager();
     String resourceBasePath;

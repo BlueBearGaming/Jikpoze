@@ -10,6 +10,7 @@ abstract class Base extends Jikpoze.Board {
     String endPoint;
     String socketIOUri;
     int contextId;
+    InputEvent dragEvent;
 
     Base(canvas, Map options) : super(canvas, options) {
         eventEngine = new EventEngine(this);
@@ -17,6 +18,9 @@ abstract class Base extends Jikpoze.Board {
     }
 
     void parseOptions(Map options) {
+        if (Multitouch.supportsTouchEvents) {
+            Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
+        }
         super.parseOptions(options);
 
         if (options.containsKey('endPoint')) {
@@ -37,25 +41,30 @@ abstract class Base extends Jikpoze.Board {
     }
 
     void attachStageEvents() {
-        stage.onMouseDown.listen((MouseEvent e) {
-            dragMouseEvent = e;
+        eventBegin(InputEvent e) {
+            dragEvent = e;
             dragging = new Point(e.stageX, e.stageY);
-        });
+        }
+        stage.onTouchBegin.listen(eventBegin);
+        stage.onMouseDown.listen(eventBegin);
 
-
-        stage.onMouseUp.listen((MouseEvent e) {
+        eventEnd(InputEvent e) {
             dragging = null;
             map.updateGrid();
             //map.updateCells(); //@todo: query missing cells
-        });
+        }
+        stage.onTouchEnd.listen(eventEnd);
+        stage.onMouseUp.listen(eventEnd);
 
-        stage.onMouseMove.listen((MouseEvent e) {
+        eventMove(InputEvent e) {
             if (dragging != null) {
                 x += e.stageX - dragging.x;
                 y += e.stageY - dragging.y;
                 dragging = new Point(e.stageX, e.stageY);
             }
-        });
+        }
+        stage.onTouchMove.listen(eventMove);
+        stage.onMouseMove.listen(eventMove);
     }
 
     void attachMapItemEvents(MapItem mapItem);

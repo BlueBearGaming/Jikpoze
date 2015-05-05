@@ -10,22 +10,24 @@ class Game extends Base {
     void attachStageEvents() {
         super.attachStageEvents();
 
-        map.onMouseClick.listen((MouseEvent e) {
+        clickEvent(InputEvent e) {
             if (dragging != null) {
                 return;
             }
             // remove large mouse offset
-            if (e.stageX - 2 > dragMouseEvent.stageX || dragMouseEvent.stageX > e.stageX + 2) {
+            if (e.stageX - 2 > dragEvent.stageX || dragEvent.stageX > e.stageX + 2) {
                 return;
             }
-            if (e.stageY - 2 > dragMouseEvent.stageY || dragMouseEvent.stageY > e.stageY + 2) {
+            if (e.stageY - 2 > dragEvent.stageY || dragEvent.stageY > e.stageY + 2) {
                 return;
             }
 
             //Point position = viewPointToGamePoint(new Point(e.stageX, e.stageY));
 
             clearSelection();
-        });
+        }
+        map.onTouchTap.listen(clickEvent);
+        map.onMouseClick.listen(clickEvent);
     }
 
     void attachMapItemEvents(MapItem mapItem) {
@@ -37,21 +39,23 @@ class Game extends Base {
             return;
         }
         Listener listener = mapItem.listeners['click'];
-        mapItem.cell.onMouseClick.listen((MouseEvent e) {
+        clickEvent(InputEvent e) {
             if (dragging != null) {
                 return;
             }
             // remove large mouse offset
-            if (e.stageX - 2 > dragMouseEvent.stageX || dragMouseEvent.stageX > e.stageX + 2) {
+            if (e.stageX - 2 > dragEvent.stageX || dragEvent.stageX > e.stageX + 2) {
                 return;
             }
-            if (e.stageY - 2 > dragMouseEvent.stageY || dragMouseEvent.stageY > e.stageY + 2) {
+            if (e.stageY - 2 > dragEvent.stageY || dragEvent.stageY > e.stageY + 2) {
                 return;
             }
 
             e.stopImmediatePropagation();
 
             new MapItemClickRequest(mapItem);
-        });
+        }
+        mapItem.cell.onTouchTap.listen(clickEvent);
+        mapItem.cell.onMouseClick.listen(clickEvent);
     }
 }
