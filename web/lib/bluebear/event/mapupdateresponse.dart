@@ -6,6 +6,9 @@ class MapUpdateResponse implements ResponseInterface {
     List<MapItem> moved = new List<MapItem>();
 
     handleResponse(Map data) {
+        if (data.containsKey('clearSelection') && data['clearSelection']) {
+            EventEngine.instance.board.clearSelection();
+        }
         if (data.containsKey('removed')) {
             for (var item in data['removed']) {
                 MapItem mapItem = new MapItem.fromJsonData(item);

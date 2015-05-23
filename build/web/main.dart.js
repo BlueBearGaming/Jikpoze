@@ -2511,6 +2511,7 @@ return z}}},
 Gy:{
 "^":"a;Q,a,b",
 Hr:["cM",function(a){var z,y,x
+if(a.Y("clearSelection")===!0&&J.T(a,"clearSelection")===!0)$.U6.Q.d8()
 if(a.Y("removed")===!0)for(z=J.Nx(J.T(a,"removed"));z.D();){y=D.kV(z.gk())
 y.a=null
 this.a.push(y)}$.U6.Q.zH(this.a)
