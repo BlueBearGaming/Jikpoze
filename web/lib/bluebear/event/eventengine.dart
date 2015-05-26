@@ -4,6 +4,7 @@ class EventEngine {
     Base board;
     String code;
     String name;
+    String uid;
     DateTime timestamp;
     ResponseInterface response;
     SocketIoClient socket;
@@ -57,16 +58,15 @@ class EventEngine {
         var decoded = JSON.decode(jsonString);
         code = decoded['code'];
         name = decoded['name'];
-
+        timestamp = new DateTime.fromMillisecondsSinceEpoch(decoded['timestamp'] * 1000);
+        if (decoded['uid'] == uid) {
+            return;
+        }
+        uid = decoded['uid'];
         if ('error' == code) {
             throw "API returned an error: ${decoded['message']}";
         }
 
-        DateTime timestamp = new DateTime.fromMillisecondsSinceEpoch(decoded['timestamp']);
-        if (timestamp == this.timestamp) {
-            return;
-        }
-        this.timestamp = timestamp;
         print("Received '${name}' at ${timestamp.toIso8601String()}");
         switch (name) {
             case LoadContextRequest.code:
