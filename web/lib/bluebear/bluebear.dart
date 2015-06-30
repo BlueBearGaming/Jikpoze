@@ -32,3 +32,6 @@ part 'entity/pencil.dart';
 part 'entity/pencilset.dart';
 part 'entity/image.dart';
 part 'entity/listener.dart';
+
+// Animatable
+part 'animatable/unit.dart';

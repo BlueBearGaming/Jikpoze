@@ -25,6 +25,7 @@ class Board extends DisplayObjectContainer {
         Stage stage = new Stage(canvas, webGL: false);
         stage.scaleMode = StageScaleMode.NO_SCALE;
         stage.align = StageAlign.TOP_LEFT;
+        stage.backgroundColor = Color.Black;
         renderLoop = new RenderLoop();
         renderLoop.addStage(stage);
         stage.addChild(this);
