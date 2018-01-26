@@ -4,7 +4,7 @@
     "keywords": [ "game", "tiles", "engine", "dart", "stagexl" ],
     "homepage": "https://github.com/BlueBearGaming/Jikpoze",
     "type": "game-engine",
-    "license": "GPL",
+    "license": "LGPL-3.0-or-later",
     "authors": [
         {
             "name": "Vincent Chalnot",
