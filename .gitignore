@@ -2,6 +2,4 @@
 packages
 .project
 .settings
-pubspec.lock
 .idea
-!/build/web/packages

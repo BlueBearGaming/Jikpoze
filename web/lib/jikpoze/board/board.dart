@@ -22,7 +22,7 @@ class Board extends DisplayObjectContainer {
             throw "Canvas cannot be null";
         }
         parseOptions(options);
-        Stage stage = new Stage(canvas, webGL: false);
+        Stage stage = new Stage(canvas);
         stage.scaleMode = StageScaleMode.NO_SCALE;
         stage.align = StageAlign.TOP_LEFT;
         stage.backgroundColor = Color.Black;

@@ -7,27 +7,26 @@ class EventEngine {
     String uid;
     DateTime timestamp;
     ResponseInterface response;
-    SocketIoClient socket;
+    IO.Socket socket;
     static EventEngine instance;
 
     EventEngine(this.board) {
         instance = this;
-        SocketIoClient socket = new SocketIoClient(board.socketIOUri);
-        socket.onConnect((){
+        IO.Socket socket = IO.io(board.socketIOUri);
+        socket.on('connect', (_) {
             print('[SocketIO] Connected to ${board.socketIOUri}');
-            socket.onDisconnect(() {
-                print('[SocketIO] Disconnected');
-            });
-
-            socket.on('bluebear.engine.clientUpdate', (message) {
-                try {
-                    handleResponse(message['event']);
-                } catch (e) {
-                    print('Error during handleResponse: ');
-                    print(message);
-                    throw e;
-                }
-            });
+        });
+        socket.on('disconnect', (_) {
+            print('[SocketIO] Disconnected');
+        });
+        socket.on('bluebear.engine.clientUpdate', (message) {
+            try {
+                handleResponse(message['event']);
+            } catch (e) {
+                print('Error during handleResponse: ');
+                print(message);
+                throw e;
+            }
         });
     }
 

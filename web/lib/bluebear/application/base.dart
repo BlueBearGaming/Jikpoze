@@ -18,9 +18,6 @@ abstract class Base extends Jikpoze.Board {
     }
 
     void parseOptions(Map options) {
-        if (Multitouch.supportsTouchEvents) {
-            Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
-        }
         super.parseOptions(options);
 
         if (options.containsKey('endPoint')) {
