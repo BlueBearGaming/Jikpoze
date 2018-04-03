@@ -6,3 +6,5 @@ dependencies:
   stagexl: any
   socket_io_client:
     git: https://github.com/rikulo/socket.io-client-dart.git
+  socket_io:
+    git: https://github.com/rikulo/socket.io-dart.git
