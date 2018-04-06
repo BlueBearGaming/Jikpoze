@@ -69,7 +69,6 @@ class SquareMap extends DisplayObjectContainer {
 
   void renderCell(Layer layer, Point point) {
     if (layer.cells.containsKey(point)) {
-      //layer.cells[point].draw(); // Not necessary anymore ?
     } else if (layer.type == 'grid') {
       createCell(layer, point, gridPencil);
     }
@@ -93,10 +92,10 @@ class SquareMap extends DisplayObjectContainer {
         (viewPoint.y / board.cellSize).floor());
   }
 
-  void addChildAt(DisplayObject child, int index) {
-    super.addChildAt(child, index);
+  void addChild(DisplayObject child) {
+    super.addChild(child);
     if (child is Cell) {
-      sortChildren(sortCells);
+      sortChildren(sortCells); // @todo optimize this?
     }
   }
 
