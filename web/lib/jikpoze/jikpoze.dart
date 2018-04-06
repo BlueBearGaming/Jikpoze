@@ -10,7 +10,9 @@ part 'board/board.dart';
 
 // Map
 part 'map/squaremap.dart';
+
 part 'map/hexmap.dart';
+
 part 'map/isomap.dart';
 
 // Layers
@@ -21,8 +23,11 @@ part 'cell/cell.dart';
 
 // Pencils
 part 'pencil/pencil.dart';
+
 part 'pencil/gridpencil.dart';
+
 part 'pencil/selectionpencil.dart';
+
 part 'pencil/emptypencil.dart';
 
 // Bitmaps

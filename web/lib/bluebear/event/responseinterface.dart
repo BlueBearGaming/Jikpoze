@@ -1,5 +1,5 @@
 part of bluebear;
 
 abstract class ResponseInterface {
-    void handleResponse(Map data);
+  void handleResponse(Map data);
 }
