@@ -48,7 +48,7 @@ abstract class Base extends Jikpoze.Board {
 
     eventEnd(InputEvent e) {
       dragging = null;
-      //map.updateGrid();
+      map.updateGrid();
       //map.updateCells(); //@todo: query missing cells
     }
 

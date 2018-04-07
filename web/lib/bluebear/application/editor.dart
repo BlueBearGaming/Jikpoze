@@ -8,6 +8,7 @@ class Editor extends Base {
   String layerSelectorName;
   String pencilSelectorName;
   Jikpoze.Cell debugPointer;
+  Point lastCursorPosition;
 
   Editor(canvas, Map options) : super(canvas, options) {
     showGrid = true;
@@ -46,12 +47,16 @@ class Editor extends Base {
       }
       debugPointer.alpha = 0.6;
       debugPointer.zIndex = 1000;
-      map.sortChildren(map.sortCells);
+//      map.sortChildren(map.sortCells);
     }
 
     stage.onMouseMove.listen((MouseEvent e) {
       // Display transparent cell under the mouse cursor to show where the "pencil" is
       Point cellPosition = viewPointToGamePoint(new Point(e.stageX, e.stageY));
+      if (lastCursorPosition == cellPosition) {
+        return; // Don't do anything if the cursor is over the same cell than before
+      }
+      lastCursorPosition = cellPosition;
       Point position = gamePointToViewPoint(cellPosition);
       if (null == debugPointer) {
         createDebugPointer(cellPosition);
