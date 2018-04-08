@@ -19,15 +19,18 @@ class EventEngine {
     socket.on('disconnect', (_) {
       print('[SocketIO] Disconnected');
     });
-    socket.on('bluebear.engine.clientUpdate', (message) {
-      try {
-        handleResponse(message['event']);
-      } catch (e) {
-        print('Error during handleResponse: ');
-        print(message);
-        throw e;
-      }
-    });
+
+    socket.on('bluebear.engine.clientUpdate', handleMessage);
+  }
+
+  void handleMessage(message) {
+    try {
+      handleResponse(message['event']);
+    } catch (e) {
+      print('Error during handleResponse: ');
+      print(message);
+      throw e;
+    }
   }
 
   Html.HttpRequest queryApi(String eventName, Object json) {

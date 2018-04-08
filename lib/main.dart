@@ -6,7 +6,7 @@ void main() {
         String hash = client.conn.hashCode;
         print('Connection initiated : $hash');
         client.on('bluebear.engine.clientUpdate', (data) {
-            client.emit('bluebear.engine.clientUpdate', data);
+            io.emit('bluebear.engine.clientUpdate', data);
         });
     });
     io.listen(3000);

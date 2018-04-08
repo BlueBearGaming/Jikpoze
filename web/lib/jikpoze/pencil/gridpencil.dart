@@ -8,7 +8,7 @@ class GridPencil extends Pencil {
       : super(board, name: name, type: type) {
     graphics = new Graphics();
     board.map.buildCellGraphics(graphics);
-    graphics.strokeColor(Color.Gray, 0.2);
+    graphics.strokeColor(Color.Gray, 1);
     graphics.fillColor(Color.Transparent);
   }
 
